@@ -1,0 +1,43 @@
+.aside {
+  width: 228px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.logo {
+  cursor: pointer;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacings-8);
+  padding: var(--spacings-8) var(--spacings-12);
+  transition: 0.3s;
+  cursor: pointer;
+  border-radius: 8px;
+  width: 100%;
+
+  svg > path {
+    transition: 0.3s;
+  }
+
+  &:hover {
+    background-color: var(--background-secondary);
+    svg > path {
+      stroke-opacity: 1;
+    }
+
+    svg > g > path {
+      stroke-opacity: 1;
+    }
+  }
+}

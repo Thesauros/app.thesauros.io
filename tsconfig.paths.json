@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@app/*": ["./src/app/*"],
+      "@processes/*": ["./src/processes/*"],
+      "@pages/*": ["./src/pages/*"],
+      "@widgets/*": ["./src/widgets/*"],
+      "@features/*": ["./src/features/*"],
+      "@entities/*": ["./src/entities/*"],
+      "@shared/*": ["./src/shared/*"],
+      "@breakpoints": ["./src/shared/ui/ui-constants/_mixins.scss"],
+      "@scrollbar": ["./src/shared/ui/ui-constants/_scrollbar.scss"]
+    }
+  }
+}

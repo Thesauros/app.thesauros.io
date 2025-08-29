@@ -1,0 +1,9 @@
+@use '@breakpoints' as breakpoints;
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 24px;
+
+  gap: 100px;
+}

@@ -1,0 +1,58 @@
+.container {
+  width: 100%;
+  position: relative;
+
+  // Firefox
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+}
+
+.input {
+  padding: 14px 16px;
+  width: 100%;
+  font-size: 14px;
+  border-radius: 12px;
+  color: var(--content-primary);
+  background: var(--background-secondary);
+  box-sizing: border-box;
+
+  // Chrome
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    display: none;
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:focus-visible {
+    border: unset;
+    outline: unset;
+    background-color: var(--background-secondary);
+  }
+
+  &::placeholder {
+    color: #8c99ac;
+  }
+
+  &.error {
+    color: red;
+  }
+
+  &.withIcon {
+    padding-left: 30px;
+  }
+}
+
+.icon {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  top: 8px;
+  left: 4px;
+  transform: translate(50%, 50%);
+  * {
+    width: 100%;
+    height: 100%;
+  }
+}

@@ -1,0 +1,150 @@
+@use '@breakpoints' as breakpoints;
+@use '@scrollbar' as scrollbar;
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+  display: none;
+
+  &.visible {
+    display: flex;
+  }
+}
+
+.modalWrapper {
+  position: relative;
+}
+
+.overlay {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.75);
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: auto;
+  animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+
+  @include breakpoints.mobile {
+    align-items: end;
+  }
+}
+
+.modalContainer {
+  border-radius: 28px;
+  background-color: var(--background-secondary);
+  max-width: 500px;
+  box-shadow:
+    2px 2px 24px 0px rgba(4, 6, 8, 0.08),
+    1px 1px 16px 0px rgba(4, 6, 8, 0.06),
+    1px 1px 8px 0px rgba(7, 7, 8, 0.1),
+    1px 1px 4px 0px rgba(7, 7, 8, 0.1);
+
+  &::-webkit-scrollbar {
+    width: 0; /* ширина всей полосы прокрутки */
+  }
+
+  &.small {
+    max-width: 300px;
+  }
+
+  &.medium {
+    max-width: 500px;
+  }
+
+  &.large {
+    max-width: 700px;
+  }
+
+  max-height: calc(100vh - 100px);
+  @include scrollbar.hide-scrollbar();
+
+  width: 100%;
+  z-index: 3;
+  position: relative;
+  overflow: auto;
+  // it doesn't work when you change some Modal containers in one opened modal (example SwapForm -> SelectToken)
+  // animation: scaleUp .2s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
+
+  &.noCloseButton {
+    padding: 24px;
+  }
+
+  &.noBackground {
+    background-color: transparent;
+    width: 380px;
+    padding: unset;
+    box-shadow: unset;
+  }
+
+  @include breakpoints.mobile {
+    border-radius: 28px 28px 0 0;
+    max-height: 710px;
+    overflow-y: scroll;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    background: rgba(0, 0, 0, 0);
+  }
+
+  100% {
+    background: rgba(0, 0, 0, 0.7);
+  }
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(0.8) translateY(1000px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1) translateY(0px);
+    opacity: 1;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacings-24);
+
+  @include breakpoints.mobile {
+    padding: var(--spacings-16);
+  }
+}
+
+.modalContent {
+  padding: 0 var(--spacings-24) var(--spacings-24) var(--spacings-24);
+
+  @include breakpoints.mobile {
+    padding: 0 var(--spacings-16) var(--spacings-16) var(--spacings-16);
+  }
+}
+
+.titleWithSubtitle {
+  display: flex;
+  flex-direction: column;
+}
+
+.subtitle {
+  color: var(--content-secondary);
+}

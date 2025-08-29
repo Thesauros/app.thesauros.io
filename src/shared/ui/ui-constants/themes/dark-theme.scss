@@ -1,0 +1,75 @@
+:root,
+html[data-theme='dark'] {
+  // Content
+  --content-primary: var(--neutral-white-1000);
+  --content-primary-secondary: var(--neutral-white-900);
+  --content-secondary: var(--neutral-white-800);
+  --content-tertinary: var(--neutral-white-600);
+  --content-quaternary: var(--neutral-white-400);
+
+  // BG
+  --background-primary: var(--bg-dark-900);
+  --card-bg: var(--neutral-white-050);
+  --header-primary-bg: #fefefe05;
+  --bg-main-gradeint: linear-gradient(180deg, #051733 0%, #0f1419 100%);
+  --background-secondary: var(--card-inverted);
+
+  // Primary Button
+  --button-primary-bg: var(--accent-975);
+  --button-primary-bg-hovered: var(--accent-1000);
+  --button-primary-text: var(--black);
+  --button-primary-box-shadow: 0px 4px 6.7px 0px #196bff38;
+
+  // Secondary Button
+  --button-secondary-border: var(--black);
+  --button-secondary-box-shadow: 0px 4px 6.7px 0px rgba(255, 255, 255, 0.3);
+
+  // Text
+  --accent-text: var(--accent-1000);
+
+  // Progress bar
+  --pregress-bar-bg: var(--neutral-white-005);
+  --pregress-bar-accent-bg: var(--accent-975);
+
+  // Footer
+  --footer-bg: var(--accent-100);
+
+  // Border
+  --card-border: var(--neutral-black-600);
+
+  // NEW COLORS
+  --primary: #196bff;
+  --active-primary: #0051e5;
+  --surface-primary: #152134;
+  --surface-primary-light: #0f1419;
+  --on-primary: #1b2024;
+  --primary-container: #fefefe0d;
+  --active-primary-container: #fefefe1a;
+
+  --success: #48d155;
+  --active-success: #2eb73c;
+  --on-success: #fefefe;
+  --success-container: #fefefe99;
+  --active-success-container: #fefefeb2;
+
+  --error: #ec715a;
+  --active-error: #e64223;
+  --on-error: #fefefe;
+  --error-container: #fefefe99;
+  --active-error-container: #fefefeb2;
+
+  --surface-low: #fefefeb2;
+  --surface: #fcfcfc;
+  --surface-high: #ebebeb;
+  --on-surface: #fcfcfc;
+  --on-surface-50: #bdbdbd;
+  --on-surface-40: #adadad;
+  --on-surface-30: #cccccc;
+  --on-surface-20: #e6e6e6;
+  --on-surface-10: #e8e8e8;
+  --on-surface-5: #f5f5f5;
+
+  --disabled-low: #989898;
+  --disabled: #cccccc;
+  --disabled-high: #e5e5e5;
+}

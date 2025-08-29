@@ -1,0 +1,8 @@
+.root {
+  max-width: 434px;
+  z-index: 10000;
+
+  @media screen and (max-width: 576px) {
+    max-width: 300px;
+  }
+}

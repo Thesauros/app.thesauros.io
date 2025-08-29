@@ -1,0 +1,30 @@
+html,
+body {
+  height: 100vh;
+  margin: 0;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-main-gradeint);
+  overflow-x: hidden;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: unset;
+  background: transparent;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}

@@ -1,0 +1,17 @@
+.root {
+  position: relative;
+  height: 6px;
+  border-radius: 8px;
+  background-color: var(--pregress-bar-bg);
+  margin-bottom: 4px;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 100px;
+  background-color: var(--pregress-bar-accent-bg);
+}
+
+.progressBarValue {
+  color: var(--content-quaternary);
+}

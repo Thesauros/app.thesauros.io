@@ -1,0 +1,50 @@
+@use '@breakpoints' as breakpoints;
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacers-20);
+  background-color: var(--footer-bg);
+  gap: 24px;
+  padding: 36px 120px;
+  border-radius: 24px 24px 0 0;
+
+  @include breakpoints.laptop {
+    padding: 40px 60px;
+  }
+
+  @include breakpoints.tablet {
+    padding: 40px 24px;
+  }
+
+  @include breakpoints.mobile {
+    padding: 40px 16px;
+  }
+}
+
+.footerCopyright {
+  color: var(--content-secondary);
+}
+
+.docsLinksContainer {
+  color: var(--content-secondary);
+
+  @include breakpoints.tablet {
+    gap: 16px !important;
+  }
+}
+
+.link {
+  cursor: pointer;
+}
+
+.docLink {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--accent-text);
+  }
+}

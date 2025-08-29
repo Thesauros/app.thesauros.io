@@ -1,0 +1,14 @@
+@use '@breakpoints' as breakpoints;
+
+.pageContainer {
+  padding: 0 24px 24px;
+  min-height: 73vh;
+
+  @include breakpoints.laptop {
+    padding: 10px 60px;
+  }
+
+  @include breakpoints.tablet {
+    padding: 10px 16px;
+  }
+}
