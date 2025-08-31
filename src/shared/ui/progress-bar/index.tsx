@@ -11,6 +11,12 @@ type TProps = {
   width?: string | number;
   withValues?: boolean;
   filledAnimation?: boolean;
+  showPercentage?: boolean;
+  showRemainingDays?: boolean;
+  remainingDays?: number;
+  withGradient?: boolean;
+  postfix?: string;
+  valuePrefix?: string;
 };
 
 export const ProgressBar = ({
@@ -19,6 +25,12 @@ export const ProgressBar = ({
   width = '100%',
   withValues = false,
   filledAnimation = true,
+  showPercentage = false,
+  showRemainingDays = false,
+  remainingDays = 0,
+  withGradient = false,
+  postfix = '',
+  valuePrefix = '',
 }: TProps) => {
   const targetPct = useMemo(() => {
     return value === 0 ? 0 : (100.0 * Number(value)) / Number(max);
@@ -79,21 +91,49 @@ export const ProgressBar = ({
   }, [isVisible, targetPct, value, filledAnimation]);
 
   return (
-    <FlexBlock direction="column" gap={8} ref={ref}>
+    <FlexBlock direction="column" gap={12} ref={ref} block>
       {withValues && (
         <Texting level={3} className={styles.progressBarValue}>
-          <Higlight>{currentValue}</Higlight> / {max}
+          <Higlight>
+            {valuePrefix}
+            {currentValue}
+          </Higlight>{' '}
+          / {valuePrefix}
+          {max} {postfix}
         </Texting>
       )}
-      <div className={styles.root} style={{ width }}>
+
+      <div
+        className={classNames(styles.root, {
+          [styles.gradient]: withGradient,
+        })}
+        style={{ width: width }}
+      >
         <div
-          className={classNames(styles.bar)}
+          className={classNames(styles.bar, {
+            [styles.gradient]: withGradient,
+          })}
           style={{
             width: `${progressPct}%`,
             transition: filledAnimation ? `width 3000ms ease-out` : 'none',
           }}
         />
       </div>
+
+      {(showPercentage || showRemainingDays) && (
+        <FlexBlock justifyContent="space-between" className={styles.progressInfo}>
+          {showPercentage && (
+            <Texting level={4} weight="regular" className={styles.percentageText}>
+              {Math.round(progressPct)}% Complete
+            </Texting>
+          )}
+          {showRemainingDays && (
+            <Texting level={4} weight="regular" className={styles.remainingDaysText}>
+              {remainingDays} days remaining
+            </Texting>
+          )}
+        </FlexBlock>
+      )}
     </FlexBlock>
   );
 };
