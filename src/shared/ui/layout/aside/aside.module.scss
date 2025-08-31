@@ -25,6 +25,8 @@
   cursor: pointer;
   border-radius: 8px;
   width: 100%;
+  text-decoration: unset;
+  color: #0303038c;
 
   svg > path {
     transition: 0.3s;
@@ -38,6 +40,39 @@
 
     svg > g > path {
       stroke-opacity: 1;
+    }
+  }
+
+  &.active {
+    background-color: var(--background-secondary);
+    color: #030303;
+    font-weight: 500;
+
+    svg > path {
+      stroke-opacity: 1;
+    }
+
+    svg > g > path {
+      stroke-opacity: 1;
+    }
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    color: #0303034c;
+
+    svg > path {
+      stroke-opacity: 0.5;
+    }
+
+    svg > g > path {
+      stroke-opacity: 0.5;
+    }
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      opacity: 0.6;
     }
   }
 }

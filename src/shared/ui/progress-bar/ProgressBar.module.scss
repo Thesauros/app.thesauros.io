@@ -3,15 +3,35 @@
   height: 6px;
   border-radius: 8px;
   background-color: var(--pregress-bar-bg);
-  margin-bottom: 4px;
+
+  &.gradient {
+    height: 12px;
+    border-radius: 36px;
+  }
 }
 
 .bar {
   height: 100%;
   border-radius: 100px;
   background-color: var(--pregress-bar-accent-bg);
+
+  &.gradient {
+    background: linear-gradient(90.08deg, rgba(16, 185, 129, 0.48) -2.16%, #4ca6ff 103.23%);
+  }
 }
 
 .progressBarValue {
   color: var(--content-quaternary);
+}
+
+.progressInfo {
+  margin-top: 4px;
+}
+
+.percentageText {
+  color: #196bff;
+}
+
+.remainingDaysText {
+  color: #01010166;
 }
