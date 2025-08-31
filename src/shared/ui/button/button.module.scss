@@ -11,6 +11,16 @@
   white-space: nowrap;
 }
 
+.xxs {
+  font-size: 14px;
+  font-weight: 400;
+  padding: 8px 12px;
+
+  @include breakpoints.laptop {
+    font-size: 14px;
+  }
+}
+
 .xs {
   font-size: 14px;
   font-weight: 500;

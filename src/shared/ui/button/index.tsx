@@ -7,7 +7,7 @@ type ButtonVariant = 'primary' | 'secondary';
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   variant?: ButtonVariant;
-  size?: 'xs' | 's' | 'm';
+  size?: 'xxs' | 'xs' | 's' | 'm';
   className?: string;
 }
 

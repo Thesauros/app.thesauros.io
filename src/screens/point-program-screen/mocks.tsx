@@ -1,0 +1,63 @@
+import { Button } from '@/shared/ui/button';
+
+export const pointProgramMocks = [
+  {
+    title: 'Your Points Balance',
+    value: '12,847',
+    additionalInfo: '+127 earned today',
+  },
+  {
+    title: 'Leaderboard Rank',
+    value: '#34',
+    additionalInfo: 'Top 5% of users',
+  },
+  {
+    title: 'Referral Earnings',
+    value: '847',
+    additionalInfo: 'From 3 active friends',
+  },
+];
+
+export const earnedPoints = [
+  {
+    title: 'Connect Wallet',
+    description: 'Connect your Web3 wallet to get started',
+    value: '+100PTS',
+    isCompleted: true,
+  },
+  {
+    title: 'First Deposit $100+',
+    description: 'Make your first deposit of at least $100',
+    value: '+500PTS',
+    isCompleted: true,
+  },
+  {
+    title: 'Maintain TVL 30+ days',
+    description: 'Keep your funds deposited for 30 consecutive days',
+    value: '+2000PTS',
+    isCompleted: false,
+    progressBar: {
+      current: 12,
+      total: 30,
+      postfix: 'Days',
+    },
+  },
+  {
+    title: 'Invite Friends',
+    description: 'Earn 5% of your friend`s daily points forever',
+    value: '+2000PTS',
+    isCompleted: false,
+    action: <Button size="xxs">Generate Link</Button>,
+  },
+  {
+    title: 'Hold $1000+ TVL',
+    description: 'Deposit and maintain at least $1000 for bonus rewards',
+    value: '+1.5xMULT',
+    isCompleted: false,
+    progressBar: {
+      current: 287,
+      total: 1000,
+      prefix: '$',
+    },
+  },
+];

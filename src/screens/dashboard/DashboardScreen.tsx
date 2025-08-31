@@ -14,7 +14,9 @@ export const DashboardScreen = () => {
       <FlexBlock direction="column" gap={20} block>
         <FlexBlock direction="column" gap={12}>
           <Heading level={3}>Dashboard</Heading>
-          <Texting>Welcome back! Here&apos;s your portfolio overview.</Texting>
+          <Texting className={styles.pageDescription}>
+            Welcome back! Here&apos;s your portfolio overview.
+          </Texting>
         </FlexBlock>
         <FlexBlock gap={16} block>
           {dashbardConstants.map(item => (
