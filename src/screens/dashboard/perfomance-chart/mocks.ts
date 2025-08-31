@@ -1,10 +1,10 @@
 export const revenueData = [
-  { month: 'Jan', revenue: 90, engagement: 45 },
-  { month: 'Feb', revenue: 150, engagement: 75 },
-  { month: 'Mar', revenue: 120, engagement: 60 },
-  { month: 'Apr', revenue: 140, engagement: 70 },
-  { month: 'May', revenue: 180, engagement: 90 },
-  { month: 'Jun', revenue: 125, engagement: 62 },
+  { month: 'Jan', revenue: 90, engagement: 126, profit: 11.5 },
+  { month: 'Feb', revenue: 150, engagement: 75, profit: 12.5 },
+  { month: 'Mar', revenue: 120, engagement: 200, profit: 14.5 },
+  { month: 'Apr', revenue: 140, engagement: 180, profit: 16.5 },
+  { month: 'May', revenue: 180, engagement: 90, profit: 2.5 },
+  { month: 'Jun', revenue: 125, engagement: 180, profit: 22.5 },
 ];
 
 export const profitData = [
