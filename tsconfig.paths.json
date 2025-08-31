@@ -3,9 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@app/*": ["./src/app/*"],
-      "@processes/*": ["./src/processes/*"],
       "@pages/*": ["./src/pages/*"],
+      "@screens/*": ["./src/screens/*"],
       "@widgets/*": ["./src/widgets/*"],
       "@features/*": ["./src/features/*"],
       "@entities/*": ["./src/entities/*"],

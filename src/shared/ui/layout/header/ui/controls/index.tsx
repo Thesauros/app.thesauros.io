@@ -7,6 +7,7 @@ import { useCheckResolution } from '@/shared/browser/useCheckResolution';
 export const Controls = () => {
   const { theme, setTheme } = useTheme();
   const isMobile = useCheckResolution(576);
+  const isEnabledSwitcher = false;
 
   const toggleTheme = () => {
     setTheme(theme === AppTheme.LIGHT ? AppTheme.DARK : AppTheme.LIGHT);
@@ -14,7 +15,7 @@ export const Controls = () => {
 
   return (
     <FlexBlock gap={14} alignItems="center">
-      {!isMobile && <Moon onClick={toggleTheme} />}
+      {isEnabledSwitcher && !isMobile && <Moon onClick={toggleTheme} />}
       <Button variant="primary" size="s">
         Deposit
       </Button>
