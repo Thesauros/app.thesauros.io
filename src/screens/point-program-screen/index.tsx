@@ -2,7 +2,7 @@ import { FlexBlock } from '@/shared/ui/flex-block';
 import { Heading } from '@/shared/ui/typography/heading';
 import { Texting } from '@/shared/ui/typography/texting';
 import styles from './point-program.module.scss';
-import { earnedPoints, pointProgramMocks } from './mocks';
+import { EarnedPoints, pointProgramMocks } from './mocks';
 import { Card } from '@/shared/ui/card';
 import { InfoIcon } from '@/shared/ui/icons';
 import { EarlyAdopterBadge } from '@/shared/ui/icons/early-adopter-badge';
@@ -25,7 +25,7 @@ export const PointProgramScreen = () => {
             </Texting>
           </FlexBlock>
         </FlexBlock>
-        <FlexBlock gap={16} block>
+        <FlexBlock gap={16} block className={styles.pointProgramContainer}>
           {pointProgramMocks.map(item => (
             <Card key={item.title} className={styles.card}>
               <FlexBlock direction="column" justifyContent="space-between" block>
@@ -79,11 +79,11 @@ export const PointProgramScreen = () => {
           Earn Points
         </Texting>
         <FlexBlock direction="column" gap={12} block>
-          {earnedPoints.map(element => (
+          {EarnedPoints()?.map(element => (
             <Card className={styles.card} key={element.title}>
-              <FlexBlock gap={12} block>
+              <FlexBlock gap={12} block className={styles.classContainer}>
                 <FlexBlock gap={20} block>
-                  {element.isCompleted ? <SuccessIcon /> : <PendingIcon />}
+                  <div>{element.isCompleted ? <SuccessIcon /> : <PendingIcon />}</div>
                   <FlexBlock direction="column" gap={12}>
                     <FlexBlock direction="column" gap={8}>
                       <Texting level={2} className={styles.title}>

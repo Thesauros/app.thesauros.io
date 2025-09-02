@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './generated-avatar.module.scss';
-import Image from 'next/image';
 
 const stringToHash = (str: string): number => {
   let hash = 0;
@@ -44,7 +43,7 @@ export const Avatar: React.FC<{ value: string }> = ({ value }) => {
   const src = generateAvatar(value);
   return (
     <div className={styles.container}>
-      <Image src={src} alt={value} className={styles.avatar} />
+      <img src={src} alt={value} className={styles.avatar} />
     </div>
   );
 };

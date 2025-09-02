@@ -1,3 +1,18 @@
+@use '@breakpoints' as breakpoints;
+
+.pointProgramContainer {
+  @include breakpoints.tablet {
+    flex-direction: column !important;
+  }
+}
+
+.classContainer {
+  @include breakpoints.tablet {
+    flex-direction: column !important;
+    align-items: flex-end !important;
+  }
+}
+
 .pageDescription {
   color: #94a3b8;
 }

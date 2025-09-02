@@ -1,7 +1,21 @@
+@use '@breakpoints' as breakpoints;
+
 .container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 16px;
   width: 100%;
+
+  @include breakpoints.tablet {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+.headContainer {
+  @include breakpoints.tablet {
+    flex-direction: column !important;
+  }
 }

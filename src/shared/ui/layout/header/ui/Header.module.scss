@@ -6,4 +6,8 @@
   padding: 24px;
   gap: 100px;
   flex-shrink: 0;
+
+  @include breakpoints.tablet {
+    gap: 20px;
+  }
 }
