@@ -27,7 +27,7 @@ export const Controls = () => {
   }
 
   return (
-    <FlexBlock gap={40} alignItems="center">
+    <FlexBlock gap={40} alignItems="center" justifyContent={isMobile ? 'space-between' : undefined}>
       <FlexBlock gap={14} alignItems="center">
         {isEnabledSwitcher && !isMobile && <Moon onClick={toggleTheme} />}
         <Button variant="primary" size="s">

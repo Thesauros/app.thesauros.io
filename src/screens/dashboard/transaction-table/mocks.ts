@@ -1,17 +1,17 @@
-export interface Transaction {
+export interface ITransaction {
   id: string;
   coin: string;
-  type: 'Deposite' | 'Withdraw';
+  type: 'Deposit' | 'Withdraw';
   amount: number;
   status: 'Successfully' | 'Pending' | 'Failed';
   dateTime: string;
 }
 
-export const mockTransactions: Transaction[] = [
+export const mockTransactions: ITransaction[] = [
   {
     id: '1',
     coin: 'USDT',
-    type: 'Deposite',
+    type: 'Deposit',
     amount: 527.329,
     status: 'Successfully',
     dateTime: '2025-07-29 14:03',
@@ -27,7 +27,7 @@ export const mockTransactions: Transaction[] = [
   {
     id: '3',
     coin: 'USDT',
-    type: 'Deposite',
+    type: 'Deposit',
     amount: 177.529,
     status: 'Successfully',
     dateTime: '2025-12-28 18:03',

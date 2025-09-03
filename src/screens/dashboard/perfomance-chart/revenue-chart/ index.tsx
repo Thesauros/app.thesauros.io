@@ -34,16 +34,8 @@ export const RevenueChart = () => {
             className={styles.dateDropdown}
             defaultValue="Jan 2025 - Dec 2025"
           >
-            <option>
-              <Texting level={3} weight="regular" className={styles.chartTitle}>
-                Jan 2025 - Dec 2025
-              </Texting>
-            </option>
-            <option>
-              <Texting level={3} weight="regular" className={styles.dateRangeOption}>
-                Jan 2024 - Dec 2024
-              </Texting>
-            </option>
+            <option>Jan 2025 - Dec 2025</option>
+            <option>Jan 2024 - Dec 2024</option>
           </select>
         </Card>
       </FlexBlock>

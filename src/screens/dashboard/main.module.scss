@@ -1,6 +1,18 @@
+@use '@breakpoints' as breakpoints;
+
+.cardsContainer {
+  @include breakpoints.tablet {
+    flex-direction: column !important;
+  }
+}
+
 .card {
   width: 100%;
   height: 106px;
+
+  @include breakpoints.tablet {
+    width: -webkit-fill-available;
+  }
 }
 
 .contentContainer {

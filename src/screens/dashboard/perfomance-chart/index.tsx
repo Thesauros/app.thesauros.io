@@ -12,7 +12,12 @@ export const PerfomanceChart = () => {
 
   return (
     <FlexBlock direction="column" gap={20} block>
-      <FlexBlock alignItems="center" justifyContent="space-between" block>
+      <FlexBlock
+        alignItems="center"
+        justifyContent="space-between"
+        block
+        className={styles.headContainer}
+      >
         <Heading level={4}>Performance Chart</Heading>
         <PeriodSelector activePeriod={timeRange} onPeriodSelect={setTimeRange} />
       </FlexBlock>

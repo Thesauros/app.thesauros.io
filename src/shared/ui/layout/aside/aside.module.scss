@@ -1,9 +1,15 @@
+@use '@breakpoints' as breakpoints;
+
 .aside {
   width: 228px;
   padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+
+  @include breakpoints.tablet {
+    display: none;
+  }
 }
 
 .logo {
