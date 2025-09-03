@@ -18,7 +18,7 @@ export const DashboardScreen = () => {
             Welcome back! Here&apos;s your portfolio overview.
           </Texting>
         </FlexBlock>
-        <FlexBlock gap={16} block>
+        <FlexBlock gap={16} block className={styles.cardsContainer}>
           {dashbardConstants.map(item => (
             <Card key={item.id} className={styles.card}>
               <FlexBlock

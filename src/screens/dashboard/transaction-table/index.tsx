@@ -5,8 +5,11 @@ import { mockTransactions } from './mocks';
 import styles from './transaction-table.module.scss';
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { Texting } from '@/shared/ui/typography/texting';
+import { TransactionDetailModal } from './transaction-detail-modal';
+import { useModal } from '@/shared/ui/modal/useModal';
 
 export const TransactionTable = () => {
+  const { open } = useModal();
   const formatAmount = (amount: number) => {
     const sign = amount >= 0 ? '+' : '';
     return `${sign}${amount.toFixed(4)}`;
@@ -61,7 +64,12 @@ export const TransactionTable = () => {
                   </td>
                   <td>{transaction.dateTime}</td>
                   <td>
-                    <button className={styles.actionButton}>Details</button>
+                    <button
+                      className={styles.actionButton}
+                      onClick={() => open(<TransactionDetailModal transaction={transaction} />)}
+                    >
+                      Details
+                    </button>
                   </td>
                 </tr>
               ))}

@@ -35,7 +35,9 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
             aria-label="overlay"
             tabIndex={0}
           />
-          <div className={styles.content}>{modalContent}</div>
+          <div className={styles.content}>
+            <div className={styles.modalContainer}>{modalContent}</div>
+          </div>
         </div>
       </div>
       {children}
