@@ -17,6 +17,7 @@ export const Header = () => {
           placeholder="Search..."
           icon={<LoupeIcon />}
           onChange={setValue}
+          id={'input_menu'}
         />
       )}
       <Controls />
