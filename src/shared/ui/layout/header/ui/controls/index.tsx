@@ -6,6 +6,9 @@ import { Button } from '@/shared/ui/button';
 import { AppTheme, useTheme } from '@/shared/ui/theme';
 import { useCheckResolution } from '@/shared/browser/useCheckResolution';
 import { Avatar } from '@/shared/ui/generated-avatar';
+import { useModal } from '@/shared/ui/modal';
+import { DepositModal } from '../../../../../../feature/deposit/ui/DepositModal';
+import { WithdrawModal } from '@/feature/withdraw/ui/WithdrawModal';
 
 export const Controls = () => {
   const { theme, setTheme } = useTheme();
@@ -13,6 +16,7 @@ export const Controls = () => {
   const { openConnectModal } = useConnectModal();
   const { isConnected, address } = useAccount();
   const isEnabledSwitcher = false;
+  const { open } = useModal();
 
   const toggleTheme = () => {
     setTheme(theme === AppTheme.LIGHT ? AppTheme.DARK : AppTheme.LIGHT);
@@ -30,10 +34,10 @@ export const Controls = () => {
     <FlexBlock gap={40} alignItems="center" justifyContent={isMobile ? 'space-between' : undefined}>
       <FlexBlock gap={14} alignItems="center">
         {isEnabledSwitcher && !isMobile && <Moon onClick={toggleTheme} />}
-        <Button variant="primary" size="s">
+        <Button variant="primary" size="s" onClick={() => open(<DepositModal />)}>
           Deposit
         </Button>
-        <Button variant="secondary" size="s">
+        <Button variant="secondary" size="s" onClick={() => open(<WithdrawModal />)}>
           Withdraw
         </Button>
       </FlexBlock>

@@ -10,16 +10,9 @@ import ThemeProvider from '@/shared/ui/theme/theme.provider';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
 import '@rainbow-me/rainbowkit/styles.css';
-import { getDefaultConfig, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
-import { mainnet, polygon, optimism, arbitrum, base } from 'wagmi/chains';
-
-const config = getDefaultConfig({
-  appName: 'thesauros',
-  projectId: 'c251732975350cbb92d74a64f88273c0',
-  chains: [mainnet, polygon, optimism, arbitrum, base],
-  ssr: true,
-});
+import { wagmiConfig } from '@/shared/blockchain/config';
 
 const queryClient = new QueryClient();
 
@@ -29,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={onest.className}>
       <ThemeProvider>
-        <WagmiProvider config={config}>
+        <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
             <RainbowKitProvider>
               <ModalProvider>

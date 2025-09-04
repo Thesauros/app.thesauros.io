@@ -1,0 +1,15 @@
+.buttonContainer {
+  button {
+    width: 100%;
+  }
+}
+.vaultButton {
+  cursor: pointer;
+  width: 100%;
+  background: linear-gradient(128.71deg, #d3edfd -1.74%, #ddf1fe 110.23%) !important;
+  text-align: center;
+}
+
+.active {
+  border: 1px solid rgba(25, 107, 255, 0.975) !important;
+}
