@@ -1,0 +1,52 @@
+import { TVault } from './core/types';
+import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { mainnet, polygon, optimism, arbitrum, base } from 'wagmi/chains';
+
+export const wagmiConfig = getDefaultConfig({
+  appName: 'thesauros',
+  projectId: 'c251732975350cbb92d74a64f88273c0',
+  chains: [mainnet, polygon, optimism, arbitrum, base],
+  ssr: true,
+});
+
+export const config = {
+  networks: [
+    {
+      chainId: 42161,
+      chainName: 'Arbitrum One',
+      vaults: [
+        {
+          coin: 'USDT',
+          decimals: 6,
+          address: '0xe1D34AB80090da3498Fc5D0696a2Cf82971E5eC6',
+          coinAddress: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
+        },
+        {
+          coin: 'USDC',
+          decimals: 6,
+          address: '0xdf5AFad7f88888bEE944d14982c2d9eBA65653e6',
+          coinAddress: '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
+        },
+      ],
+    },
+  ],
+};
+
+export const vaults: TVault[] = [
+  {
+    chainID: 42161,
+    chainName: 'Arbitrum One',
+    decimals: 6,
+    vaultAddress: '0xe1D34AB80090da3498Fc5D0696a2Cf82971E5eC6',
+    coinName: 'USDT',
+    coinAddress: '0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',
+  },
+  {
+    chainID: 42161,
+    chainName: 'Arbitrum One',
+    decimals: 6,
+    vaultAddress: '0xdf5AFad7f88888bEE944d14982c2d9eBA65653e6',
+    coinName: 'USDC',
+    coinAddress: '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
+  },
+];

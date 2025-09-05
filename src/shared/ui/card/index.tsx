@@ -6,10 +6,16 @@ export const Card = ({
   children,
   size = 'm',
   className = '',
+  onClick,
 }: {
   children: ReactNode;
   size?: 'm' | 's';
   className?: string;
+  onClick?: () => void;
 }) => {
-  return <div className={classNames(styles.card, styles[size], className)}>{children}</div>;
+  return (
+    <div className={classNames(styles.card, styles[size], className)} onClick={onClick}>
+      {children}
+    </div>
+  );
 };

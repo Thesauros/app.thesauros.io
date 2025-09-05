@@ -13,8 +13,6 @@
   width: 100%;
   font-size: 14px;
   border-radius: 12px;
-  color: var(--content-primary);
-  background: var(--background-secondary);
   box-sizing: border-box;
 
   // Chrome
@@ -41,6 +39,25 @@
 
   &.withIcon {
     padding-left: 30px;
+  }
+}
+
+.primary {
+  color: var(--content-primary);
+  background: var(--background-secondary);
+}
+
+.secondary {
+  background: rgba(246, 246, 246, 1);
+  color: rgba(146, 146, 146, 1);
+
+  &:focus-visible {
+    border: unset;
+    outline: unset;
+    background-color: rgba(246, 246, 246, 1);
+  }
+  &::placeholder {
+    color: rgba(146, 146, 146, 1);
   }
 }
 

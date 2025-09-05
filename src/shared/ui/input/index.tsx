@@ -15,6 +15,8 @@ type TProps = {
   className?: string;
   autoComplete?: 'off' | 'on';
   icon?: ReactNode;
+  id: string;
+  variant?: 'primary' | 'secondary';
 };
 export const InputComponent = ({
   disabled = false,
@@ -29,6 +31,8 @@ export const InputComponent = ({
   className,
   autoComplete = 'off',
   icon,
+  id,
+  variant = 'primary',
 }: TProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -52,6 +56,7 @@ export const InputComponent = ({
         aria-label={name}
         data-testid={name}
         tabIndex={0}
+        id={id}
         name={name}
         onChange={onInputChange}
         onFocus={onFocus}
@@ -59,6 +64,7 @@ export const InputComponent = ({
         value={value}
         className={classNames(
           styles.input,
+          variant && styles[variant],
           !!error && styles.error,
           !!icon && styles.withIcon,
           className && className
