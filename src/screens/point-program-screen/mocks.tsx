@@ -1,24 +1,31 @@
 import { Button } from '@/shared/ui/button';
 import { useModal } from '@/shared/ui/modal/useModal';
 import { GenerateLinkModal } from './generate-link-modal';
+import { useAccount } from '@/shared/blockchain/useAccount';
+import { useUserPointsInfo } from '@/shared/api/pointProgram';
 
-export const pointProgramMocks = [
-  {
-    title: 'Your Points Balance',
-    value: '12,847',
-    additionalInfo: '+127 earned today',
-  },
-  {
-    title: 'Leaderboard Rank',
-    value: '#34',
-    additionalInfo: 'Top 5% of users',
-  },
-  {
-    title: 'Referral Earnings',
-    value: '847',
-    additionalInfo: 'From 3 active friends',
-  },
-];
+export const useUserPointProgramInfo = () => {
+  const { address, isConnected } = useAccount();
+  const { userPointsInfo } = useUserPointsInfo(address);
+
+  return [
+    {
+      title: 'Your Points Balance',
+      value: isConnected && userPointsInfo ? userPointsInfo.totalBalance : '-',
+      additionalInfo: '+127 earned today',
+    },
+    {
+      title: 'Leaderboard Rank',
+      value: isConnected && userPointsInfo ? `#${userPointsInfo.rank}` : '-',
+      additionalInfo: 'Top 5% of users',
+    },
+    {
+      title: 'Referral Earnings',
+      value: isConnected && userPointsInfo ? userPointsInfo.referralEarnings : '-',
+      additionalInfo: 'From 3 active friends',
+    },
+  ];
+};
 
 export const EarnedPoints = () => {
   const { open } = useModal();
