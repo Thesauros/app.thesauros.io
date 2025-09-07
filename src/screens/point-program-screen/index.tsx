@@ -2,7 +2,7 @@ import { FlexBlock } from '@/shared/ui/flex-block';
 import { Heading } from '@/shared/ui/typography/heading';
 import { Texting } from '@/shared/ui/typography/texting';
 import styles from './point-program.module.scss';
-import { EarnedPoints, pointProgramMocks } from './mocks';
+import { EarnedPoints, useUserPointProgramInfo } from './mocks';
 import { Card } from '@/shared/ui/card';
 import { InfoIcon } from '@/shared/ui/icons';
 import { EarlyAdopterBadge } from '@/shared/ui/icons/early-adopter-badge';
@@ -11,6 +11,8 @@ import { SuccessIcon } from '@/shared/ui/icons/succes';
 import { PendingIcon } from '@/shared/ui/icons/pending';
 
 export const PointProgramScreen = () => {
+  const pointProgramInfo = useUserPointProgramInfo();
+
   return (
     <FlexBlock direction="column" gap={40} block>
       <FlexBlock direction="column" gap={20} block>
@@ -26,7 +28,7 @@ export const PointProgramScreen = () => {
           </FlexBlock>
         </FlexBlock>
         <FlexBlock gap={16} block className={styles.pointProgramContainer}>
-          {pointProgramMocks.map(item => (
+          {pointProgramInfo.map(item => (
             <Card key={item.title} className={styles.card}>
               <FlexBlock direction="column" justifyContent="space-between" block>
                 <FlexBlock direction="column" gap={12} block>

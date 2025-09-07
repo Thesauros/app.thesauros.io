@@ -1,0 +1,1 @@
+export { useUserPointsInfo } from './useUserPointsInfo';
