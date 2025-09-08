@@ -4,7 +4,7 @@ export type TTaskRaw = {
   points: number;
   description: number;
   isCompleted: boolean;
-  progress: {
+  progress?: {
     total: number;
     current: number;
     prefix: string;

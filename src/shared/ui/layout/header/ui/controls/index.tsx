@@ -9,6 +9,8 @@ import { Avatar } from '@/shared/ui/generated-avatar';
 import { useModal } from '@/shared/ui/modal';
 import { DepositModal } from '../../../../../../feature/deposit/ui/DepositModal';
 import { WithdrawModal } from '@/feature/withdraw/ui/WithdrawModal';
+// import { LocalStorageKey, useLocalStorageState } from '@/shared/browser/localStorage';
+// import { connectBonus } from '@/shared/api/pointProgram';
 
 export const Controls = () => {
   const { theme, setTheme } = useTheme();
@@ -17,6 +19,21 @@ export const Controls = () => {
   const { isConnected, address } = useAccount();
   const isEnabledSwitcher = false;
   const { open } = useModal();
+  // const [isConnectedLS, setConnectedLS] = useLocalStorageState(
+  //   LocalStorageKey.CONNECTED_WALLET,
+  //   'false'
+  // );
+
+  // useAccountEffect({
+  //   onConnect(data) {
+  //     if (!Boolean(isConnected)) {
+  //       connectBonus(data.address).then(res => {
+  //         console.log('THEN', res);
+  //         setConnectedLS('true');
+  //       });
+  //     }
+  //   },
+  // });
 
   const toggleTheme = () => {
     setTheme(theme === AppTheme.LIGHT ? AppTheme.DARK : AppTheme.LIGHT);
