@@ -4,21 +4,25 @@ import { TTaskRaw } from './types';
 type TUserPointsInfoRaw = {
   success: boolean;
   data: {
-    id: number;
-    currentSeason: number;
-    currentTasks: TTaskRaw[];
+    seasonNumber: number;
+    season: {
+      name: string;
+      description: string;
+      startDate: number;
+      endDate: number;
+      multiplier: number;
+      tasks: TTaskRaw[];
+    };
   };
   message: string;
 };
 
-const fetchSeasonId = async (): Promise<TUserPointsInfoRaw | undefined> => {
-  return customFetch<TUserPointsInfoRaw>(getApiUrl('global/current-season-id'));
+const fetchSeason = async (): Promise<TUserPointsInfoRaw | undefined> => {
+  return customFetch<TUserPointsInfoRaw>(getApiUrl('global/current-season'));
 };
 
-export const useCurrentSeasonId = () => {
-  const { data: userPointsInfo, isLoading } = useCustomQueryKey(['GET_CURRENT_SEASON_ID'], () =>
-    fetchSeasonId()
-  );
+export const useCurrentSeason = () => {
+  const { data, isLoading } = useCustomQueryKey(['GET_CURRENT_SEASON'], () => fetchSeason());
 
-  return { userPointsInfo: userPointsInfo?.data, isLoading };
+  return { seasonInfo: data?.data, isLoading };
 };
