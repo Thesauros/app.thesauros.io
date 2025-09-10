@@ -7,6 +7,12 @@ type TUserPointsInfoRaw = {
 
 export const connectBonus = async (address: TAddress): Promise<TUserPointsInfoRaw> => {
   return customFetch<TUserPointsInfoRaw>(getApiUrl(`users/${address}/registration-bonus`), {
-    method: 'PUT',
+    method: 'POST',
+    body: JSON.stringify({
+      bonusAmount: 10000,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 };

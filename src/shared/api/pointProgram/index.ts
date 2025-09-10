@@ -1,2 +1,2 @@
 export { useUserPointsInfo } from './useUserPointsInfo';
-export { connectBonus } from './conncetBonus';
+export { connectBonus } from './connectBonus';
