@@ -1,5 +1,5 @@
 import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useAccount } from 'wagmi';
+import { useAccount, useAccountEffect } from 'wagmi';
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { Moon } from '@shared/ui/icons/moon';
 import { Button } from '@/shared/ui/button';
@@ -9,8 +9,8 @@ import { Avatar } from '@/shared/ui/generated-avatar';
 import { useModal } from '@/shared/ui/modal';
 import { DepositModal } from '../../../../../../feature/deposit/ui/DepositModal';
 import { WithdrawModal } from '@/feature/withdraw/ui/WithdrawModal';
-// import { LocalStorageKey, useLocalStorageState } from '@/shared/browser/localStorage';
-// import { connectBonus } from '@/shared/api/pointProgram';
+import { LocalStorageKey, useLocalStorageState } from '@/shared/browser/localStorage';
+import { connectBonus } from '@/shared/api/pointProgram';
 
 export const Controls = () => {
   const { theme, setTheme } = useTheme();
@@ -19,21 +19,20 @@ export const Controls = () => {
   const { isConnected, address } = useAccount();
   const isEnabledSwitcher = false;
   const { open } = useModal();
-  // const [isConnectedLS, setConnectedLS] = useLocalStorageState(
-  //   LocalStorageKey.CONNECTED_WALLET,
-  //   'false'
-  // );
+  const [isConnectedLS, setConnectedLS] = useLocalStorageState(
+    LocalStorageKey.CONNECTED_WALLET,
+    'false'
+  );
 
-  // useAccountEffect({
-  //   onConnect(data) {
-  //     if (!Boolean(isConnected)) {
-  //       connectBonus(data.address).then(res => {
-  //         console.log('THEN', res);
-  //         setConnectedLS('true');
-  //       });
-  //     }
-  //   },
-  // });
+  useAccountEffect({
+    onConnect(data) {
+      if (!Boolean(isConnectedLS)) {
+        connectBonus(data.address).then(_ => {
+          setConnectedLS('true');
+        });
+      }
+    },
+  });
 
   const toggleTheme = () => {
     setTheme(theme === AppTheme.LIGHT ? AppTheme.DARK : AppTheme.LIGHT);

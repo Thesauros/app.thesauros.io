@@ -15,11 +15,17 @@ import { Badge } from '@/shared/ui/badge';
 import { GenerateLinkModal } from './generate-link-modal';
 import { Button } from '@/shared/ui/button';
 import { useModal } from '@/shared/ui/modal';
+import { useTaskStatuses } from '@/shared/api/pointProgram/useTaskStatuses';
+import { useAccount } from '@/shared/blockchain/useAccount';
 
 export const PointProgramScreen = () => {
   const { open } = useModal();
+  const { address } = useAccount();
   const pointProgramInfo = useUserPointProgramInfo();
   const { seasonInfo } = useCurrentSeason();
+  const { userTaskStatuses } = useTaskStatuses(address);
+  console.log('seasonInfo', seasonInfo);
+  console.log('userTaskStatuses', userTaskStatuses);
 
   const progressBarValue = useMemo(() => {
     if (!seasonInfo?.season.startDate || !seasonInfo?.season.endDate) {
@@ -102,7 +108,13 @@ export const PointProgramScreen = () => {
             <Card className={styles.card} key={element.title}>
               <FlexBlock gap={12} block className={styles.classContainer}>
                 <FlexBlock gap={20} block>
-                  <div>{element.isCompleted ? <SuccessIcon /> : <PendingIcon />}</div>
+                  <div>
+                    {userTaskStatuses?.tasks[element.id] === 'done' ? (
+                      <SuccessIcon />
+                    ) : (
+                      <PendingIcon />
+                    )}
+                  </div>
                   <FlexBlock direction="column" gap={12}>
                     <FlexBlock direction="column" gap={8}>
                       <Texting level={2} className={styles.title}>
