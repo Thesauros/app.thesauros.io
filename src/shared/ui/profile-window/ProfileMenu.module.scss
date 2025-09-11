@@ -1,0 +1,74 @@
+.root {
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  background: #ffffff85;
+  border: 1px solid white;
+  backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 4px 16px -8px rgba(0, 0, 0, 0.08),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.02);
+  padding: 8px 0;
+  overflow: hidden;
+  position: relative;
+  @media screen and (max-width: 768px) {
+    background-color: var(--bg-real-secondary-deprecated);
+  }
+}
+
+.top {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  @media screen and (max-width: 768px) {
+    gap: 24px;
+  }
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  .icon {
+    width: 64px;
+    height: 64px;
+    @media screen and (max-width: 768px) {
+      width: 100px;
+      height: 100px;
+    }
+  }
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.closeButton {
+  display: none;
+  @media screen and (max-width: 768px) {
+    display: block;
+  }
+}
+
+.actionButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  width: 100%;
+  cursor: pointer;
+}
+
+.address {
+  color: #94a3b8;
+}
+
+.balance {
+  color: #7b8c9d;
+}

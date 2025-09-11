@@ -1,0 +1,33 @@
+.profileWidget {
+  position: absolute;
+  top: 48px;
+  right: -2px;
+  width: 280px;
+  z-index: 1;
+  @media screen and (max-width: 768px) {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: calc(100% - 8px);
+    transform: translate(-50%, -50%);
+    max-width: 382px;
+  }
+}
+
+.overlay {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.75);
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  cursor: pointer;
+  @media screen and (max-width: 768px) {
+    display: block;
+  }
+}
+
+.button {
+  position: relative;
+}

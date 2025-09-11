@@ -5,12 +5,12 @@ import { Moon } from '@shared/ui/icons/moon';
 import { Button } from '@/shared/ui/button';
 import { AppTheme, useTheme } from '@/shared/ui/theme';
 import { useCheckResolution } from '@/shared/browser/useCheckResolution';
-import { Avatar } from '@/shared/ui/generated-avatar';
 import { useModal } from '@/shared/ui/modal';
 import { DepositModal } from '../../../../../../feature/deposit/ui/DepositModal';
 import { WithdrawModal } from '@/feature/withdraw/ui/WithdrawModal';
 import { LocalStorageKey, useLocalStorageState } from '@/shared/browser/localStorage';
 import { connectBonus } from '@/shared/api/pointProgram';
+import { ProfileWindow } from '@/shared/ui/profile-window';
 
 export const Controls = () => {
   const { theme, setTheme } = useTheme();
@@ -57,7 +57,7 @@ export const Controls = () => {
           Withdraw
         </Button>
       </FlexBlock>
-      {address && <Avatar value={address} />}
+      {address && <ProfileWindow />}
     </FlexBlock>
   );
 };
