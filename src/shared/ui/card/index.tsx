@@ -9,7 +9,7 @@ export const Card = ({
   onClick,
 }: {
   children: ReactNode;
-  size?: 'm' | 's';
+  size?: 'm' | 's' | 'xs';
   className?: string;
   onClick?: () => void;
 }) => {

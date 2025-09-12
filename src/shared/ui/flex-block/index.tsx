@@ -37,6 +37,7 @@ type TProps = {
   block?: boolean;
   flexShrink?: number;
   flexWrap?: boolean;
+  onClick?: () => void;
 };
 
 export const FlexBlock = ({
@@ -51,11 +52,13 @@ export const FlexBlock = ({
   flexShrink,
   flexWrap,
   ref,
+  onClick,
 }: TProps) => {
   return (
     <div
       id={id ?? ''}
       ref={ref}
+      onClick={onClick}
       className={classNames(
         styles.root,
         styles[`direction-${direction}`],
