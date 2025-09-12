@@ -1,18 +1,14 @@
-import { useAccount, useDisconnect } from 'wagmi';
 import styles from './aside.module.scss';
 import { useRouter } from 'next/router';
 import { LogoIcon } from '@/shared/ui/icons/logo';
 import { FlexBlock } from '../../flex-block';
 import { MENU_ITEMS } from './menu/menuItems';
 import { Texting } from '../../typography/texting';
-import { LogoutIcon } from '../../icons/logout';
 import { Tooltip } from '../../tooltip/tooltip';
 import Link from 'next/link';
 
 export const Aside = () => {
   const router = useRouter();
-  const { disconnect } = useDisconnect();
-  const { isConnected } = useAccount();
 
   const isActiveRoute = (path: string) => {
     if (path === '/') {
@@ -60,17 +56,6 @@ export const Aside = () => {
             </Link>
           );
         })}
-        {isConnected && (
-          <div
-            className={styles.menuItem}
-            key={'logout'}
-            role="presentation"
-            onClick={() => disconnect()}
-          >
-            <LogoutIcon />
-            <Texting level={3}>Log out</Texting>
-          </div>
-        )}
       </FlexBlock>
     </div>
   );
