@@ -20,12 +20,10 @@ import { useAccount } from '@/shared/blockchain/useAccount';
 
 export const PointProgramScreen = () => {
   const { open } = useModal();
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
   const pointProgramInfo = useUserPointProgramInfo();
   const { seasonInfo } = useCurrentSeason();
   const { userTaskStatuses } = useTaskStatuses(address);
-  console.log('seasonInfo', seasonInfo);
-  console.log('userTaskStatuses', userTaskStatuses);
 
   const progressBarValue = useMemo(() => {
     if (!seasonInfo?.season.startDate || !seasonInfo?.season.endDate) {
@@ -80,7 +78,7 @@ export const PointProgramScreen = () => {
             <Texting level={1} weight="semibold">
               Season {seasonInfo?.seasonNumber}
             </Texting>
-            <Badge label="Main User" />
+            {isConnected && <Badge label="Main User" />}
           </FlexBlock>
           <Texting level={2} weight="regular" className={styles.seasonDescription}>
             {seasonInfo?.season.description}
@@ -99,48 +97,54 @@ export const PointProgramScreen = () => {
           </div>
         </FlexBlock>
       </Card>
-      <FlexBlock direction="column" gap={22} block>
-        <Texting level={1} weight="semibold">
-          Earn Points
-        </Texting>
-        <FlexBlock direction="column" gap={12} block>
-          {seasonInfo?.season.tasks?.map(element => (
-            <Card className={styles.card} key={element.title}>
-              <FlexBlock gap={12} block className={styles.classContainer}>
-                <FlexBlock gap={20} block>
-                  <div>
-                    {userTaskStatuses?.tasks[element.id] === 'done' ? (
-                      <SuccessIcon />
-                    ) : (
-                      <PendingIcon />
-                    )}
-                  </div>
-                  <FlexBlock direction="column" gap={12}>
-                    <FlexBlock direction="column" gap={8}>
-                      <Texting level={2} className={styles.title}>
-                        {element.title}
-                      </Texting>
-                      <Texting level={3} weight="regular" className={styles.pointBlockDescription}>
-                        {element.description}
-                      </Texting>
+      {isConnected && (
+        <FlexBlock direction="column" gap={22} block>
+          <Texting level={1} weight="semibold">
+            Earn Points
+          </Texting>
+          <FlexBlock direction="column" gap={12} block>
+            {seasonInfo?.season.tasks?.map(element => (
+              <Card className={styles.card} key={element.title}>
+                <FlexBlock gap={12} block className={styles.classContainer}>
+                  <FlexBlock gap={20} block>
+                    <div>
+                      {userTaskStatuses?.tasks[element.id] === 'done' ? (
+                        <SuccessIcon />
+                      ) : (
+                        <PendingIcon />
+                      )}
+                    </div>
+                    <FlexBlock direction="column" gap={12}>
+                      <FlexBlock direction="column" gap={8}>
+                        <Texting level={2} className={styles.title}>
+                          {element.title}
+                        </Texting>
+                        <Texting
+                          level={3}
+                          weight="regular"
+                          className={styles.pointBlockDescription}
+                        >
+                          {element.description}
+                        </Texting>
+                      </FlexBlock>
                     </FlexBlock>
                   </FlexBlock>
+                  <FlexBlock gap={20} alignItems="center">
+                    <Texting level={2} className={styles.value}>
+                      {element.points}PTS
+                    </Texting>
+                    {element.id === 'invite_friends' && (
+                      <Button size="xxs" onClick={() => open(<GenerateLinkModal />)}>
+                        Generate Link
+                      </Button>
+                    )}
+                  </FlexBlock>
                 </FlexBlock>
-                <FlexBlock gap={20} alignItems="center">
-                  <Texting level={2} className={styles.value}>
-                    {element.points}PTS
-                  </Texting>
-                  {element.id === 'invite_friends' && (
-                    <Button size="xxs" onClick={() => open(<GenerateLinkModal />)}>
-                      Generate Link
-                    </Button>
-                  )}
-                </FlexBlock>
-              </FlexBlock>
-            </Card>
-          ))}
+              </Card>
+            ))}
+          </FlexBlock>
         </FlexBlock>
-      </FlexBlock>
+      )}
     </FlexBlock>
   );
 };
