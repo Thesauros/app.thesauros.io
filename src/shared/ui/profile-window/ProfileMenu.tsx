@@ -1,7 +1,5 @@
 import styles from './ProfileMenu.module.scss';
-import { JSXElementConstructor } from 'react';
 import { useAccount } from '@/shared/blockchain/useAccount';
-import { CloseIcon } from '../icons/close';
 import { Texting } from '../typography/texting';
 import { CopyButton } from '../copy-button';
 import { useDisconnect } from 'wagmi';
@@ -12,13 +10,7 @@ import { FlexBlock } from '../flex-block';
 import { Card } from '../card';
 import { useNetwork } from '@/shared/blockchain/useNetwork';
 
-type TProps = {
-  onClose: () => void;
-};
-
-export type TProfileMenuComponent = JSXElementConstructor<TProps>;
-
-export const ProfileMenu = ({ onClose }: TProps) => {
+export const ProfileMenu = () => {
   const { address = '', isConnected } = useAccount();
   const { chain } = useNetwork();
   const { disconnect } = useDisconnect();
@@ -26,9 +18,6 @@ export const ProfileMenu = ({ onClose }: TProps) => {
   return (
     <div className={styles.root}>
       <div className={styles.top}>
-        <div className={styles.closeButton} onClick={onClose}>
-          <CloseIcon />
-        </div>
         <FlexBlock gap={12} block>
           <div className={styles.iconContainer}>
             <Avatar value={address} />{' '}

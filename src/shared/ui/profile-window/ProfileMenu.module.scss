@@ -12,8 +12,9 @@
   padding: 8px 0;
   overflow: hidden;
   position: relative;
+
   @media screen and (max-width: 768px) {
-    background-color: var(--bg-real-secondary-deprecated);
+    background: #ffffff85;
   }
 }
 
