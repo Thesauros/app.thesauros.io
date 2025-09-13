@@ -11,6 +11,7 @@ import { WithdrawModal } from '@/feature/withdraw/ui/WithdrawModal';
 import { LocalStorageKey, useLocalStorageState } from '@/shared/browser/localStorage';
 import { connectBonus } from '@/shared/api/pointProgram';
 import { ProfileWindow } from '@/shared/ui/profile-window';
+import { MobileMenu } from '../../../mobile-menu';
 
 export const Controls = () => {
   const { theme, setTheme } = useTheme();
@@ -57,7 +58,10 @@ export const Controls = () => {
           Withdraw
         </Button>
       </FlexBlock>
-      {address && <ProfileWindow />}
+      <FlexBlock alignItems="flex-end" gap={12}>
+        {address && <ProfileWindow />}
+        {isMobile && <MobileMenu />}
+      </FlexBlock>
     </FlexBlock>
   );
 };

@@ -29,9 +29,7 @@ export const ProfileWindow = () => {
         {opened && (
           <>
             <div className={styles.overlay} onClick={() => setOpened(false)} />
-            <div className={styles.profileWidget}>
-              {<ProfileMenu onClose={() => setOpened(false)} />}
-            </div>
+            <div className={styles.profileWidget}>{<ProfileMenu />}</div>
           </>
         )}
       </div>
