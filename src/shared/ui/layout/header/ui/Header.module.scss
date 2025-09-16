@@ -10,4 +10,8 @@
   @include breakpoints.tablet {
     gap: 20px;
   }
+
+  @include breakpoints.mobile {
+    padding: 24px 16px;
+  }
 }

@@ -41,9 +41,17 @@ export const Controls = () => {
 
   if (!isConnected) {
     return (
-      <Button variant="primary" size="s" onClick={openConnectModal}>
-        Connect wallet
-      </Button>
+      <FlexBlock
+        alignItems="center"
+        justifyContent={isMobile ? 'space-between' : undefined}
+        gap={24}
+        block={!!isMobile}
+      >
+        <Button variant="primary" size="s" onClick={openConnectModal}>
+          Connect wallet
+        </Button>
+        {isMobile && <MobileMenu />}
+      </FlexBlock>
     );
   }
 
