@@ -12,6 +12,7 @@ import { LocalStorageKey, useLocalStorageState } from '@/shared/browser/localSto
 import { connectBonus } from '@/shared/api/pointProgram';
 import { ProfileWindow } from '@/shared/ui/profile-window';
 import { MobileMenu } from '../../../mobile-menu';
+import { SelectChainButton } from '@/shared/ui/select-chain-button';
 
 export const Controls = () => {
   const { theme, setTheme } = useTheme();
@@ -59,6 +60,7 @@ export const Controls = () => {
     <FlexBlock gap={40} alignItems="center" justifyContent={isMobile ? 'space-between' : undefined}>
       <FlexBlock gap={14} alignItems="center">
         {isEnabledSwitcher && !isMobile && <Moon onClick={toggleTheme} />}
+        <SelectChainButton />
         <Button variant="primary" size="s" onClick={() => open(<DepositModal />)}>
           Deposit
         </Button>
