@@ -1,11 +1,63 @@
-export const revenueData = [
-  { month: 'Jan', revenue: 90, engagement: 126, profit: 11.5 },
-  { month: 'Feb', revenue: 150, engagement: 75, profit: 12.5 },
-  { month: 'Mar', revenue: 120, engagement: 200, profit: 14.5 },
-  { month: 'Apr', revenue: 140, engagement: 180, profit: 16.5 },
-  { month: 'May', revenue: 180, engagement: 90, profit: 2.5 },
-  { month: 'Jun', revenue: 125, engagement: 180, profit: 22.5 },
-];
+import { useAPRTicks, useUserEarnedTicks } from '@/shared/api/dashboard';
+import { useMarketAPRTicks } from '@/shared/api/dashboard/useHighestMarketAprTicks';
+import { useAccount } from '@/shared/blockchain/useAccount';
+import { formatDate } from '@/shared/date';
+import { useMemo } from 'react';
+
+export const useAPRData = ({ coinName }: { coinName: 'USDC' | 'USDT' }) => {
+  const { data: aprData, isLoading: isAPRLoading } = useAPRTicks({
+    token: coinName,
+    interval: 1,
+    intervals: 7,
+  });
+
+  const { data: marketData, isLoading: isMarketAPRLoading } = useMarketAPRTicks({
+    token: coinName,
+    interval: 1,
+    intervals: 7,
+  });
+
+  const aprDatas = useMemo(() => {
+    return aprData
+      ? [...aprData].map((item, index) => ({
+          date: formatDate(item.from),
+          dateValue: item.value === null ? 0 : item.value,
+          marketValue: marketData && marketData[index]?.value ? marketData[index]?.value : 0,
+        }))
+      : undefined;
+  }, [aprData, marketData]);
+
+  return useMemo(
+    () => ({
+      data: aprDatas && aprDatas.length > 0 ? [...aprDatas].reverse() : [],
+      isLoading: isAPRLoading && isMarketAPRLoading,
+    }),
+    [aprDatas, isAPRLoading, isMarketAPRLoading]
+  );
+};
+
+export const useProfitData = ({ coinName }: { coinName: 'USDC' | 'USDT' }) => {
+  const { address } = useAccount();
+  const { data, isLoading } = useUserEarnedTicks({
+    address: address,
+    token: coinName,
+    interval: 1,
+    intervals: 7,
+  });
+
+  return useMemo(
+    () => ({
+      data: data
+        ? [...data].reverse().map(item => ({
+            date: formatDate(item.from),
+            dateValue: item.value === null ? 0 : item.value,
+          }))
+        : undefined,
+      isLoading: isLoading,
+    }),
+    [data, isLoading]
+  );
+};
 
 export const profitData = [
   { time: '12 AM', profit: 120 },

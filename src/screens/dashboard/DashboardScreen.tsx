@@ -1,14 +1,14 @@
-import { dashbardConstants } from '@/shared/constants/dashboard-constants';
+import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 import { Card } from '@/shared/ui/card';
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { Heading } from '@/shared/ui/typography/heading';
 import { Texting } from '@/shared/ui/typography/texting';
 import { PerfomanceChart } from './perfomance-chart';
-import { TransactionTable } from './transaction-table';
 import { InfoIcon } from '@/shared/ui/icons';
 import styles from './main.module.scss';
 
 export const DashboardScreen = () => {
+  const dashbardConstants = useDashboardConstants();
   return (
     <FlexBlock direction="column" gap={40} block>
       <FlexBlock direction="column" gap={20} block>
@@ -36,9 +36,9 @@ export const DashboardScreen = () => {
                   </FlexBlock>
                   <Texting level={1} className={styles.cardValue}>
                     {item.value}
-                    {item.valuePostifx ? (
+                    {/* {item?.valuePostifx ? (
                       <span className={styles.valuePostifx}>{item.valuePostifx}</span>
-                    ) : null}
+                    ) : null} */}
                   </Texting>
                 </FlexBlock>
                 {item.action ? item.action : null}
@@ -53,7 +53,7 @@ export const DashboardScreen = () => {
         </FlexBlock>
       </FlexBlock>
       <PerfomanceChart />
-      <TransactionTable />
+      {/* <TransactionTable /> */}
     </FlexBlock>
   );
 };

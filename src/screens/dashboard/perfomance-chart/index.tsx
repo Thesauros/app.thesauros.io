@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import styles from './perfomance-chart.module.scss';
 import { Heading } from '@/shared/ui/typography/heading';
 import { FlexBlock } from '@/shared/ui/flex-block';
-import { PeriodSelector } from './period-selector';
-import { RevenueChart } from './revenue-chart/ index';
+
 import { ProfitChart } from './profit-chart';
-import { SessionsChart } from './sessions-chart';
+import { APRChart } from './apr-chart';
+import { VaultSelector } from './vault-selector';
+import { vaults } from '@/shared/blockchain/config';
 
 export const PerfomanceChart = () => {
-  const [timeRange, setTimeRange] = useState('30D');
+  const [currentVault, setCurrentVault] = useState(vaults[0]);
 
   return (
     <FlexBlock direction="column" gap={20} block>
@@ -19,12 +20,12 @@ export const PerfomanceChart = () => {
         className={styles.headContainer}
       >
         <Heading level={4}>Performance Chart</Heading>
-        <PeriodSelector activePeriod={timeRange} onPeriodSelect={setTimeRange} />
+        <VaultSelector activeVault={currentVault} onVaultSelect={setCurrentVault} />
+        {/* <PeriodSelector activePeriod={timeRange} onPeriodSelect={setTimeRange} /> */}
       </FlexBlock>
       <div className={styles.container}>
-        <RevenueChart />
-        <ProfitChart />
-        <SessionsChart />
+        <APRChart currentVault={currentVault} />
+        <ProfitChart currentVault={currentVault} />
       </div>
     </FlexBlock>
   );
