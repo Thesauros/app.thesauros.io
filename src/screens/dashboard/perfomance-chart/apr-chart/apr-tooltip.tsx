@@ -16,7 +16,7 @@ export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
     return (
       <div className={styles.revenueTooltip}>
         <FlexBlock alignItems="center" gap={8}>
-          <div className={styles.tooltipValue}>${round(aprValue)}</div>
+          <div className={styles.tooltipValue}>{round(aprValue)}%</div>
           {diffPercent !== Infinity && (
             <div
               className={classNames(styles.tooltipChange, diffPercent < 0 ? styles.negative : '')}

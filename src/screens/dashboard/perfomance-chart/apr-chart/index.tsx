@@ -58,7 +58,7 @@ export const APRChart = ({ currentVault }: { currentVault: TVault }) => {
               tickCount={7}
               tick={{ fontSize: 12, fill: '#9D9D9D' }}
               tickMargin={20}
-              tickFormatter={value => `$${value.toFixed(2)}`}
+              tickFormatter={value => `${value.toFixed(2)}%`}
             />
             <Tooltip content={<APRChartTooltip />} />
             <Area
