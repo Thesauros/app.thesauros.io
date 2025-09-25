@@ -42,11 +42,11 @@ export const DashboardScreen = () => {
                   </Texting>
                 </FlexBlock>
                 {item.action ? item.action : null}
-                {item.lastMonthchange && (
+                {/* {item.lastMonthchange && (
                   <Texting level={3} className={styles.lightText}>
                     <span>{item.lastMonthchange}</span> vs last month
                   </Texting>
-                )}
+                )} */}
               </FlexBlock>
             </Card>
           ))}

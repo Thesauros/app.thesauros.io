@@ -5,6 +5,8 @@ import { Button } from '../ui/button';
 import { DepositModal } from '@/feature/deposit/ui/DepositModal';
 import { useModal } from '../ui/modal';
 import { useVaultsTVL } from '../blockchain';
+import { useCurrentAPR } from '../api/dashboard/useCurrentAPR';
+import { round } from '../number/round';
 
 export const dashbardConstants = [
   { id: 'apy', label: 'APY', value: '12.25%', action: <Button size="xs">Earn</Button> },
@@ -33,6 +35,7 @@ export const useDashboardConstants = () => {
   const { address } = useAccount();
   const { open } = useModal();
   const { data } = useUserEarnedOverallicks({ interval: 1, intervals: 7, address: address });
+  const { apr30D } = useCurrentAPR();
 
   const totalEarned = useMemo(() => (data ? data[data?.length - 1].value : 0), [data]);
   const { data: vaultsTVL } = useVaultsTVL();
@@ -41,7 +44,7 @@ export const useDashboardConstants = () => {
     {
       id: 'apy',
       label: 'APY',
-      value: `${1}%`,
+      value: `${round(apr30D)}%`,
       action: (
         <Button size="xs" onClick={() => open(<DepositModal />)}>
           Earn
@@ -57,7 +60,6 @@ export const useDashboardConstants = () => {
       id: 'tvl',
       label: 'Total Value Locked',
       value: `$${vaultsTVL ?? '...'}`,
-      lastMonthchange: '+5.2%',
     },
   ];
 };
