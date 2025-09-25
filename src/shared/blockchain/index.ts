@@ -1,4 +1,5 @@
 export { useVaultsTVL } from './useVaultsTVL';
+export { useVaultsPosition } from './useVaultsPosition';
 export { useAccount } from './useAccount';
 export { useAllowance } from './useAllowance';
 export { useApprove } from './useApprove';

@@ -1,12 +1,10 @@
 import { useMemo } from 'react';
-import { useUserEarnedOverallicks } from '../api/dashboard/useUserEarnedOverall';
-import { useAccount } from '../blockchain/useAccount';
 import { Button } from '../ui/button';
 import { DepositModal } from '@/feature/deposit/ui/DepositModal';
 import { useModal } from '../ui/modal';
-import { useVaultsTVL } from '../blockchain';
-import { useCurrentAPR } from '../api/dashboard/useCurrentAPR';
+import { useVaultsPosition, useVaultsTVL, useAccount } from '../blockchain';
 import { round } from '../number/round';
+import { useHighestApr, useCurrentAPR, useUserEarnedOverallicks } from '../api/dashboard';
 
 export const dashbardConstants = [
   { id: 'apy', label: 'APY', value: '12.25%', action: <Button size="xs">Earn</Button> },
@@ -39,6 +37,8 @@ export const useDashboardConstants = () => {
 
   const totalEarned = useMemo(() => (data ? data[data?.length - 1].value : 0), [data]);
   const { data: vaultsTVL } = useVaultsTVL();
+  const { data: totalPosition } = useVaultsPosition();
+  const { data: performerOfTheWeek } = useHighestApr(7);
 
   return [
     {
@@ -52,13 +52,23 @@ export const useDashboardConstants = () => {
       ),
     },
     {
+      id: 'my-position',
+      label: 'My Position',
+      value: `$${totalPosition ? round(totalPosition) : 0}`,
+    },
+    {
+      id: 'best-performer',
+      label: 'Best Performer of the Week',
+      value: performerOfTheWeek,
+    },
+    {
       id: 'total-profit',
-      label: 'Total Earned (USD)',
+      label: 'Total Earned',
       value: `$${totalEarned}`,
     },
     {
       id: 'tvl',
-      label: 'Total Value Locked',
+      label: 'TVL',
       value: `$${vaultsTVL ?? '...'}`,
     },
   ];
