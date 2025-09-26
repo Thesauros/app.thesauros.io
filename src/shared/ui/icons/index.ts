@@ -5,3 +5,4 @@ export { CoinStackedIcon } from './coins-stacked';
 export { GearIcon } from './gear';
 export { LoupeIcon } from './loupe';
 export { InfoIcon } from './info';
+export { ArrowDown } from './arrow-down';

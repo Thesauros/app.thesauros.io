@@ -4,10 +4,8 @@ export interface CustomTooltipProps {
     value: number;
     dataKey: string;
     payload: {
-      revenue?: number;
-      engagement?: number;
-      profit?: number;
-      sessions?: number;
+      date: string;
+      marketValue: number;
     };
   }[];
   label?: string;
