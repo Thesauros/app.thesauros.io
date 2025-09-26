@@ -2,6 +2,7 @@ import { useAPRTicks, useUserEarnedTicks } from '@/shared/api/dashboard';
 import { useMarketAPRTicks } from '@/shared/api/dashboard/useHighestMarketAprTicks';
 import { useAccount } from '@/shared/blockchain/useAccount';
 import { formatDate } from '@/shared/date';
+import { round } from '@/shared/number/round';
 import { useMemo } from 'react';
 
 export const useAPRData = ({ coinName }: { coinName: 'USDC' | 'USDT' }) => {
@@ -50,7 +51,7 @@ export const useProfitData = ({ coinName }: { coinName: 'USDC' | 'USDT' }) => {
       data: data
         ? [...data].reverse().map(item => ({
             date: formatDate(item.from),
-            dateValue: item.value === null ? 0 : item.value,
+            dateValue: item.value === null ? 0 : round(item.value, 6),
           }))
         : undefined,
       isLoading: isLoading,

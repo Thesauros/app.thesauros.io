@@ -18,7 +18,7 @@ export const DashboardScreen = () => {
             Welcome back! Here&apos;s your portfolio overview.
           </Texting>
         </FlexBlock>
-        <FlexBlock gap={16} block className={styles.cardsContainer}>
+        <FlexBlock gap={16} block className={styles.cardsContainer} justifyContent="space-between">
           {dashbardConstants.map(item => (
             <Card key={item.id} className={styles.card}>
               <FlexBlock
@@ -27,21 +27,21 @@ export const DashboardScreen = () => {
                 className={styles.contentContainer}
                 block
               >
-                <FlexBlock direction="column" gap={8} block>
+                <FlexBlock direction="column" gap={8} block justifyContent="space-between">
                   <FlexBlock alignItems="center" justifyContent="space-between" block>
                     <Texting level={3} className={styles.lightText}>
                       {item.label}
                     </Texting>
                     <InfoIcon />
                   </FlexBlock>
-                  <Texting level={1} className={styles.cardValue}>
+                  <Heading level={3} className={styles.cardValue}>
                     {item.value}
                     {/* {item?.valuePostifx ? (
                       <span className={styles.valuePostifx}>{item.valuePostifx}</span>
                     ) : null} */}
-                  </Texting>
+                  </Heading>
                 </FlexBlock>
-                {item.action ? item.action : null}
+                {/* {item.action ? item.action : null} */}
                 {/* {item.lastMonthchange && (
                   <Texting level={3} className={styles.lightText}>
                     <span>{item.lastMonthchange}</span> vs last month
