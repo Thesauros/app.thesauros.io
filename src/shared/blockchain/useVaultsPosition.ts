@@ -23,6 +23,7 @@ export const useVaultsPosition = (): TVaultPositionResult => {
 
   const { data, isLoading } = useContractsRead<bigint>({
     contracts,
+    watch: true,
   });
 
   const totalPosition = useMemo(() => {

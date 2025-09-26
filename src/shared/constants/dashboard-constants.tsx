@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
 import { Button } from '../ui/button';
-import { DepositModal } from '@/feature/deposit/ui/DepositModal';
-import { useModal } from '../ui/modal';
 import { useVaultsPosition, useVaultsTVL, useAccount } from '../blockchain';
 import { round } from '../number/round';
 import { useHighestApr, useCurrentAPR, useUserEarnedOverallicks } from '../api/dashboard';
@@ -31,11 +29,10 @@ export const dashbardConstants = [
 
 export const useDashboardConstants = () => {
   const { address } = useAccount();
-  const { open } = useModal();
   const { data } = useUserEarnedOverallicks({ interval: 1, intervals: 7, address: address });
   const { apr30D } = useCurrentAPR();
 
-  const totalEarned = useMemo(() => (data ? data[data?.length - 1].value : 0), [data]);
+  const totalEarned = useMemo(() => (data ? round(data[0].value, 6) : 0), [data]);
   const { data: vaultsTVL } = useVaultsTVL();
   const { data: totalPosition } = useVaultsPosition();
   const { data: performerOfTheWeek } = useHighestApr(7);
@@ -45,11 +42,11 @@ export const useDashboardConstants = () => {
       id: 'apy',
       label: 'APY',
       value: `${round(apr30D)}%`,
-      action: (
-        <Button size="xs" onClick={() => open(<DepositModal />)}>
-          Earn
-        </Button>
-      ),
+      // action: (
+      //   <Button size="xs" onClick={() => open(<DepositModal />)}>
+      //     Earn
+      //   </Button>
+      // ),
     },
     {
       id: 'my-position',
@@ -58,7 +55,7 @@ export const useDashboardConstants = () => {
     },
     {
       id: 'best-performer',
-      label: 'Best Performer of the Week',
+      label: 'Best Performer',
       value: performerOfTheWeek,
     },
     {
