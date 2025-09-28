@@ -1,4 +1,8 @@
+import { useMemo } from 'react';
 import { Button } from '../ui/button';
+import { useVaultsPosition, useVaultsTVL, useAccount } from '../blockchain';
+import { round } from '../number/round';
+import { useHighestApr, useCurrentAPR, useUserEarnedOverallicks } from '../api/dashboard';
 
 export const dashbardConstants = [
   { id: 'apy', label: 'APY', value: '12.25%', action: <Button size="xs">Earn</Button> },
@@ -22,3 +26,47 @@ export const dashbardConstants = [
     lastMonthchange: '+5.2%',
   },
 ];
+
+export const useDashboardConstants = () => {
+  const { address } = useAccount();
+  const { data } = useUserEarnedOverallicks({ interval: 1, intervals: 7, address: address });
+  const { apr30D } = useCurrentAPR();
+
+  const totalEarned = useMemo(() => (data ? round(data[0].value, 6) : 0), [data]);
+  const { data: vaultsTVL } = useVaultsTVL();
+  const { data: totalPosition } = useVaultsPosition();
+  const { data: performerOfTheWeek } = useHighestApr(7);
+
+  return [
+    {
+      id: 'apy',
+      label: 'APY',
+      value: `${round(apr30D)}%`,
+      // action: (
+      //   <Button size="xs" onClick={() => open(<DepositModal />)}>
+      //     Earn
+      //   </Button>
+      // ),
+    },
+    {
+      id: 'my-position',
+      label: 'My Position',
+      value: `$${totalPosition ? round(totalPosition) : 0}`,
+    },
+    {
+      id: 'best-performer',
+      label: 'Best Performer',
+      value: performerOfTheWeek,
+    },
+    {
+      id: 'total-profit',
+      label: 'Total Earned',
+      value: `$${totalEarned}`,
+    },
+    {
+      id: 'tvl',
+      label: 'TVL',
+      value: `$${vaultsTVL ?? '...'}`,
+    },
+  ];
+};

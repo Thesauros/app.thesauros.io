@@ -8,7 +8,7 @@
 
 .card {
   width: 100%;
-  height: 106px;
+  height: 60px;
 
   @include breakpoints.tablet {
     width: -webkit-fill-available;
@@ -17,6 +17,9 @@
 
 .contentContainer {
   height: 100%;
+  & > div {
+    height: 100%;
+  }
 }
 
 .pageDescription {

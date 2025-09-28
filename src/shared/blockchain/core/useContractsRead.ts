@@ -1,0 +1,83 @@
+import { useMemo } from 'react';
+import { useReadContracts } from 'wagmi';
+import { abi } from '../abi';
+import { TAddress, TArg, TChainID } from './types';
+
+type TContractReadConfig = {
+  address: TAddress;
+  functionName: string;
+  args: TArg[];
+  chainID: TChainID;
+  watch?: boolean;
+  staleTime?: number;
+  selectData?: ((data: unknown) => unknown) | undefined;
+};
+
+type TContractsReadProps = {
+  contracts: TContractReadConfig[];
+  watch?: boolean;
+  staleTime?: number;
+};
+
+type TContractsReadResult<T = unknown> = {
+  data: T[] | undefined;
+  isLoading: boolean;
+  error: Error | null;
+  refetch: () => void;
+  results: Array<{
+    data: T | undefined;
+    isLoading: boolean;
+    error: Error | null;
+    refetch: () => void;
+  }>;
+};
+
+export const useContractsRead = <T = unknown>({
+  contracts,
+  watch = false,
+  staleTime,
+}: TContractsReadProps): TContractsReadResult<T> => {
+  const staleTimeResult = watch ? Infinity : (staleTime ?? 0);
+
+  const result = useReadContracts({
+    contracts: contracts.map(contract => ({
+      address: contract.address,
+      abi: abi,
+      chainId: contract.chainID,
+      functionName: contract.functionName,
+      args: contract.args,
+    })),
+    query: {
+      staleTime: staleTimeResult,
+    },
+  });
+
+  const results = useMemo(() => {
+    return contracts.map((contract, index) => {
+      const contractData = result.data?.[index];
+      const contractResult = contractData?.result;
+      const contractError = contractData?.error || result.error;
+
+      return {
+        data: contract.selectData
+          ? (contract.selectData(contractResult) as T)
+          : (contractResult as T),
+        isLoading: result.isLoading,
+        error: contractError as Error | null,
+        refetch: result.refetch,
+      };
+    });
+  }, [contracts, result.data, result.isLoading, result.error, result.refetch]);
+
+  const refetch = () => {
+    result.refetch();
+  };
+
+  return {
+    data: results.map(r => r.data) as T[],
+    isLoading: result.isLoading,
+    error: result.error as Error | null,
+    refetch,
+    results,
+  };
+};

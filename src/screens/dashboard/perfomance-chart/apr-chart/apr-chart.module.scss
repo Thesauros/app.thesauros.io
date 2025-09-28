@@ -1,5 +1,4 @@
 .container {
-  grid-area: 1 / 1 / 3 / 2;
   display: flex;
   flex-direction: column;
   gap: 26px;
@@ -9,25 +8,8 @@
   color: #030303b2;
 }
 
-.dateRange {
-  padding: 4px 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  color: var(--neutral-black-600);
-}
-
 .dateRangeOption {
   color: #030303;
-}
-
-.dateDropdown {
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: unset;
-  }
 }
 
 .revenueTooltip {
@@ -41,18 +23,6 @@
   font-size: 16px;
   font-weight: 400;
   color: #030303;
-}
-
-.tooltipChange {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 10px;
-  opacity: 1;
-  border-radius: 2px;
-  padding: 2px 4px;
-  background-color: #1e6eff0a;
-  color: #10b981;
 }
 
 .tooltipDate {
@@ -70,5 +40,21 @@
 
   &:focus-visible {
     outline: none !important;
+  }
+}
+
+.tooltipChange {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  opacity: 1;
+  border-radius: 2px;
+  padding: 2px 4px;
+  background-color: #1e6eff0a;
+  color: #10b981;
+
+  &.negative {
+    color: red;
   }
 }

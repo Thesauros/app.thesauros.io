@@ -88,7 +88,7 @@ export const DepositModal = () => {
       <FlexBlock direction="column" gap={16} block>
         <Texting level={2}>Vaults</Texting>
         <FlexBlock block alignItems="center">
-          {vaults.map(({ vaultAddress, coinName }) => (
+          {vaults.map(({ vaultAddress, coinName, chainName }) => (
             <Card
               size="s"
               key={vaultAddress}
@@ -102,7 +102,8 @@ export const DepositModal = () => {
                 )
               }
             >
-              {coinName}
+              <Texting level={2}>{coinName}</Texting>
+              <Texting level={4}>{chainName}</Texting>
             </Card>
           ))}
         </FlexBlock>
