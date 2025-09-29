@@ -8,11 +8,21 @@ import { Texting } from '@/shared/ui/typography/texting';
 import { Card } from '@/shared/ui/card';
 import { Loader } from '@/shared/ui/loader';
 import { TVault } from '@/shared/blockchain/core/types';
+import formatNumberSmart from '@/shared/number/formatNumberSmart';
 
-export const ProfitChart = ({ currentVault }: { currentVault: TVault }) => {
+export const ProfitChart = ({
+  currentVault,
+  period,
+}: {
+  currentVault: TVault;
+  period: { title: string; value: number };
+}) => {
   const { data: profitData, isLoading } = useProfitData({
     coinName: currentVault.coinName as 'USDC' | 'USDT',
+    period: period.value,
   });
+
+  const isWeekPeriod = period.value === 7;
 
   return (
     <Card className={styles.container}>
@@ -40,13 +50,14 @@ export const ProfitChart = ({ currentVault }: { currentVault: TVault }) => {
               tickLine={false}
               tick={{ fontSize: 12, fill: '#9D9D9D' }}
               tickMargin={10}
+              interval={isWeekPeriod ? 1 : 5}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
               tickCount={4}
               tick={{ fontSize: 12, fill: '#9D9D9D' }}
-              tickMargin={30}
+              tickFormatter={value => formatNumberSmart(value as number)}
             />
             <Tooltip content={<ProfitTooltip />} cursor={false} />
             <Bar

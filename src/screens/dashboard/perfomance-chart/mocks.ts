@@ -5,17 +5,17 @@ import { formatDate } from '@/shared/date';
 import { round } from '@/shared/number/round';
 import { useMemo } from 'react';
 
-export const useAPRData = ({ coinName }: { coinName: 'USDC' | 'USDT' }) => {
+export const useAPRData = ({ coinName, period }: { coinName: 'USDC' | 'USDT'; period: number }) => {
   const { data: aprData, isLoading: isAPRLoading } = useAPRTicks({
     token: coinName,
     interval: 1,
-    intervals: 7,
+    intervals: period,
   });
 
   const { data: marketData, isLoading: isMarketAPRLoading } = useMarketAPRTicks({
     token: coinName,
     interval: 1,
-    intervals: 7,
+    intervals: period,
   });
 
   const aprDatas = useMemo(() => {
@@ -37,13 +37,19 @@ export const useAPRData = ({ coinName }: { coinName: 'USDC' | 'USDT' }) => {
   );
 };
 
-export const useProfitData = ({ coinName }: { coinName: 'USDC' | 'USDT' }) => {
+export const useProfitData = ({
+  coinName,
+  period,
+}: {
+  coinName: 'USDC' | 'USDT';
+  period: number;
+}) => {
   const { address } = useAccount();
   const { data, isLoading } = useUserEarnedTicks({
     address: address,
     token: coinName,
     interval: 1,
-    intervals: 7,
+    intervals: period,
   });
 
   return useMemo(
