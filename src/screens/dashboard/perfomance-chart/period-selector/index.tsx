@@ -4,19 +4,21 @@ import styles from './period-selector.module.scss';
 export const PeriodSelector = ({
   activePeriod,
   onPeriodSelect,
+  periods,
 }: {
-  activePeriod: string;
-  onPeriodSelect: (period: string) => void;
+  activePeriod: { title: string; value: number };
+  onPeriodSelect: (period: { title: string; value: number }) => void;
+  periods: { title: string; value: number }[];
 }) => {
   return (
     <Card className={styles.timeRangeSelector}>
-      {['7D', '30D', '6M', '1Y'].map(period => (
+      {periods.map(period => (
         <button
-          key={period}
-          className={`${styles.timeRangeButton} ${activePeriod === period ? styles.active : ''}`}
+          key={period.title}
+          className={`${styles.timeRangeButton} ${activePeriod.value === period.value ? styles.active : ''}`}
           onClick={() => onPeriodSelect(period)}
         >
-          {period}
+          {period.title}
         </button>
       ))}
     </Card>
