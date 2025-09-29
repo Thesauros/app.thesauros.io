@@ -20,8 +20,19 @@ import { Texting } from '@/shared/ui/typography/texting';
 import { Loader } from '@/shared/ui/loader';
 import { TVault } from '@/shared/blockchain/core/types';
 
-export const APRChart = ({ currentVault }: { currentVault: TVault }) => {
-  const { data, isLoading } = useAPRData({ coinName: currentVault.coinName as 'USDC' | 'USDT' });
+export const APRChart = ({
+  currentVault,
+  period,
+}: {
+  currentVault: TVault;
+  period: { title: string; value: number };
+}) => {
+  const { data, isLoading } = useAPRData({
+    coinName: currentVault.coinName as 'USDC' | 'USDT',
+    period: period.value,
+  });
+
+  const isWeekPeriod = period.value === 7;
 
   return (
     <Card className={styles.container}>
@@ -96,7 +107,7 @@ export const APRChart = ({ currentVault }: { currentVault: TVault }) => {
               tickLine={false}
               tick={{ fontSize: 12, fill: '#9D9D9D' }}
               tickMargin={10}
-              interval={1}
+              interval={isWeekPeriod ? 1 : 5}
             />
             <YAxis
               axisLine={false}
