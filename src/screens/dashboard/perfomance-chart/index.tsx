@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styles from './perfomance-chart.module.scss';
-import { Heading } from '@/shared/ui/typography/heading';
 import { FlexBlock } from '@/shared/ui/flex-block';
 
 import { ProfitChart } from './profit-chart';
@@ -26,15 +25,12 @@ export const PerfomanceChart = () => {
         block
         className={styles.headContainer}
       >
-        <Heading level={4}>Performance Chart</Heading>
-        <FlexBlock alignItems="center" gap={24}>
-          <PeriodSelector
-            activePeriod={timePeriod}
-            onPeriodSelect={setTimePeriod}
-            periods={periods}
-          />
-          <VaultSelector activeVault={currentVault} onVaultSelect={setCurrentVault} />
-        </FlexBlock>
+        <VaultSelector activeVault={currentVault} onVaultSelect={setCurrentVault} />
+        <PeriodSelector
+          activePeriod={timePeriod}
+          onPeriodSelect={setTimePeriod}
+          periods={periods}
+        />
       </FlexBlock>
       <div className={styles.container}>
         <APRChart currentVault={currentVault} period={timePeriod} />
