@@ -29,18 +29,18 @@ export const config = {
         },
       ],
     },
-    // {
-    //   chainId: 8453,
-    //   chainName: 'Base',
-    //   vaults: [
-    //     {
-    //       coin: 'USDC',
-    //       decimals: 6,
-    //       address: '0x4C7e55689aCcC42562E113e04c3BDe1B2eb76622',
-    //       coinAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-    //     },
-    //   ],
-    // },
+    {
+      chainId: 8453,
+      chainName: 'Base',
+      vaults: [
+        {
+          coin: 'USDC',
+          decimals: 6,
+          address: '0x386b6872358981f199BF23f12c369dB26a5F2869',
+          coinAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+        },
+      ],
+    },
   ],
 };
 
@@ -61,12 +61,12 @@ export const vaults: TVault[] = [
     coinName: 'USDC',
     coinAddress: '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
   },
-  // {
-  //   chainID: 8453,
-  //   chainName: 'Base',
-  //   decimals: 6,
-  //   vaultAddress: '0x4C7e55689aCcC42562E113e04c3BDe1B2eb76622',
-  //   coinName: 'USDC',
-  //   coinAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-  // },
+  {
+    chainID: 8453,
+    chainName: 'Base',
+    decimals: 6,
+    vaultAddress: '0x386b6872358981f199BF23f12c369dB26a5F2869',
+    coinName: 'USDC',
+    coinAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+  },
 ];
