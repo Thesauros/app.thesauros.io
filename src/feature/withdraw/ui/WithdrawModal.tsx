@@ -74,7 +74,20 @@ export const WithdrawModal = () => {
   const { data: symbol } = useContractRead({
     address: choosenVault.vaultAddress,
     functionName: 'symbol',
+    watch: false,
     chainID: choosenVault.chainID,
+  });
+
+  const { data: withdrawFeePercent } = useContractRead({
+    address: choosenVault.vaultAddress,
+    functionName: 'withdrawFeePercent',
+    watch: false,
+    chainID: choosenVault.chainID,
+    selectData: (data: unknown): number => {
+      const raw = Number(data);
+      const denominator = raw > 1_000_000 ? 1e18 : 1e4;
+      return raw / denominator;
+    },
   });
 
   const userCoinBalance: number = useMemo(() => {
@@ -83,6 +96,12 @@ export const WithdrawModal = () => {
     }
     return 0;
   }, [coinBalance]);
+
+  const withdrawFeeAmountTokens: number = useMemo(() => {
+    const amountTokens = Number(value || 0);
+    const feeFraction = typeof withdrawFeePercent === 'number' ? withdrawFeePercent : 0;
+    return round(amountTokens * feeFraction, 6);
+  }, [value, withdrawFeePercent]);
 
   const handlePercentageClick = (percentage: number) => {
     if (percentage === 100) {
@@ -101,28 +120,30 @@ export const WithdrawModal = () => {
           <CloseIcon onClick={close} />
         </FlexBlock>
       </FlexBlock>
-      <FlexBlock direction="column" gap={16} block>
-        <Texting level={2}>Vaults</Texting>
-        <FlexBlock block alignItems="center">
-          {vaults.map(({ vaultAddress, coinName }) => (
-            <Card
-              size="s"
-              key={vaultAddress}
-              className={classNames(
-                styles.vaultButton,
-                choosenVault.vaultAddress === vaultAddress ? styles.active : ''
-              )}
-              onClick={() =>
-                setChoosenVault(
-                  vaults.find(vault => vault.vaultAddress === vaultAddress) ?? vaults[0]
-                )
-              }
-            >
-              {coinName}
-            </Card>
-          ))}
+      {vaults.length > 1 && (
+        <FlexBlock direction="column" gap={16} block>
+          <Texting level={2}>Vaults</Texting>
+          <FlexBlock block alignItems="center">
+            {vaults.map(({ vaultAddress, coinName }) => (
+              <Card
+                size="s"
+                key={vaultAddress}
+                className={classNames(
+                  styles.vaultButton,
+                  choosenVault.vaultAddress === vaultAddress ? styles.active : ''
+                )}
+                onClick={() =>
+                  setChoosenVault(
+                    vaults.find(vault => vault.vaultAddress === vaultAddress) ?? vaults[0]
+                  )
+                }
+              >
+                {coinName}
+              </Card>
+            ))}
+          </FlexBlock>
         </FlexBlock>
-      </FlexBlock>
+      )}
 
       <FlexBlock direction="column" gap={16} block>
         <Texting level={2}>Amount</Texting>
@@ -177,7 +198,9 @@ export const WithdrawModal = () => {
 
           <FlexBlock justifyContent="space-between" alignItems="center" block>
             <Texting level={3}>Withdrawal Fee:</Texting>
-            <Texting level={3}>0.00 {(symbol as string) ?? ''}</Texting>
+            <Texting level={3}>
+              {withdrawFeeAmountTokens.toFixed(3)} {(symbol as string) ?? ''}
+            </Texting>
           </FlexBlock>
         </FlexBlock>
       </FlexBlock>
