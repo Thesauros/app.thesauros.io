@@ -85,29 +85,31 @@ export const DepositModal = () => {
         <CloseIcon onClick={close} />
       </FlexBlock>
 
-      <FlexBlock direction="column" gap={16} block>
-        <Texting level={2}>Vaults</Texting>
-        <FlexBlock block alignItems="center">
-          {vaults.map(({ vaultAddress, coinName, chainName }) => (
-            <Card
-              size="s"
-              key={vaultAddress}
-              className={classNames(
-                styles.vaultButton,
-                choosenVault.vaultAddress === vaultAddress ? styles.active : ''
-              )}
-              onClick={() =>
-                setChoosenVault(
-                  vaults.find(vault => vault.vaultAddress === vaultAddress) ?? vaults[0]
-                )
-              }
-            >
-              <Texting level={2}>{coinName}</Texting>
-              <Texting level={4}>{chainName}</Texting>
-            </Card>
-          ))}
+      {vaults.length > 1 && (
+        <FlexBlock direction="column" gap={16} block>
+          <Texting level={2}>Vaults</Texting>
+          <FlexBlock block alignItems="center">
+            {vaults.map(({ vaultAddress, coinName, chainName }) => (
+              <Card
+                size="s"
+                key={vaultAddress}
+                className={classNames(
+                  styles.vaultButton,
+                  choosenVault.vaultAddress === vaultAddress ? styles.active : ''
+                )}
+                onClick={() =>
+                  setChoosenVault(
+                    vaults.find(vault => vault.vaultAddress === vaultAddress) ?? vaults[0]
+                  )
+                }
+              >
+                <Texting level={2}>{coinName}</Texting>
+                <Texting level={4}>{chainName}</Texting>
+              </Card>
+            ))}
+          </FlexBlock>
         </FlexBlock>
-      </FlexBlock>
+      )}
 
       <FlexBlock direction="column" gap={16} block>
         <Texting level={2}>Amount</Texting>

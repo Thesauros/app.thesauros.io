@@ -25,7 +25,11 @@ export const PerfomanceChart = () => {
         block
         className={styles.headContainer}
       >
-        <VaultSelector activeVault={currentVault} onVaultSelect={setCurrentVault} />
+        {vaults.length > 1 ? (
+          <VaultSelector activeVault={currentVault} onVaultSelect={setCurrentVault} />
+        ) : (
+          <div />
+        )}
         <PeriodSelector
           activePeriod={timePeriod}
           onPeriodSelect={setTimePeriod}

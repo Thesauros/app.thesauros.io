@@ -10,7 +10,7 @@ import { TAddress, TArg, TChainID } from './types';
 type TContractReadProps = {
   address: TAddress;
   functionName: string;
-  args: TArg[];
+  args?: TArg[];
   chainID: TChainID;
   watch?: boolean;
   staleTime?: number;
@@ -38,7 +38,7 @@ export const useContractRead = ({
     abi: abi,
     chainId: chainID,
     functionName: functionName,
-    args: args,
+    args: args ?? [],
     query: {
       select: selectData,
       staleTime: staleTimeResult,
