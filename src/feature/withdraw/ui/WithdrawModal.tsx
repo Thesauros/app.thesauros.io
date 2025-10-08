@@ -71,6 +71,12 @@ export const WithdrawModal = () => {
     },
   });
 
+  const { data: symbol } = useContractRead({
+    address: choosenVault.vaultAddress,
+    functionName: 'symbol',
+    chainID: choosenVault.chainID,
+  });
+
   const userCoinBalance: number = useMemo(() => {
     if (typeof coinBalance === 'number') {
       return coinBalance;
@@ -165,13 +171,13 @@ export const WithdrawModal = () => {
           <FlexBlock justifyContent="space-between" alignItems="center" block>
             <Texting level={3}>Available:</Texting>
             <Texting level={3}>
-              {userCoinBalance ?? 0} r{choosenVault.coinName}
+              {userCoinBalance ?? 0} {(symbol as string) ?? ''}
             </Texting>
           </FlexBlock>
 
           <FlexBlock justifyContent="space-between" alignItems="center" block>
             <Texting level={3}>Withdrawal Fee:</Texting>
-            <Texting level={3}>0.00 USDT</Texting>
+            <Texting level={3}>0.00 {(symbol as string) ?? ''}</Texting>
           </FlexBlock>
         </FlexBlock>
       </FlexBlock>
