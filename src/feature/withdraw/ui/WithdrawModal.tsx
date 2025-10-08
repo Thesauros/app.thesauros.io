@@ -78,30 +78,12 @@ export const WithdrawModal = () => {
     chainID: choosenVault.chainID,
   });
 
-  const { data: withdrawFeePercent } = useContractRead({
-    address: choosenVault.vaultAddress,
-    functionName: 'withdrawFeePercent',
-    watch: false,
-    chainID: choosenVault.chainID,
-    selectData: (data: unknown): number => {
-      const raw = Number(data);
-      const denominator = raw > 1_000_000 ? 1e18 : 1e4;
-      return raw / denominator;
-    },
-  });
-
   const userCoinBalance: number = useMemo(() => {
     if (typeof coinBalance === 'number') {
       return coinBalance;
     }
     return 0;
   }, [coinBalance]);
-
-  const withdrawFeeAmountTokens: number = useMemo(() => {
-    const amountTokens = Number(value || 0);
-    const feeFraction = typeof withdrawFeePercent === 'number' ? withdrawFeePercent : 0;
-    return round(amountTokens * feeFraction, 6);
-  }, [value, withdrawFeePercent]);
 
   const handlePercentageClick = (percentage: number) => {
     if (percentage === 100) {
@@ -193,13 +175,6 @@ export const WithdrawModal = () => {
             <Texting level={3}>Available:</Texting>
             <Texting level={3}>
               {userCoinBalance ?? 0} {(symbol as string) ?? ''}
-            </Texting>
-          </FlexBlock>
-
-          <FlexBlock justifyContent="space-between" alignItems="center" block>
-            <Texting level={3}>Withdrawal Fee:</Texting>
-            <Texting level={3}>
-              {withdrawFeeAmountTokens.toFixed(3)} {(symbol as string) ?? ''}
             </Texting>
           </FlexBlock>
         </FlexBlock>
