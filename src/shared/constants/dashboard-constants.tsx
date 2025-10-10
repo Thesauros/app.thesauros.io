@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { Button } from '../ui/button';
-import { useVaultsPosition, useVaultsTVL, useAccount } from '../blockchain';
+import { useVaultsPosition, useVaultsTVL, useAccount, vaults } from '../blockchain';
 import { round } from '../number/round';
-import { useHighestApr, useCurrentAPR, useUserEarnedOverallicks } from '../api/dashboard';
+import { useHighestApr, useUserEarnedOverallicks } from '../api/dashboard';
+import { useOnchainCurrentAPY } from '../blockchain/useOnchainCurrentAPY';
 
 export const dashbardConstants = [
   { id: 'apy', label: 'APY', value: '12.25%', action: <Button size="xs">Earn</Button> },
@@ -30,18 +31,20 @@ export const dashbardConstants = [
 export const useDashboardConstants = () => {
   const { address } = useAccount();
   const { data } = useUserEarnedOverallicks({ interval: 1, intervals: 7, address: address });
-  const { apr30D } = useCurrentAPR();
 
   const totalEarned = useMemo(() => (data ? round(data[0].value, 6) : 0), [data]);
   const { data: vaultsTVL } = useVaultsTVL();
   const { data: totalPosition } = useVaultsPosition();
   const { data: performerOfTheWeek } = useHighestApr(7);
-
+  const apy = useOnchainCurrentAPY({
+    vaultAddress: vaults[0].vaultAddress,
+    chainID: vaults[0].chainID,
+  });
   return [
     {
       id: 'apy',
-      label: 'APY',
-      value: `${round(apr30D)}%`,
+      label: 'Current APY',
+      value: `${round(apy)}%`,
       // action: (
       //   <Button size="xs" onClick={() => open(<DepositModal />)}>
       //     Earn

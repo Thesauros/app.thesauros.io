@@ -9,6 +9,7 @@ import styles from './main.module.scss';
 
 export const DashboardScreen = () => {
   const dashbardConstants = useDashboardConstants();
+
   return (
     <FlexBlock direction="column" gap={40} block>
       <FlexBlock direction="column" gap={20} block>

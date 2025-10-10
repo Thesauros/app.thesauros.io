@@ -778,6 +778,25 @@ export const abi: Abi = [
   {
     inputs: [
       {
+        internalType: 'contract IVault',
+        name: 'vault',
+        type: 'address',
+      },
+    ],
+    name: 'getDepositRate',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'rate',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: 'owner',
         type: 'address',
