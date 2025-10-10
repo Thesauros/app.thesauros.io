@@ -39,7 +39,7 @@ export const APRChart = ({
       <FlexBlock alignItems="center" justifyContent="space-between" block>
         <FlexBlock alignItems="center" gap={8}>
           <Texting level={3} weight="regular" className={styles.chartTitle}>
-            Avearge dailyAPR
+            Average daily APR
           </Texting>
           <InfoIcon />
         </FlexBlock>

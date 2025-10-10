@@ -43,7 +43,7 @@ export const useDashboardConstants = () => {
   return [
     {
       id: 'apy',
-      label: 'CurrentAPY',
+      label: 'Current APY',
       value: `${round(apy)}%`,
       // action: (
       //   <Button size="xs" onClick={() => open(<DepositModal />)}>
