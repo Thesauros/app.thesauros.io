@@ -2,6 +2,7 @@ import { createContext, ReactNode } from 'react';
 
 export type TOpenOptions = {
   onClose?: () => void;
+  withLayout?: boolean;
 };
 
 type TModalState = {

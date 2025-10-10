@@ -6,10 +6,12 @@ import classNames from 'classnames';
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [modalContent, setModalContent] = useState<ReactNode>(null);
   const [onCloseHandler, setOncloseHandler] = useState<(() => void) | undefined>(undefined);
+  const [withLayout, setWithLayout] = useState(true);
 
   const open = useCallback((content: ReactNode, options?: TOpenOptions) => {
     setModalContent(content);
 
+    setWithLayout(options?.withLayout ?? true);
     const handler = options?.onClose ? options.onClose : null;
     if (handler) {
       setOncloseHandler(() => handler);
@@ -36,7 +38,11 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
             tabIndex={0}
           />
           <div className={styles.content}>
-            <div className={styles.modalContainer}>{modalContent}</div>
+            {withLayout ? (
+              <div className={styles.modalContainer}>{modalContent}</div>
+            ) : (
+              <div>{modalContent}</div>
+            )}
           </div>
         </div>
       </div>
