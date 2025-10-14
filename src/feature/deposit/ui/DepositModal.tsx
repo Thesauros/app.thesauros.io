@@ -17,6 +17,7 @@ import { useApprove } from '@/shared/blockchain/useApprove';
 import { useSwitchNetwork } from '@/shared/blockchain/core/useSwtichNetwork';
 import { round } from '@/shared/number/round';
 import { useContractRead } from '@/shared/blockchain/core/useContractRead';
+import { SwapWidget } from '@/widgets/swap';
 
 export const erc20Abi = [
   {
@@ -36,7 +37,7 @@ export const erc20Abi = [
 ];
 
 export const DepositModal = () => {
-  const { close } = useModal();
+  const { open, close } = useModal();
   const [choosenVault, setChoosenVault] = useState<TVault>(vaults[0]);
   const [value, setValue] = useState('');
   const { address } = useAccount();
@@ -131,6 +132,19 @@ export const DepositModal = () => {
           </div>
         </FlexBlock>
       </FlexBlock>
+      {userCoinBalance === 0 && (
+        <Button
+          onClick={() => {
+            open(
+              <SwapWidget coinAddress={choosenVault.coinAddress} chainID={choosenVault.chainID} />,
+              { withLayout: false }
+            );
+          }}
+          disabled={isDepositLoading}
+        >
+          Swap tokens
+        </Button>
+      )}
 
       <FlexBlock gap={16} alignItems="center" className={styles.buttonContainer} block>
         <Button variant="secondary" onClick={() => close()} disabled={isDepositLoading}>
