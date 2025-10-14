@@ -12,8 +12,12 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@bigmi/react": "^0.6.0",
+    "@lifi/widget": "^3.33.1",
+    "@mysten/dapp-kit": "^0.19.2",
     "@rainbow-me/rainbowkit": "^2.2.8",
-    "@tanstack/react-query": "^5.85.6",
+    "@solana/wallet-adapter-react": "^0.15.39",
+    "@tanstack/react-query": "^5.90.2",
     "@types/three": "^0.179.0",
     "classnames": "^2.5.1",
     "ethers": "^5.8.0",
@@ -24,7 +28,7 @@
     "recharts": "^3.1.2",
     "sass": "^1.89.2",
     "viem": "^2.36.0",
-    "wagmi": "^2.16.9"
+    "wagmi": "^2.18.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
