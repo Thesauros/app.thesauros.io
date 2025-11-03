@@ -1,5 +1,6 @@
 export enum LocalStorageKey {
   CONNECTED_WALLET = 'CONNECTED_WALLET',
+  REGISTERED_REFERRALS = 'REGISTERED_REFERRALS',
 }
 
 const addArrayItem = <T>(key: LocalStorageKey, value: T): void => {
