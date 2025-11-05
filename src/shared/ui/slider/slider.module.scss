@@ -1,0 +1,99 @@
+.wrapper {
+  height: 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+}
+
+.slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.track {
+  position: relative;
+  flex-grow: 1;
+  height: 100%;
+  border-radius: 4px;
+  background-color: #eceef2;
+  overflow: visible;
+}
+
+.trackFilled {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: var(--accent-1000, #3366ff);
+  border-radius: 4px;
+  transition: width 0.1s ease;
+
+  // Disable transitions during dragging for better performance
+  .slider.dragging & {
+    transition: none;
+  }
+}
+
+.thumb {
+  display: block;
+  width: 17px;
+  height: 17px;
+  border: 4px solid var(--accent-1000, #3366ff);
+  background-color: var(--white, #ffffff);
+  border-radius: 50%;
+  cursor: grab;
+  outline: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  // Radix UI manages positioning with transform, we only style appearance
+  will-change: transform;
+  // Smooth transition when not dragging
+  transition: transform 0.1s ease;
+
+  // Disable all focus effects (including Radix UI data attributes)
+  &:focus,
+  &:focus-visible,
+  &:focus-within,
+  &[data-focus],
+  &[data-focus-visible] {
+    outline: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  // Remove any pseudo-elements that might create the second circle
+  &::before,
+  &::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  // Disable focus ring for all states
+  &[data-state] {
+    outline: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  .slider.disabled & {
+    cursor: not-allowed;
+  }
+
+  // Disable transitions during dragging for better performance
+  .slider.dragging & {
+    transition: none;
+  }
+}
