@@ -1,0 +1,32 @@
+@use '@breakpoints' as breakpoints;
+
+.root {
+  font-weight: 400;
+  color: #030303;
+}
+
+.level-1 {
+  font-size: 16px;
+  line-height: 1.75;
+  letter-spacing: 0;
+}
+
+.level-2 {
+  font-size: 14px;
+  line-height: 1.57;
+  letter-spacing: 0;
+}
+
+.inline {
+  display: inline-block;
+}
+
+.bold {
+  font-weight: 700;
+}
+.medium {
+  font-weight: 500;
+}
+.regular {
+  font-weight: 400;
+}

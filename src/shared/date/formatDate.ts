@@ -3,6 +3,7 @@ export const formatDate = (dateString: string): string => {
 
   return new Intl.DateTimeFormat('en-US', {
     day: '2-digit',
-    month: 'short',
+    month: 'long',
+    year: 'numeric',
   }).format(date);
 };

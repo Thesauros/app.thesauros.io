@@ -1,7 +1,7 @@
 @use '@breakpoints' as breakpoints;
 
 .pageContainer {
-  padding: 0 24px 24px;
+  padding: 0 24px 24px 0;
   min-height: 73vh;
   flex: 1;
   overflow-y: auto;
