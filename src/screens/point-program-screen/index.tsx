@@ -62,6 +62,11 @@ export const PointProgramScreen = () => {
                     {item.value}
                   </Heading>
                 </FlexBlock>
+                {item.additionalInfo && (
+                  <Texting level={3} weight="regular" className={styles.additionalInfo}>
+                    {item.additionalInfo}
+                  </Texting>
+                )}
               </FlexBlock>
             </Card>
           ))}

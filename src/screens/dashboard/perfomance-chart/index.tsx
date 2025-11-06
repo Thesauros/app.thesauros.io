@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styles from './perfomance-chart.module.scss';
 import { FlexBlock } from '@/shared/ui/flex-block';
+
+import { ProfitChart } from './profit-chart';
 import { APRChart } from './apr-chart';
+import { VaultSelector } from './vault-selector';
 import { vaults } from '@/shared/blockchain/config';
-import { Card } from '@/shared/ui/new-card';
-import { SwitchToggle } from '@/shared/ui/switch-toggle';
-import { Subtitle } from '@/shared/ui/new-typography/subtitle';
+import { PeriodSelector } from './period-selector';
 
 const periods = [
   { title: '7D', value: 7 },
@@ -13,23 +14,32 @@ const periods = [
 ];
 
 export const PerfomanceChart = () => {
+  const [currentVault, setCurrentVault] = useState(vaults[0]);
   const [timePeriod, setTimePeriod] = useState(periods[0]);
 
   return (
-    <Card block>
-      <FlexBlock direction="column" gap={20}>
-        <FlexBlock justifyContent="space-between" alignItems="center">
-          <Subtitle level={2} weight="regular">
-            Thesauros Performance APY, %
-          </Subtitle>
-          <SwitchToggle active={timePeriod} onSelect={setTimePeriod} values={periods} />
-        </FlexBlock>
-        <FlexBlock direction="column" gap={20} block>
-          <div className={styles.container}>
-            <APRChart currentVault={vaults[0]} period={timePeriod} />
-          </div>
-        </FlexBlock>
+    <FlexBlock direction="column" gap={20} block>
+      <FlexBlock
+        alignItems="center"
+        justifyContent="space-between"
+        block
+        className={styles.headContainer}
+      >
+        {vaults.length > 1 ? (
+          <VaultSelector activeVault={currentVault} onVaultSelect={setCurrentVault} />
+        ) : (
+          <div />
+        )}
+        <PeriodSelector
+          activePeriod={timePeriod}
+          onPeriodSelect={setTimePeriod}
+          periods={periods}
+        />
       </FlexBlock>
-    </Card>
+      <div className={styles.container}>
+        <APRChart currentVault={currentVault} period={timePeriod} />
+        <ProfitChart currentVault={currentVault} period={timePeriod} />
+      </div>
+    </FlexBlock>
   );
 };

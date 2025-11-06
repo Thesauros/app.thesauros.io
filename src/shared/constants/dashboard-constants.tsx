@@ -40,45 +40,36 @@ export const useDashboardConstants = () => {
     vaultAddress: vaults[0].vaultAddress,
     chainID: vaults[0].chainID,
   });
-
-  return {
-    apy: apy,
-    totalPosition: totalPosition ? round(totalPosition) : 0,
-    performerOfTheWeek,
-    totalEarned,
-    vaultsTVL,
-  };
-
-  // return [
-  //   {
-  //     id: 'apy',
-  //     label: 'Current APY',
-  //     value: `${round(apy)}%`,
-  //     // action: (
-  //     //   <Button size="xs" onClick={() => open(<DepositModal />)}>
-  //     //     Earn
-  //     //   </Button>
-  //     // ),
-  //   },
-  //   {
-  //     id: 'my-position',
-  //     label: 'My Position',
-  //     value: `$${totalPosition ? round(totalPosition) : 0}`,
-  //   },
-  //   {
-  //     id: 'best-performer',
-  //     label: 'Best Performer',
-  //     value: performerOfTheWeek,
-  //   },
-  //   {
-  //     id: 'total-profit',
-  //     label: 'Total Earned',
-  //     value: `$${totalEarned}`,
-  //   },
-  //   {
-  //     id: 'tvl',
-  //     label: 'TVL',
-  //     value: `$${vaultsTVL ?? '...'}`,
-  //   },
-  // ];
+  return [
+    {
+      id: 'apy',
+      label: 'Current APY',
+      value: `${round(apy)}%`,
+      // action: (
+      //   <Button size="xs" onClick={() => open(<DepositModal />)}>
+      //     Earn
+      //   </Button>
+      // ),
+    },
+    {
+      id: 'my-position',
+      label: 'My Position',
+      value: `$${totalPosition ? round(totalPosition) : 0}`,
+    },
+    {
+      id: 'best-performer',
+      label: 'Best Performer',
+      value: performerOfTheWeek,
+    },
+    {
+      id: 'total-profit',
+      label: 'Total Earned',
+      value: `$${totalEarned}`,
+    },
+    {
+      id: 'tvl',
+      label: 'TVL',
+      value: `$${vaultsTVL ?? '...'}`,
+    },
+  ];
 };

@@ -6,7 +6,7 @@ export const LogoIcon = ({ size = 'm' }: { size?: 's' | 'm' }) => {
 
   return (
     <svg
-      width={size === 'm' ? 214 : 110}
+      width={size === 'm' ? 143 : 110}
       height={size === 'm' ? 36 : 22}
       viewBox="0 0 549 109"
       fill="none"

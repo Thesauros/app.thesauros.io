@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 26px;
 }
 
 .chartTitle {
@@ -19,8 +19,16 @@
   box-shadow: 0px 1px 2px 0px rgba(10, 13, 20, 0.03);
 }
 
+.tooltipValue {
+  font-size: 16px;
+  font-weight: 400;
+  color: #030303;
+}
+
 .tooltipDate {
-  color: #64788c;
+  font-size: 10px;
+  color: #03030366;
+  margin-top: 4px;
 }
 
 .container :global(.recharts-surface) {
@@ -43,27 +51,10 @@
   opacity: 1;
   border-radius: 2px;
   padding: 2px 4px;
-  background-color: #e6f7eb;
-  color: #36b454;
+  background-color: #1e6eff0a;
+  color: #10b981;
 
   &.negative {
     color: red;
   }
-}
-
-.apyLegendCircle {
-  width: 16px;
-  height: 16px;
-  margin: 4px;
-  border-radius: 50%;
-  background-color: #f57c00;
-}
-
-.secondary {
-  color: #64788c;
-  padding-top: 4px;
-}
-
-.legendBlock {
-  padding-left: 65px;
 }
