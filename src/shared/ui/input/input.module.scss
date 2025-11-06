@@ -1,19 +1,21 @@
 .container {
-  width: 100%;
   position: relative;
 
   // Firefox
   input[type='number'] {
+    appearance: textfield;
     -moz-appearance: textfield;
   }
 }
 
 .input {
-  padding: 14px 16px;
-  width: 100%;
+  padding: 6px 12px;
   font-size: 14px;
-  border-radius: 12px;
+  font-weight: 400;
+  border: 1px solid #7b8c9d;
+  border-radius: 10px;
   box-sizing: border-box;
+  color: #030303;
 
   // Chrome
   &::-webkit-outer-spin-button,
@@ -24,27 +26,38 @@
   }
 
   &:focus-visible {
-    border: unset;
+    border-color: #196aff;
     outline: unset;
     background-color: var(--background-secondary);
   }
 
   &::placeholder {
-    color: #8c99ac;
+    color: #64788c;
   }
 
   &.error {
-    color: red;
+    border-color: #d21a13;
   }
 
   &.withIcon {
     padding-left: 30px;
   }
+
+  &.textAlignLeft {
+    text-align: left;
+  }
+
+  &.textAlignCenter {
+    text-align: center;
+  }
+
+  &.textAlignRight {
+    text-align: right;
+  }
 }
 
 .primary {
-  color: var(--content-primary);
-  background: var(--background-secondary);
+  color: #030303;
 }
 
 .secondary {

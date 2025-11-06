@@ -52,16 +52,31 @@
 }
 
 .apyLegendCircle {
-  width: 16px;
-  height: 16px;
-  margin: 4px;
+  width: 8px;
+  height: 8px;
+  margin: 6px;
   border-radius: 50%;
   background-color: #f57c00;
 }
 
+.profitLegendCircle {
+  width: 8px;
+  height: 8px;
+  margin: 6px;
+  border-radius: 50%;
+  background-color: #b9dcff;
+}
+
+.marketValueLegendCircle {
+  width: 8px;
+  height: 8px;
+  margin: 6px;
+  border-radius: 50%;
+  background-color: #ffd4a8;
+}
+
 .secondary {
   color: #64788c;
-  padding-top: 4px;
 }
 
 .legendBlock {

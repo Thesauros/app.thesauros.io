@@ -147,7 +147,7 @@ export const DepositModal = () => {
       )}
 
       <FlexBlock gap={16} alignItems="center" className={styles.buttonContainer} block>
-        <Button variant="secondary" onClick={() => close()} disabled={isDepositLoading}>
+        <Button variant="primary" onClick={() => close()} disabled={isDepositLoading}>
           Cancel
         </Button>
         <Button

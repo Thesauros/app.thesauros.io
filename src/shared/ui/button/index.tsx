@@ -2,19 +2,19 @@ import { ButtonHTMLAttributes, ReactNode } from 'react';
 import styles from './button.module.scss';
 import classNames from 'classnames';
 
-type ButtonVariant = 'primary' | 'secondary';
+type ButtonVariant = 'primary' | 'outline' | 'text';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   variant?: ButtonVariant;
-  size?: 'xxs' | 'xs' | 's' | 'm';
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
 export const Button = ({
   children,
   variant = 'primary',
-  size = 'm',
+  size = 'md',
   className = '',
   ...props
 }: ButtonProps) => {

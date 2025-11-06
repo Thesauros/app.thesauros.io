@@ -181,7 +181,7 @@ export const WithdrawModal = () => {
       </FlexBlock>
 
       <FlexBlock gap={16} alignItems="center" className={styles.buttonContainer} block>
-        <Button variant="secondary" onClick={() => close()} disabled={isWithdrawingLoading}>
+        <Button variant="primary" onClick={() => close()} disabled={isWithdrawingLoading}>
           Cancel
         </Button>
         <Button

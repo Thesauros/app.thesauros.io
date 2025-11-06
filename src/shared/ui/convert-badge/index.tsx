@@ -8,9 +8,7 @@ export const ConvertBadge = () => {
   return (
     <Card className={styles.badgeContainer}>
       <FlexBlock gap={8} alignItems="center">
-        <Caption>
-          Convert any crypto <br /> to USDC during Deposit
-        </Caption>
+        <Caption className={styles.secondary}>Convert any crypto to USDC during Deposit</Caption>
         <ConvertCoins />
       </FlexBlock>
     </Card>

@@ -2,6 +2,7 @@ import styles from './apr-chart.module.scss';
 import {
   Area,
   AreaChart,
+  Bar,
   CartesianGrid,
   Line,
   ResponsiveContainer,
@@ -9,13 +10,16 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { useAPRData } from '../mocks';
+import { useAPRData, useProfitData } from '../mocks';
 import { APRChartTooltip } from './apr-tooltip';
 import { Loader } from '@/shared/ui/loader';
 import { TVault } from '@/shared/blockchain/core/types';
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { Caption } from '@/shared/ui/new-typography/caption';
-import { Heading } from '@/shared/ui/new-typography/heading';
+import { Body } from '@/shared/ui/new-typography/body';
+import formatNumberSmart from '@/shared/number/formatNumberSmart';
+import { useMemo } from 'react';
+import { round } from '@/shared/number/round';
 
 export const APRChart = ({
   currentVault,
@@ -29,28 +33,70 @@ export const APRChart = ({
     period: period.value,
   });
 
+  const {
+    data: profitData,
+    isLoading: isProfitLoading,
+    total,
+  } = useProfitData({
+    coinName: currentVault.coinName as 'USDC' | 'USDT',
+    period: period.value,
+  });
+
   const isWeekPeriod = period.value === 7;
+
+  const combinedData = useMemo(() => {
+    if (!data || !profitData) return data || [];
+
+    return data.map(aprItem => {
+      const profitItem = profitData.find(p => p.date === aprItem.date);
+      return {
+        ...aprItem,
+        profitValue: profitItem?.dateValue || 0,
+      };
+    });
+  }, [data, profitData]);
 
   return (
     <div className={styles.container}>
-      <FlexBlock alignItems="center" gap={16} className={styles.legendBlock}>
+      <FlexBlock alignItems="flex-start" gap={16} className={styles.legendBlock}>
+        {!!profitData?.length && (
+          <FlexBlock gap={8} alignItems="flex-start">
+            <div className={styles.profitLegendCircle} />
+            <FlexBlock direction="column" gap={0}>
+              <Caption weight="regular" className={styles.secondary}>
+                Earned in {period.title}
+              </Caption>
+              <Body level={2} weight="bold">
+                ${round(total)}
+              </Body>
+            </FlexBlock>
+          </FlexBlock>
+        )}
         <FlexBlock gap={8} alignItems="flex-start">
           <div className={styles.apyLegendCircle} />
           <FlexBlock direction="column" gap={0}>
             <Caption weight="regular" className={styles.secondary}>
               Av. {period.title} APY
             </Caption>
-            <Heading level={6} weight="medium">
+            <Body level={2} weight="bold">
               {average}%
-            </Heading>
+            </Body>
+          </FlexBlock>
+        </FlexBlock>
+        <FlexBlock gap={8} alignItems="flex-start">
+          <div className={styles.marketValueLegendCircle} />
+          <FlexBlock direction="column" gap={0}>
+            <Caption weight="regular" className={styles.secondary}>
+              Market value
+            </Caption>
           </FlexBlock>
         </FlexBlock>
       </FlexBlock>
-      {isLoading ? (
+      {isLoading || isProfitLoading ? (
         <Loader />
       ) : (
         <ResponsiveContainer width="100%" height={394}>
-          <AreaChart data={data} margin={{ left: 10 }}>
+          <AreaChart data={combinedData} margin={{ left: 10, right: 10 }}>
             <defs>
               <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#FFDDAD" stopOpacity={0.6} />
@@ -74,6 +120,7 @@ export const APRChart = ({
               interval={isWeekPeriod ? 1 : 5}
             />
             <YAxis
+              yAxisId="left"
               axisLine={false}
               tickLine={false}
               tickCount={7}
@@ -81,8 +128,26 @@ export const APRChart = ({
               tickMargin={20}
               tickFormatter={value => `${value.toFixed(2)}%`}
             />
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              axisLine={false}
+              tickLine={false}
+              tickCount={4}
+              tick={{ fontSize: 12, fill: '#9D9D9D' }}
+              tickFormatter={value => formatNumberSmart(value as number)}
+            />
             <Tooltip content={<APRChartTooltip />} />
+            <Bar
+              yAxisId="right"
+              dataKey="profitValue"
+              fill="#B9DCFF"
+              radius={[4, 4, 0, 0]}
+              activeBar={{ fill: '#7cb2fc' }}
+              maxBarSize={20}
+            />
             <Area
+              yAxisId="left"
               type="monotone"
               dataKey="dateValue"
               stroke="#F57C00"
@@ -91,6 +156,7 @@ export const APRChart = ({
               activeDot={{ fill: '#F57C00', stroke: '#FFF', strokeWidth: 6, r: 12 }}
             />
             <Line
+              yAxisId="left"
               type="monotone"
               dataKey="marketValue"
               stroke="#ffd4a8"

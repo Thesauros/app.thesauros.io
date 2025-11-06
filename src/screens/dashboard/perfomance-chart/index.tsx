@@ -6,6 +6,8 @@ import { vaults } from '@/shared/blockchain/config';
 import { Card } from '@/shared/ui/new-card';
 import { SwitchToggle } from '@/shared/ui/switch-toggle';
 import { Subtitle } from '@/shared/ui/new-typography/subtitle';
+import { Tooltip } from '@/shared/ui/tooltip/tooltip';
+import { useAccount } from '@/shared/blockchain';
 
 const periods = [
   { title: '7D', value: 7 },
@@ -14,14 +16,25 @@ const periods = [
 
 export const PerfomanceChart = () => {
   const [timePeriod, setTimePeriod] = useState(periods[0]);
+  const { isConnected } = useAccount();
 
   return (
     <Card block>
       <FlexBlock direction="column" gap={20}>
         <FlexBlock justifyContent="space-between" alignItems="center">
-          <Subtitle level={2} weight="regular">
-            Thesauros Performance APY, %
-          </Subtitle>
+          <Tooltip
+            withIcon
+            tooltipText={
+              isConnected
+                ? 'Here you can see how your deposit grows over time and what average return the strategy is generating for you. The chart shows both your earned amount for the selected period and the average APY the strategy maintained during that time.'
+                : 'Shows the current average yield the strategy generates from connected DeFi protocols. The percentage can move up or down depending on market conditions.'
+            }
+          >
+            <Subtitle level={2} weight="regular">
+              Thesauros Performance APY, %
+            </Subtitle>
+          </Tooltip>
+
           <SwitchToggle active={timePeriod} onSelect={setTimePeriod} values={periods} />
         </FlexBlock>
         <FlexBlock direction="column" gap={20} block>
