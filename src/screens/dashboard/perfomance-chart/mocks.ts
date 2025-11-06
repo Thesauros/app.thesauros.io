@@ -28,19 +28,13 @@ export const useAPRData = ({ coinName, period }: { coinName: 'USDC' | 'USDT'; pe
       : undefined;
   }, [aprData, marketData]);
 
-  return useMemo(() => {
-    const reversedData = aprDatas && aprDatas.length > 0 ? [...aprDatas].reverse() : [];
-    const average =
-      reversedData.length > 0
-        ? reversedData.reduce((sum, item) => sum + item.dateValue, 0) / reversedData.length
-        : 0;
-
-    return {
-      data: reversedData,
+  return useMemo(
+    () => ({
+      data: aprDatas && aprDatas.length > 0 ? [...aprDatas].reverse() : [],
       isLoading: isAPRLoading && isMarketAPRLoading,
-      average: round(average, 2),
-    };
-  }, [aprDatas, isAPRLoading, isMarketAPRLoading]);
+    }),
+    [aprDatas, isAPRLoading, isMarketAPRLoading]
+  );
 };
 
 export const useProfitData = ({
