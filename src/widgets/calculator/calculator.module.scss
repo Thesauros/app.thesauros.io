@@ -1,0 +1,42 @@
+.description {
+  color: #64788c;
+}
+
+.earningsBlock {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(5, 1fr);
+  width: 100%;
+}
+
+.depositBlock {
+  grid-area: 1 / 1 / 2 / 4;
+}
+.returnsBlock {
+  grid-area: 1 / 4 / 2 / 5;
+}
+.pointsBlock {
+  grid-area: 1 / 5 / 2 / 6;
+}
+
+.fullHeignt {
+  height: 100%;
+}
+
+.pointsInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #e2f1ff;
+  border-radius: 10px;
+  gap: 8px;
+}
+
+.highlight {
+  font-weight: 700;
+  color: #196aff;
+}
