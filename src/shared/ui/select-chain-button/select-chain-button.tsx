@@ -11,7 +11,7 @@ export const SelectChainButton = () => {
               <img
                 alt={chain.name ?? 'Chain icon'}
                 src={chain.iconUrl}
-                style={{ width: 26, height: 26, borderRadius: '50%' }}
+                style={{ width: 24, height: 24, borderRadius: '50%' }}
               />
             ) : (
               <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24">

@@ -21,6 +21,7 @@ export const Slider = ({
   disabled = false,
   className = '',
 }: TProps) => {
+  const innerValue = value;
   const handleValueChange = (values: number[]) => {
     if (onChange && values[0] !== undefined) {
       onChange(values[0]);
@@ -34,8 +35,9 @@ export const Slider = ({
         min={min}
         max={max}
         step={step}
+        value={[innerValue]}
         disabled={disabled}
-        defaultValue={[value]}
+        defaultValue={[innerValue]}
         onValueChange={handleValueChange}
       >
         <SliderPrimitive.Track className={styles.track}>

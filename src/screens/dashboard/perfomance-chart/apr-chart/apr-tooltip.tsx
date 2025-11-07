@@ -9,16 +9,18 @@ import { Body } from '@/shared/ui/new-typography/body';
 
 export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
-    const aprValue = payload[0]?.value;
-    const aprDate = payload[0].payload.date;
-    const aprMarketValue = payload[0].payload.marketValue;
+    const aprValue = payload[1]?.value;
+    const aprDate = payload[1].payload.date;
+    const aprMarketValue = payload[1].payload.marketValue;
 
     const diffPercent = round((aprValue / aprMarketValue) * 100 - 100);
 
     return (
       <div className={styles.revenueTooltip}>
         <FlexBlock alignItems="center" gap={8}>
-          <Body>{round(aprValue)}%</Body>
+          <Body level={2} weight="bold">
+            {round(aprValue)}%
+          </Body>
           {diffPercent !== Infinity && (
             <div
               className={classNames(styles.tooltipChange, diffPercent < 0 ? styles.negative : '')}

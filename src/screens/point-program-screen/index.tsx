@@ -129,7 +129,7 @@ export const PointProgramScreen = () => {
                       {element.points}PTS
                     </Texting>
                     {element.id === 'invite_friends' && (
-                      <Button size="xxs" onClick={() => open(<GenerateLinkModal />)}>
+                      <Button size="sm" onClick={() => open(<GenerateLinkModal />)}>
                         Generate Link
                       </Button>
                     )}

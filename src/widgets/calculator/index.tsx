@@ -1,6 +1,5 @@
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { Card } from '@/shared/ui/new-card';
-import { Body } from '@/shared/ui/new-typography/body';
 import { Caption } from '@/shared/ui/new-typography/caption';
 import { Tooltip } from '@/shared/ui/tooltip/tooltip';
 import styles from './calculator.module.scss';
@@ -12,6 +11,8 @@ import { NewInfoIcon } from '@/shared/ui/icons/new-info';
 import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
 import { SwitchToggle } from '@/shared/ui/switch-toggle';
 import { round } from '@/shared/number/round';
+import { InputComponent } from '@/shared/ui/input';
+import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 
 type TPeriod = '6m' | '1y' | '3y' | '6y';
 
@@ -30,48 +31,65 @@ const PERIOD_TITLE_MAP_TO_TEXT: Record<TPeriod, string> = {
 };
 
 export const Calculator = ({ apy }: { apy: number }) => {
-  const [depositValue, setDepositValue] = useState(500000);
+  const [depositValue, setDepositValue] = useState('10000');
   const [timePeriod, setTimePeriod] = useState(periods[0]);
 
-  const pointsValue = depositValue * timePeriod.value * 365;
+  const pointsValue = Number(depositValue) * timePeriod.value * 365;
 
-  const potenitalReturns = round(timePeriod.value * apy * (depositValue / 100) + depositValue);
+  const potenitalReturns = round(
+    timePeriod.value * apy * (Number(depositValue) / 100) + Number(depositValue)
+  );
 
   return (
     <Card block>
       <FlexBlock direction="column" gap={16} block>
         <FlexBlock justifyContent="space-between" alignItems="center" block>
-          <Tooltip tooltipText="" withIcon>
-            <Body level={2} weight="regular">
+          <Tooltip
+            tooltipText="Shows how much your balance could grow, including your deposit and potential income for the selected period. The amount is based on the current APY and can change as the rate updates."
+            withIcon
+          >
+            <Subtitle level={2} weight="regular">
               Potential earnings
-            </Body>
+            </Subtitle>
           </Tooltip>
-          <FlexBlock alignItems="center" gap={16}>
-            <Body weight="medium">Withdraw anytime — no lock period 😎</Body>
-            <SwitchToggle active={timePeriod} values={periods} onSelect={setTimePeriod} />
-          </FlexBlock>
+          <SwitchToggle active={timePeriod} values={periods} onSelect={setTimePeriod} />
         </FlexBlock>
         <div className={styles.earningsBlock}>
           <Card variant="secondary" className={styles.depositBlock}>
             <FlexBlock direction="column" gap={24}>
               <FlexBlock alignItems="center" justifyContent="space-between">
-                <Body level={2} weight="medium" className={styles.description}>
+                <Subtitle level={2} weight="regular" className={styles.description}>
                   My deposit
-                </Body>
-                <Tooltip tooltipText="" withIcon>
+                </Subtitle>
+                <Tooltip
+                  tooltipText="Annual Percentage Yield shows how much your money could earn in one year if profits are reinvested. In DeFi the rate changes over time depending on market activity."
+                  withIcon
+                >
                   <Caption weight="regular">Current APY {round(apy)}%</Caption>
                 </Tooltip>
               </FlexBlock>
               <FlexBlock direction="column" gap={12} block>
                 <FlexBlock alignItems="center" justifyContent="space-between" block>
-                  <Subtitle weight="bold">Amount</Subtitle>
-                  <Subtitle weight="bold">${depositValue}</Subtitle>
+                  <Subtitle level={2} weight="bold">
+                    Amount
+                  </Subtitle>
+                  <InputComponent
+                    id="deposit-value"
+                    variant="primary"
+                    value={depositValue}
+                    minValue={1000}
+                    maxValue={1000000}
+                    textAlign="right"
+                    prefix="$"
+                    type="number"
+                    onChange={setDepositValue}
+                  />
                 </FlexBlock>
                 <Slider
                   min={1000}
                   max={1000000}
-                  value={depositValue}
-                  onChange={value => setDepositValue(value)}
+                  value={Number(depositValue)}
+                  onChange={value => setDepositValue(String(value))}
                 />
               </FlexBlock>
             </FlexBlock>
@@ -79,24 +97,36 @@ export const Calculator = ({ apy }: { apy: number }) => {
           <Card variant="secondary" className={styles.returnsBlock}>
             <FlexBlock direction="column" gap={24}>
               <FlexBlock direction="column" gap={12}>
-                <Body level={2} className={styles.description}>
+                <Subtitle level={2} weight="regular" className={styles.description}>
                   Potential return in{' '}
                   <span className={styles.highlight}>
                     {PERIOD_TITLE_MAP_TO_TEXT[timePeriod.title as TPeriod]}
                   </span>
-                </Body>
-                <Heading level={5}>${potenitalReturns}</Heading>
+                </Subtitle>
+                <Heading level={5} weight="bold">
+                  ${formatNumberWithCommas(potenitalReturns)}
+                </Heading>
               </FlexBlock>
-              <Tooltip tooltipText="" withIcon>
-                <Caption>Total cumulative profit 60%</Caption>
+              <Tooltip
+                tooltipText="Displays your projected total profit if you keep funds for the full selected period. Earnings are added back to your deposit, so your balance can grow faster over time."
+                withIcon
+              >
+                <Caption weight="regular" className={styles.secondary}>
+                  Total cumulative profit <span className={styles.highlight}>60%</span>
+                </Caption>
               </Tooltip>
             </FlexBlock>
           </Card>
           <Card variant="secondary" className={styles.pointsBlock}>
             <FlexBlock direction="column" gap={16} block className={styles.fullHeignt}>
               <FlexBlock justifyContent="space-between" alignItems="center" block>
-                <Caption className={styles.description}>Projected points</Caption>
-                <Tooltip tooltipText="">
+                <Subtitle level={2} weight="regular" className={styles.description}>
+                  Projected points
+                </Subtitle>
+                <Tooltip
+                  tooltipText="You receive 1 point for every $1 you hold each day.
+ For example, holding 1,000 USDC for one year gives you about 365,000 points."
+                >
                   <NewInfoIcon />
                 </Tooltip>
               </FlexBlock>

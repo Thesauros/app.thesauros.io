@@ -12,17 +12,19 @@
   padding: 4px;
   width: 67px;
   border-radius: 6px;
-  color: #99a0ae;
+  color: #64788c;
   font-size: 14px;
+  font-weight: 500;
   transition: 0.3s;
+  border: 1px solid transparent;
 
   &:hover {
-    background: #e2f1ff;
+    border-color: #e2f1ff;
   }
 
   &.active {
-    background: #ffffff;
-    box-shadow: 0px 1px 3px 0px #00000017;
-    color: #196aff;
+    background: #e2f1ff;
+    border-color: #e2f1ff;
+    color: #030303;
   }
 }
