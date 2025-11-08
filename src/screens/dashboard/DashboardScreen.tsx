@@ -32,6 +32,17 @@ export const DashboardScreen = () => {
   const { isConnected } = useAccount();
   const { open } = useModal();
 
+  const isDeposited = dashbardConstants.totalPosition > 0;
+
+  const onDepositClick = () => {
+    if (isConnected) {
+      open(<DepositModal />);
+    } else if (openConnectModal) {
+      openConnectModal();
+      open(<DepositModal />);
+    }
+  };
+
   return (
     <FlexBlock direction="column" gap={12} block>
       <FlexBlock direction="column" gap={20} block>
@@ -91,7 +102,7 @@ export const DashboardScreen = () => {
                     ${dashbardConstants.vaultsTVL}
                   </Body>
                 </FlexBlock>
-                {!isConnected && (
+                {!isDeposited && (
                   <FlexBlock direction="column" gap={4}>
                     <Caption weight="regular" className={styles.secondaryHighlight}>
                       Deposit now and get
@@ -113,7 +124,7 @@ export const DashboardScreen = () => {
               fullHeight
             >
               <FlexBlock gap={8} alignItems="flex-start">
-                {isConnected && (
+                {isDeposited && (
                   <Card variant="secondary" className={styles.apyCard}>
                     <FlexBlock justifyContent="space-between" alignItems="center" block>
                       <Body level={2}>Points</Body>
@@ -127,13 +138,13 @@ export const DashboardScreen = () => {
                     <Heading level={6} weight="bold">
                       <FlexBlock gap={4} alignItems="center">
                         <PointCoinIcon size={16} />
-                        {dashbardConstants.totalPosition * 1000}
+                        {dashbardConstants.totalPosition}
                         <span className={styles.daily}>/daily</span>
                       </FlexBlock>
                     </Heading>
                   </Card>
                 )}
-                {isConnected && (
+                {isDeposited && (
                   <Card variant="secondary" className={styles.apyCard}>
                     <Body level={2}>Your funds</Body>
                     <Heading level={6} weight="bold">
@@ -151,7 +162,7 @@ export const DashboardScreen = () => {
                   </FlexBlock>
                 </Card>
               </FlexBlock>
-              {isConnected && (
+              {isDeposited && (
                 <FlexBlock alignItems="center" gap={12}>
                   <Button variant="outline" size="lg" onClick={() => open(<WithdrawModal />)}>
                     Withdraw
@@ -163,10 +174,10 @@ export const DashboardScreen = () => {
               )}
             </FlexBlock>
           </FlexBlock>
-          {!isConnected && (
+          {!isDeposited && (
             <FlexBlock justifyContent="space-between" alignItems="center">
               <FlexBlock alignItems="center" gap={20}>
-                <Button onClick={openConnectModal}>Deposit</Button>
+                <Button onClick={onDepositClick}>Deposit</Button>
                 <Caption weight="regular" className={styles.secondaryHighlight}>
                   Withdraw anytime — no lock period 😎
                 </Caption>

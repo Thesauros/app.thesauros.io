@@ -20,6 +20,7 @@ import { Body } from '@/shared/ui/new-typography/body';
 import formatNumberSmart from '@/shared/number/formatNumberSmart';
 import { useMemo } from 'react';
 import { round } from '@/shared/number/round';
+import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 
 export const APRChart = ({
   currentVault,
@@ -44,8 +45,12 @@ export const APRChart = ({
 
   const isWeekPeriod = period.value === 7;
 
+  const { totalPosition } = useDashboardConstants();
+
+  const isDeposited = totalPosition > 0;
+
   const combinedData = useMemo(() => {
-    if (!data || !profitData) return data || [];
+    if (!data || !profitData || !isDeposited) return data || [];
 
     return data.map(aprItem => {
       const profitItem = profitData.find(p => p.date === aprItem.date);
@@ -54,12 +59,12 @@ export const APRChart = ({
         profitValue: profitItem?.dateValue || 0,
       };
     });
-  }, [data, profitData]);
+  }, [data, profitData, isDeposited]);
 
   return (
     <div className={styles.container}>
       <FlexBlock alignItems="flex-start" gap={16} className={styles.legendBlock}>
-        {!!profitData?.length && (
+        {isDeposited && (
           <FlexBlock gap={8} alignItems="flex-start">
             <div className={styles.profitLegendCircle} />
             <FlexBlock direction="column" gap={0}>
@@ -138,14 +143,16 @@ export const APRChart = ({
               tickFormatter={value => formatNumberSmart(value as number)}
             />
             <Tooltip content={<APRChartTooltip />} />
-            <Bar
-              yAxisId="right"
-              dataKey="profitValue"
-              fill="#B9DCFF"
-              radius={[4, 4, 0, 0]}
-              activeBar={{ fill: '#7cb2fc' }}
-              maxBarSize={20}
-            />
+            {isDeposited && (
+              <Bar
+                yAxisId="right"
+                dataKey="profitValue"
+                fill="#B9DCFF"
+                radius={[4, 4, 0, 0]}
+                activeBar={{ fill: '#7cb2fc' }}
+                maxBarSize={20}
+              />
+            )}
             <Area
               yAxisId="left"
               type="monotone"

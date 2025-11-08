@@ -40,6 +40,8 @@ export const Calculator = ({ apy }: { apy: number }) => {
     timePeriod.value * apy * (Number(depositValue) / 100) + Number(depositValue)
   );
 
+  const cumulativeProfit = round(timePeriod.value * apy);
+
   return (
     <Card block>
       <FlexBlock direction="column" gap={16} block>
@@ -65,7 +67,9 @@ export const Calculator = ({ apy }: { apy: number }) => {
                   tooltipText="Annual Percentage Yield shows how much your money could earn in one year if profits are reinvested. In DeFi the rate changes over time depending on market activity."
                   withIcon
                 >
-                  <Caption weight="regular">Current APY {round(apy)}%</Caption>
+                  <Caption weight="regular" className={styles.secondary}>
+                    Current APY <span className={styles.highlight}>{round(apy)}%</span>
+                  </Caption>
                 </Tooltip>
               </FlexBlock>
               <FlexBlock direction="column" gap={12} block>
@@ -80,7 +84,7 @@ export const Calculator = ({ apy }: { apy: number }) => {
                     minValue={1000}
                     maxValue={1000000}
                     textAlign="right"
-                    prefix="$"
+                    numberPrefix="$"
                     type="number"
                     onChange={setDepositValue}
                   />
@@ -112,7 +116,8 @@ export const Calculator = ({ apy }: { apy: number }) => {
                 withIcon
               >
                 <Caption weight="regular" className={styles.secondary}>
-                  Total cumulative profit <span className={styles.highlight}>60%</span>
+                  Total cumulative profit{' '}
+                  <span className={styles.highlight}>{cumulativeProfit}%</span>
                 </Caption>
               </Tooltip>
             </FlexBlock>
