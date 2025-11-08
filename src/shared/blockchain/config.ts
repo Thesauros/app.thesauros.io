@@ -5,7 +5,7 @@ import { mainnet, polygon, optimism, arbitrum, base } from 'wagmi/chains';
 export const wagmiConfig = getDefaultConfig({
   appName: 'thesauros',
   projectId: 'c251732975350cbb92d74a64f88273c0',
-  chains: [mainnet, polygon, optimism, arbitrum, base],
+  chains: [arbitrum, mainnet, polygon, optimism, base],
   ssr: true,
 });
 

@@ -1,12 +1,9 @@
 import { vaults } from '@/shared/blockchain/config';
-import { Card } from '@/shared/ui/card';
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { CloseIcon } from '@/shared/ui/icons/close';
 import { useModal } from '@/shared/ui/modal';
-import { Texting } from '@/shared/ui/typography/texting';
 import { useMemo, useState } from 'react';
 import styles from './DepositModal.module.scss';
-import classNames from 'classnames';
 import { InputComponent } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import { useDeposit } from '@/feature/deposit/model/useDeposit';
@@ -18,27 +15,21 @@ import { useSwitchNetwork } from '@/shared/blockchain/core/useSwtichNetwork';
 import { round } from '@/shared/number/round';
 import { useContractRead } from '@/shared/blockchain/core/useContractRead';
 import { SwapWidget } from '@/widgets/swap';
-
-export const erc20Abi = [
-  {
-    constant: true,
-    inputs: [{ name: 'owner', type: 'address' }],
-    name: 'balanceOf',
-    outputs: [{ name: 'balance', type: 'uint256' }],
-    type: 'function',
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'decimals',
-    outputs: [{ name: '', type: 'uint8' }],
-    type: 'function',
-  },
-];
+import { Heading } from '@/shared/ui/new-typography/heading';
+import { UsdcIcon } from '@/shared/ui/icons/usdc-icon';
+import { Caption } from '@/shared/ui/new-typography/caption';
+import { Body } from '@/shared/ui/new-typography/body';
+import { Tooltip } from '@/shared/ui/tooltip/tooltip';
+import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
+import { Overline } from '@/shared/ui/new-typography/overline';
+import { InfoCircleIcon } from '@/shared/ui/icons/info-circle';
+import { SwapIcon } from '@/shared/ui/icons/swap';
+import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
+import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 
 export const DepositModal = () => {
   const { open, close } = useModal();
-  const [choosenVault, setChoosenVault] = useState<TVault>(vaults[0]);
+  const [choosenVault, _] = useState<TVault>(vaults[0]);
   const [value, setValue] = useState('');
   const { address } = useAccount();
 
@@ -48,6 +39,20 @@ export const DepositModal = () => {
     vaultAddress: choosenVault.vaultAddress,
     chainID: choosenVault.chainID,
     args: [depositValue, address],
+    onSuccess: data => {
+      open(
+        <TransactionStatusModal
+          data={data}
+          amount={Number(value)}
+          coinName={choosenVault.coinName}
+          status="success"
+          type="deposit"
+        />
+      );
+    },
+    onError: error => {
+      if (error) open(<TransactionStatusModal status="failed" type="deposit" />);
+    },
   });
 
   const { approve, isApproved } = useApprove({
@@ -72,6 +77,11 @@ export const DepositModal = () => {
     },
   });
 
+  const apy = useOnchainCurrentAPY({
+    vaultAddress: choosenVault.vaultAddress,
+    chainID: choosenVault.chainID,
+  });
+
   const userCoinBalance: number = useMemo(() => {
     if (typeof coinBalance === 'number') {
       return coinBalance;
@@ -80,90 +90,201 @@ export const DepositModal = () => {
   }, [coinBalance]);
 
   return (
-    <FlexBlock direction="column" gap={28} block>
+    <FlexBlock direction="column" gap={16} block>
+      {/* Header */}
       <FlexBlock justifyContent="space-between" alignItems="center" block>
-        <Texting level={1}>Deposit modal</Texting>
+        <FlexBlock gap={8} alignItems="center">
+          <UsdcIcon size={33} />
+          <Heading level={6} weight="regular">
+            Deposit {choosenVault.coinName}
+          </Heading>
+        </FlexBlock>
         <CloseIcon onClick={close} />
       </FlexBlock>
 
-      {vaults.length > 1 && (
-        <FlexBlock direction="column" gap={16} block>
-          <Texting level={2}>Vaults</Texting>
-          <FlexBlock block alignItems="center">
-            {vaults.map(({ vaultAddress, coinName, chainName }) => (
-              <Card
-                size="s"
-                key={vaultAddress}
-                className={classNames(
-                  styles.vaultButton,
-                  choosenVault.vaultAddress === vaultAddress ? styles.active : ''
-                )}
-                onClick={() =>
-                  setChoosenVault(
-                    vaults.find(vault => vault.vaultAddress === vaultAddress) ?? vaults[0]
-                  )
-                }
-              >
-                <Texting level={2}>{coinName}</Texting>
-                <Texting level={4}>{chainName}</Texting>
-              </Card>
-            ))}
-          </FlexBlock>
+      {/* APY area */}
+      <FlexBlock direction="column" gap={8} block>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Net APY
+          </Caption>
+          <Heading level={6} weight="bold" className={styles.highlight}>
+            {round(apy)}%
+          </Heading>
         </FlexBlock>
-      )}
-
-      <FlexBlock direction="column" gap={16} block>
-        <Texting level={2}>Amount</Texting>
-        <FlexBlock direction="column" gap={4} block>
-          <InputComponent
-            id="id"
-            variant="secondary"
-            value={value}
-            type="number"
-            placeholder="$0.00"
-            onChange={setValue}
-            disabled={isDepositLoading}
-          />
-          <div
-            onClick={() => coinBalance && setValue(String(userCoinBalance))}
-            style={{ cursor: 'pointer' }}
-          >
-            <Texting level={3}>Balance: {userCoinBalance ?? 0}</Texting>
-          </div>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Reward APY
+          </Caption>
+          <Body level={2} weight="regular">
+            {round(10 - apy)}%
+          </Body>
         </FlexBlock>
       </FlexBlock>
-      {userCoinBalance === 0 && (
-        <Button
-          onClick={() => {
-            open(
-              <SwapWidget coinAddress={choosenVault.coinAddress} chainID={choosenVault.chainID} />,
-              { withLayout: false }
-            );
-          }}
+
+      {/* Divider */}
+      <div className={styles.divider} />
+
+      {/*  Deposit Input*/}
+
+      <FlexBlock direction="column" gap={4} block>
+        <Caption>Amount to Deposit</Caption>
+        <InputComponent
+          id="id"
+          value={value}
+          type="number"
+          size="md"
+          postfix={
+            <Body level={2} weight="regular" className={styles.secondary}>
+              {choosenVault.coinName}
+            </Body>
+          }
+          fullWidth
+          onChange={setValue}
           disabled={isDepositLoading}
-        >
-          Swap tokens
-        </Button>
+        />
+      </FlexBlock>
+
+      {/*  Balance block */}
+      <FlexBlock direction="column" gap={16} block>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Balance:
+          </Caption>
+          <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
+            <Body level={2} weight="regular">
+              {userCoinBalance} {choosenVault.coinName}
+            </Body>
+          </div>
+        </FlexBlock>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Tooltip
+            tooltipText="You receive 1 point for every $1 you hold each day.
+ For example, holding 1,000 USDC for one year gives you about 365,000 points."
+            withIcon
+          >
+            <Caption weight="regular" className={styles.secondary}>
+              Total points per year
+            </Caption>
+          </Tooltip>
+          <FlexBlock gap={2} alignItems="center">
+            <PointCoinIcon size={16} />
+            <Body level={2} weight="regular">
+              365 000
+            </Body>
+          </FlexBlock>
+        </FlexBlock>
+      </FlexBlock>
+
+      {/* Divider */}
+      <div className={styles.divider} />
+
+      {/* Projected Earnings */}
+
+      <FlexBlock direction="column" gap={12} block>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Monthly
+          </Caption>
+          <Body level={2} weight="regular">
+            $6.92
+          </Body>
+        </FlexBlock>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Yearly
+          </Caption>
+          <Body level={2} weight="regular">
+            $83.00
+          </Body>
+        </FlexBlock>
+        <Overline className={styles.secondary}>
+          * Based on current rates. Rates may change.
+        </Overline>
+      </FlexBlock>
+
+      {/* Divider */}
+      <div className={styles.divider} />
+
+      {/* Fee Block */}
+      <FlexBlock direction="column" gap={12} block>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Performance fee
+          </Caption>
+          <Body level={2} weight="regular">
+            0.1%
+          </Body>
+        </FlexBlock>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Withdrawal fee
+          </Caption>
+          <Body level={2} weight="regular">
+            0%
+          </Body>
+        </FlexBlock>
+        <Overline className={styles.secondary}>
+          * Based on current rates. Rates may change.
+        </Overline>
+      </FlexBlock>
+
+      {/* Swap Block */}
+      {userCoinBalance === 0 && (
+        <div className={styles.swapBlock}>
+          <FlexBlock alignItems="center">
+            <InfoCircleIcon />
+            <Caption weight="regular">Low on USDC? Swap from any token</Caption>
+          </FlexBlock>
+          <Button
+            variant="text"
+            prefix={<SwapIcon />}
+            onClick={() => {
+              open(
+                <SwapWidget
+                  coinAddress={choosenVault.coinAddress}
+                  chainID={choosenVault.chainID}
+                />,
+                { withLayout: false }
+              );
+            }}
+          >
+            Swap
+          </Button>
+        </div>
       )}
 
-      <FlexBlock gap={16} alignItems="center" className={styles.buttonContainer} block>
-        <Button variant="primary" onClick={() => close()} disabled={isDepositLoading}>
-          Cancel
-        </Button>
-        <Button
-          onClick={() => {
-            if (isNeedSwitch) {
-              switchNetwork(choosenVault.chainID);
-            } else if (isApproved) {
-              deposit();
-            } else {
-              approve();
-            }
-          }}
-          disabled={isDepositLoading}
-        >
-          {isNeedSwitch ? 'Switch network' : isApproved ? 'Confirm' : 'Approve'}
-        </Button>
+      {/* Deposit button block */}
+      <Button
+        size="lg"
+        onClick={() => {
+          if (isNeedSwitch) {
+            switchNetwork(choosenVault.chainID);
+          } else if (isApproved) {
+            deposit();
+          } else {
+            approve();
+          }
+        }}
+        fullWidth
+        disabled={isDepositLoading || !depositValue}
+      >
+        {isNeedSwitch
+          ? 'Switch network'
+          : isApproved
+            ? `Deposit ${value} ${choosenVault.coinName}`
+            : 'Approve'}
+      </Button>
+
+      {/* First deposit block */}
+      <FlexBlock alignItems="center" gap={8} justifyContent="center">
+        <Body level={2} weight="regular">
+          +500
+        </Body>
+        <PointCoinIcon size={16} />
+        <Body level={2} weight="regular">
+          Points bonus for your first deposit
+        </Body>
       </FlexBlock>
     </FlexBlock>
   );

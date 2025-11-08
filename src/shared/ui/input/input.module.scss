@@ -1,21 +1,41 @@
 .container {
   position: relative;
+  display: flex;
+  align-items: center;
 
   // Firefox
   input[type='number'] {
     appearance: textfield;
     -moz-appearance: textfield;
   }
+
+  &.fullWidth {
+    width: 100%;
+  }
+}
+
+.inputWrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .input {
-  padding: 6px 12px;
   font-size: 14px;
   font-weight: 400;
   border: 1px solid #7b8c9d;
   border-radius: 10px;
   box-sizing: border-box;
   color: #030303;
+
+  &.sm {
+    padding: 6px 12px;
+  }
+
+  &.md {
+    padding: 14px 12px;
+  }
 
   // Chrome
   &::-webkit-outer-spin-button,
@@ -43,6 +63,14 @@
     padding-left: 30px;
   }
 
+  &.withPrefix {
+    padding-left: 40px;
+  }
+
+  &.withPostfix {
+    padding-right: 40px;
+  }
+
   &.textAlignLeft {
     text-align: left;
   }
@@ -53,6 +81,10 @@
 
   &.textAlignRight {
     text-align: right;
+  }
+
+  &.fullWidth {
+    width: 100%;
   }
 }
 
@@ -85,4 +117,26 @@
     width: 100%;
     height: 100%;
   }
+}
+
+.prefix {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.postfix {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
 }
