@@ -25,6 +25,10 @@ import { InfoIcon } from '@/shared/ui/icons';
 import { DepositModal } from '@/feature/deposit/ui/DepositModal';
 import { useModal } from '@/shared/ui/modal';
 import { WithdrawModal } from '@/feature/withdraw/ui/WithdrawModal';
+import { useCheckResolution } from '@/shared/browser/useCheckResolution';
+import { useEffect, useState } from 'react';
+import { CalculatorIcon } from '@/shared/ui/icons/calculator-icon';
+import { ChevronTopIcon } from '@/shared/ui/icons/chevron-top-icon';
 
 export const DashboardScreen = () => {
   const dashbardConstants = useDashboardConstants();
@@ -32,6 +36,7 @@ export const DashboardScreen = () => {
   const { isConnected } = useAccount();
   const { open } = useModal();
 
+  const isMobile = useCheckResolution(576);
   const isDeposited = dashbardConstants.totalPosition > 0;
 
   const onDepositClick = () => {
@@ -43,22 +48,40 @@ export const DashboardScreen = () => {
     }
   };
 
+  const [isCalculatorOpened, setCalculatorOpened] = useState(true);
+
+  useEffect(() => {
+    if (isDeposited) {
+      setCalculatorOpened(false);
+    }
+  }, [isDeposited]);
+
   return (
     <FlexBlock direction="column" gap={12} block>
       <FlexBlock direction="column" gap={20} block>
-        <FlexBlock direction="column" gap={12}>
-          <NewHeading level={5} weight="bold">
+        <FlexBlock justifyContent="space-between" block>
+          <NewHeading level={4} weight="bold">
             Dashboard
           </NewHeading>
-          <Body level={2} weight="regular" className={styles.pageDescription}>
-            Welcome back! Here`s your portfolio overview.
-          </Body>
+          <Button
+            size="lg"
+            variant="outline"
+            prefix={!isCalculatorOpened ? <CalculatorIcon /> : <ChevronTopIcon />}
+            onClick={() => setCalculatorOpened(!isCalculatorOpened)}
+          >
+            Potential earnings
+          </Button>
         </FlexBlock>
-        <Calculator apy={dashbardConstants.apy} />
+        {isCalculatorOpened && <Calculator apy={dashbardConstants.apy} />}
       </FlexBlock>
       <Card block>
         <FlexBlock direction="column" gap={28}>
-          <FlexBlock justifyContent="space-between" alignItems="flex-start" gap={24}>
+          <FlexBlock
+            justifyContent="space-between"
+            alignItems="flex-start"
+            gap={24}
+            direction={isMobile ? 'column' : 'row'}
+          >
             <FlexBlock direction="column" gap={16} className={styles.vaultInfoCard}>
               <FlexBlock gap={12} alignItems="center">
                 <UsdcIcon />
@@ -175,7 +198,11 @@ export const DashboardScreen = () => {
             </FlexBlock>
           </FlexBlock>
           {!isDeposited && (
-            <FlexBlock justifyContent="space-between" alignItems="center">
+            <FlexBlock
+              justifyContent="space-between"
+              alignItems="center"
+              direction={isMobile ? 'column' : 'row'}
+            >
               <FlexBlock alignItems="center" gap={20}>
                 <Button onClick={onDepositClick}>Deposit</Button>
                 <Caption weight="regular" className={styles.secondaryHighlight}>
@@ -194,7 +221,7 @@ export const DashboardScreen = () => {
             About
           </Subtitle>
           <FlexBlock gap={28} direction="column" alignItems="flex-start">
-            <FlexBlock gap={16} block>
+            <FlexBlock gap={16} direction={isMobile ? 'column' : 'row'} block>
               <Card variant="secondary" className={styles.partnersBlock} block>
                 <FlexBlock justifyContent="space-between" gap={16}>
                   <FlexBlock direction="column" gap={4}>

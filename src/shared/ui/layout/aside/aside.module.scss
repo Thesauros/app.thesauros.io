@@ -5,7 +5,7 @@
   padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  justify-content: space-between;
 
   @include breakpoints.tablet {
     display: none;
@@ -97,4 +97,21 @@
       opacity: 0.6;
     }
   }
+}
+
+.docsLinksContainer {
+  border-radius: 20px;
+  padding: 14px 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  background-color: #ffffff99;
+  border: 1px solid #fff;
+}
+
+.link {
+  text-decoration: unset;
+  color: #030303;
 }

@@ -8,6 +8,7 @@ import { SwitchToggle } from '@/shared/ui/switch-toggle';
 import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 import { Tooltip } from '@/shared/ui/tooltip/tooltip';
 import { useAccount } from '@/shared/blockchain';
+import { useCheckResolution } from '@/shared/browser/useCheckResolution';
 
 const periods = [
   { title: '7D', value: 7 },
@@ -17,11 +18,16 @@ const periods = [
 export const PerfomanceChart = () => {
   const [timePeriod, setTimePeriod] = useState(periods[0]);
   const { isConnected } = useAccount();
+  const isMobile = useCheckResolution(576);
 
   return (
     <Card block>
       <FlexBlock direction="column" gap={20}>
-        <FlexBlock justifyContent="space-between" alignItems="center">
+        <FlexBlock
+          justifyContent="space-between"
+          alignItems={isMobile ? 'flex-start' : 'center'}
+          direction={isMobile ? 'column' : 'row'}
+        >
           <Tooltip
             withIcon
             tooltipText={

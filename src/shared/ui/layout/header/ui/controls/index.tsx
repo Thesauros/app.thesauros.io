@@ -37,7 +37,7 @@ export const Controls = () => {
         gap={24}
         block={!!isMobile}
       >
-        <ConnectWalletBadge />
+        {!isMobile && <ConnectWalletBadge />}
         <Button variant="primary" size="lg" onClick={openConnectModal}>
           Connect wallet
         </Button>
