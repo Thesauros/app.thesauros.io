@@ -47,6 +47,10 @@
     flex-wrap: wrap;
   }
 
+  .fullHeight {
+    height: -webkit-fill-available;
+  }
+
   .flex-shrink-0 {
     flex-shrink: 0;
   }

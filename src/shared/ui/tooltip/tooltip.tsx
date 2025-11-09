@@ -26,17 +26,18 @@ export const Tooltip = ({ tooltipText, children, display = 'block' }: TProps) =>
       <ReactTooltip
         className={styles.root}
         id={uniqueId}
-        place="bottom"
+        place={'bottom-end'}
+        noArrow
         content={tooltipText}
         opacity={1}
         style={{
-          backgroundColor: '#30343A',
+          backgroundColor: '#262F38',
           borderRadius: '8px',
-          padding: '8px',
-          fontSize: '16px',
-          lineHeight: '18px',
+          padding: '12px 16px',
+          fontSize: '12px',
+          lineHeight: '16px',
+          letterSpacing: 0,
           fontWeight: 400,
-          textAlign: 'center',
         }}
       />
     </div>

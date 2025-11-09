@@ -1,0 +1,30 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 6px;
+  border: 1px solid #fff;
+  background-color: #ffffff99;
+}
+
+.button {
+  padding: 4px;
+  width: 67px;
+  border-radius: 6px;
+  color: #64788c;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.3s;
+  border: 1px solid transparent;
+
+  &:hover {
+    border-color: #e2f1ff;
+  }
+
+  &.active {
+    background: #e2f1ff;
+    border-color: #e2f1ff;
+    color: #030303;
+  }
+}

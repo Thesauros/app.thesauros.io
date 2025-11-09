@@ -4,29 +4,35 @@ import { FlexBlock } from '@/shared/ui/flex-block';
 import { ArrowTopRightIcon } from '@/shared/ui/icons/arrow-top-right';
 import { round } from '@/shared/number/round';
 import classNames from 'classnames';
+import { Caption } from '@/shared/ui/new-typography/caption';
+import { Body } from '@/shared/ui/new-typography/body';
 
 export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
-    const aprValue = payload[0]?.value;
-    const aprDate = payload[0].payload.date;
-    const aprMarketValue = payload[0].payload.marketValue;
+    const aprValue = payload[1]?.value;
+    const aprDate = payload[1].payload.date;
+    const aprMarketValue = payload[1].payload.marketValue;
 
     const diffPercent = round((aprValue / aprMarketValue) * 100 - 100);
 
     return (
       <div className={styles.revenueTooltip}>
         <FlexBlock alignItems="center" gap={8}>
-          <div className={styles.tooltipValue}>{round(aprValue)}%</div>
+          <Body level={2} weight="bold">
+            {round(aprValue)}%
+          </Body>
           {diffPercent !== Infinity && (
             <div
               className={classNames(styles.tooltipChange, diffPercent < 0 ? styles.negative : '')}
             >
-              <span>{diffPercent}%</span>
+              <Caption weight="medium">{diffPercent}%</Caption>
               {diffPercent > 0.1 && <ArrowTopRightIcon />}
             </div>
           )}
         </FlexBlock>
-        <div className={styles.tooltipDate}>{aprDate}</div>
+        <Caption weight="regular" className={styles.tooltipDate}>
+          {aprDate}
+        </Caption>
       </div>
     );
   }

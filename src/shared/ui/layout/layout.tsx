@@ -4,12 +4,15 @@ import { PageContainer } from './page-container';
 import styles from './layout.module.scss';
 import { Aside } from './aside';
 import { FlexBlock } from '../flex-block';
+import { useAutoSwitchToArbitrum } from '@/shared/blockchain/useAutoSwitchToArbitrum';
 
 type TProps = {
   children: ReactNode;
 };
 
 export const Layout = ({ children }: TProps) => {
+  useAutoSwitchToArbitrum();
+
   return (
     <FlexBlock direction="column" block>
       <div className={styles.layout}>
