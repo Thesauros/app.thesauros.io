@@ -13,6 +13,7 @@ import { SwitchToggle } from '@/shared/ui/switch-toggle';
 import { round } from '@/shared/number/round';
 import { InputComponent } from '@/shared/ui/input';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
+import { useCheckResolution } from '@/shared/browser/useCheckResolution';
 
 type TPeriod = '6m' | '1y' | '3y' | '6y';
 
@@ -41,11 +42,17 @@ export const Calculator = ({ apy }: { apy: number }) => {
   );
 
   const cumulativeProfit = round(timePeriod.value * apy);
+  const isMobile = useCheckResolution(576);
 
   return (
     <Card block>
       <FlexBlock direction="column" gap={16} block>
-        <FlexBlock justifyContent="space-between" alignItems="center" block>
+        <FlexBlock
+          justifyContent="space-between"
+          alignItems={isMobile ? 'flex-start' : 'center'}
+          direction={isMobile ? 'column' : 'row'}
+          block
+        >
           <Tooltip
             tooltipText="Shows how much your balance could grow, including your deposit and potential income for the selected period. The amount is based on the current APY and can change as the rate updates."
             withIcon

@@ -21,6 +21,7 @@ import formatNumberSmart from '@/shared/number/formatNumberSmart';
 import { useMemo } from 'react';
 import { round } from '@/shared/number/round';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
+import { useCheckResolution } from '@/shared/browser/useCheckResolution';
 
 export const APRChart = ({
   currentVault,
@@ -60,6 +61,8 @@ export const APRChart = ({
       };
     });
   }, [data, profitData, isDeposited]);
+
+  const isMobile = useCheckResolution(576);
 
   return (
     <div className={styles.container}>
@@ -122,7 +125,7 @@ export const APRChart = ({
               tickLine={false}
               tick={{ fontSize: 12, fill: '#9D9D9D' }}
               tickMargin={10}
-              interval={isWeekPeriod ? 1 : 5}
+              interval={!isMobile ? (isWeekPeriod ? 1 : 5) : isWeekPeriod ? 5 : 14}
             />
             <YAxis
               yAxisId="left"
