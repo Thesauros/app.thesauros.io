@@ -105,7 +105,7 @@ export const TransactionDetailModal = ({ transaction }: { transaction: ITransact
         </FlexBlock>
       </FlexBlock>
 
-      <Button size="md" variant="primary" className={styles.doneButton} onClick={close}>
+      <Button size="m" variant="primary" className={styles.doneButton} onClick={close}>
         Done
       </Button>
     </FlexBlock>

@@ -38,7 +38,6 @@ type TProps = {
   flexShrink?: number;
   flexWrap?: boolean;
   onClick?: () => void;
-  fullHeight?: boolean;
 };
 
 export const FlexBlock = ({
@@ -54,7 +53,6 @@ export const FlexBlock = ({
   flexWrap,
   ref,
   onClick,
-  fullHeight,
 }: TProps) => {
   return (
     <div
@@ -70,7 +68,6 @@ export const FlexBlock = ({
         styles[block ? 'block' : ''],
         styles[flexShrink !== undefined ? `flex-shrink-${flexShrink}` : ''],
         styles[flexWrap ? 'flex-wrap' : ''],
-        styles[fullHeight ? 'fullHeight' : ''],
         className
       )}
     >

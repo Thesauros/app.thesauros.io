@@ -52,27 +52,17 @@ export const useProfitData = ({
     intervals: period,
   });
 
-  const reversedData = useMemo(
-    () =>
-      data && data.length > 0
+  return useMemo(
+    () => ({
+      data: data
         ? [...data].reverse().map(item => ({
             date: formatDate(item.from),
             dateValue: item.value === null ? 0 : round(item.value, 6),
           }))
-        : [],
-    [data]
-  );
-
-  const total =
-    reversedData.length > 0 ? reversedData.reduce((sum, item) => sum + item.dateValue, 0) : 0;
-
-  return useMemo(
-    () => ({
-      data: reversedData,
-      total: total,
+        : undefined,
       isLoading: isLoading,
     }),
-    [isLoading, reversedData, total]
+    [data, isLoading]
   );
 };
 

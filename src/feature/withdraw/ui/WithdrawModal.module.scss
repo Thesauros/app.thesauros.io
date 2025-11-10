@@ -1,14 +1,33 @@
-.secondary {
-  color: #64788c;
+.buttonContainer {
+  button {
+    width: 100%;
+  }
 }
-
-.potentialProfitLoseBlock {
-  border-radius: 10px;
-  padding: 16px;
+.vaultButton {
+  cursor: pointer;
   width: 100%;
-  background-color: #eff9ff;
+  background: linear-gradient(128.71deg, #d3edfd -1.74%, #ddf1fe 110.23%) !important;
+  text-align: center;
 }
 
-.innerPotentialProfitBlock {
-  padding: 8px;
+.active {
+  border: 1px solid rgba(25, 107, 255, 0.975) !important;
+}
+
+.percentageButton {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  padding: 8px 12px !important;
+  text-align: center;
+  border-radius: 6px;
+  background: linear-gradient(128.71deg, #d3edfd -1.74%, #ddf1fe 110.23%) !important;
+  border: 1px solid transparent;
+  color: #666;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: rgba(25, 107, 255, 0.975);
+  }
 }

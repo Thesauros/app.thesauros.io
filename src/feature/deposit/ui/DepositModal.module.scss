@@ -3,30 +3,13 @@
     width: 100%;
   }
 }
-
-.divider {
-  background-color: #eceef2;
-  height: 1px;
+.vaultButton {
+  cursor: pointer;
   width: 100%;
+  background: linear-gradient(128.71deg, #d3edfd -1.74%, #ddf1fe 110.23%) !important;
+  text-align: center;
 }
 
-.highlight {
-  color: #196bff;
-}
-
-.secondary {
-  color: #64788c;
-}
-
-.swapBlock {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  background-color: #e2f1ff;
-  box-sizing: border-box;
-
-  padding: 16px;
-  border: 1px solid #88c7ff;
-  border-radius: 13px;
+.active {
+  border: 1px solid rgba(25, 107, 255, 0.975) !important;
 }

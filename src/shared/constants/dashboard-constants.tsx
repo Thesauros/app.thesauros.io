@@ -6,7 +6,7 @@ import { useHighestApr, useUserEarnedOverallicks } from '../api/dashboard';
 import { useOnchainCurrentAPY } from '../blockchain/useOnchainCurrentAPY';
 
 export const dashbardConstants = [
-  { id: 'apy', label: 'APY', value: '12.25%', action: <Button size="sm">Earn</Button> },
+  { id: 'apy', label: 'APY', value: '12.25%', action: <Button size="xs">Earn</Button> },
   {
     id: 'total-profit',
     label: 'Total Profit (USD)',
