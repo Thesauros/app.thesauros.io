@@ -4,6 +4,9 @@ import { useRef, useState } from 'react';
 import { Avatar } from '../generated-avatar';
 import { useAccount } from '@/shared/blockchain/useAccount';
 import { ProfileMenu } from './ProfileMenu';
+import { FlexBlock } from '../flex-block';
+import { Subtitle } from '../new-typography/subtitle';
+import { shortString } from '@/shared/string';
 
 export const ProfileWindow = () => {
   const [opened, setOpened] = useState(false);
@@ -23,7 +26,10 @@ export const ProfileWindow = () => {
       <div className={styles.button} ref={ref}>
         {address && (
           <div onClick={() => setOpened(true)} style={{ cursor: 'pointer' }}>
-            <Avatar value={address} />
+            <FlexBlock gap={8} alignItems="center">
+              <Avatar value={address} />
+              <Subtitle>{shortString(address)}</Subtitle>
+            </FlexBlock>
           </div>
         )}
         {opened && (

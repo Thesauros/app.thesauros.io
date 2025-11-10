@@ -2,28 +2,44 @@ import { ButtonHTMLAttributes, ReactNode } from 'react';
 import styles from './button.module.scss';
 import classNames from 'classnames';
 
-type ButtonVariant = 'primary' | 'secondary';
+type ButtonVariant = 'primary' | 'outline' | 'text';
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'prefix'> {
   children: ReactNode;
   variant?: ButtonVariant;
-  size?: 'xxs' | 'xs' | 's' | 'm';
+  size?: 'sm' | 'md' | 'lg';
   className?: string;
+  prefix?: ReactNode;
+  postfix?: ReactNode;
+  fullWidth?: boolean;
 }
 
 export const Button = ({
   children,
   variant = 'primary',
-  size = 'm',
+  size = 'md',
   className = '',
+  prefix,
+  postfix,
+  fullWidth = false,
   ...props
 }: ButtonProps) => {
   return (
     <button
-      className={classNames(styles.button, styles[variant], styles[size], className)}
+      className={classNames(
+        styles.button,
+        styles[variant],
+        styles[size],
+        !!prefix && styles.withPrefix,
+        !!postfix && styles.withPostfix,
+        fullWidth && styles.fullWidth,
+        className
+      )}
       {...props}
     >
+      {prefix ? <span className={styles.prefix}>{prefix}</span> : null}
       {children}
+      {postfix ? <span className={styles.postfix}>{postfix}</span> : null}
     </button>
   );
 };

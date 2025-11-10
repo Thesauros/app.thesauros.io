@@ -28,13 +28,19 @@ export const useAPRData = ({ coinName, period }: { coinName: 'USDC' | 'USDT'; pe
       : undefined;
   }, [aprData, marketData]);
 
-  return useMemo(
-    () => ({
-      data: aprDatas && aprDatas.length > 0 ? [...aprDatas].reverse() : [],
+  return useMemo(() => {
+    const reversedData = aprDatas && aprDatas.length > 0 ? [...aprDatas].reverse() : [];
+    const average =
+      reversedData.length > 0
+        ? reversedData.reduce((sum, item) => sum + item.dateValue, 0) / reversedData.length
+        : 0;
+
+    return {
+      data: reversedData,
       isLoading: isAPRLoading && isMarketAPRLoading,
-    }),
-    [aprDatas, isAPRLoading, isMarketAPRLoading]
-  );
+      average: round(average, 2),
+    };
+  }, [aprDatas, isAPRLoading, isMarketAPRLoading]);
 };
 
 export const useProfitData = ({
@@ -52,17 +58,27 @@ export const useProfitData = ({
     intervals: period,
   });
 
-  return useMemo(
-    () => ({
-      data: data
+  const reversedData = useMemo(
+    () =>
+      data && data.length > 0
         ? [...data].reverse().map(item => ({
             date: formatDate(item.from),
             dateValue: item.value === null ? 0 : round(item.value, 6),
           }))
-        : undefined,
+        : [],
+    [data]
+  );
+
+  const total =
+    reversedData.length > 0 ? reversedData.reduce((sum, item) => sum + item.dateValue, 0) : 0;
+
+  return useMemo(
+    () => ({
+      data: reversedData,
+      total: total,
       isLoading: isLoading,
     }),
-    [data, isLoading]
+    [isLoading, reversedData, total]
   );
 };
 

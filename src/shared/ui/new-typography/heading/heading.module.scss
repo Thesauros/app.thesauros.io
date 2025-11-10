@@ -1,0 +1,96 @@
+@use '@breakpoints' as breakpoints;
+
+.root {
+  color: var(--content-primary);
+}
+
+.bold {
+  font-weight: 700;
+}
+.semibold {
+  font-weight: 600;
+}
+.medium {
+  font-weight: 500;
+}
+.regular {
+  font-weight: 400;
+}
+.light {
+  font-weight: 300;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  &.inline {
+    display: inline;
+  }
+}
+
+.level-1 {
+  font-size: 95px;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+
+  // Not Included in the design
+  @include breakpoints.tablet {
+    font-size: 56px;
+    line-height: 56px;
+  }
+
+  @include breakpoints.mobile {
+    font-size: 56px;
+    line-height: 56px;
+  }
+
+  @include breakpoints.small-mobile {
+    font-size: 48px;
+    line-height: 56px;
+  }
+}
+
+.level-2 {
+  font-size: 60px;
+  line-height: 1.2;
+  letter-spacing: 0;
+
+  // Not Included in the design
+  @include breakpoints.tablet {
+    font-size: 36px;
+    line-height: 48px;
+  }
+}
+
+.level-3 {
+  font-size: 48px;
+  line-height: 1.2;
+  letter-spacing: 0;
+  // Not Included in the design
+
+  @include breakpoints.tablet {
+    font-size: 24px;
+    line-height: 32px;
+  }
+}
+
+.level-4 {
+  font-size: 34px;
+  line-height: 1.23;
+  letter-spacing: 0;
+}
+
+.level-5 {
+  font-size: 24px;
+  line-height: 1.334;
+  letter-spacing: 0;
+}
+
+.level-6 {
+  font-size: 20px;
+  line-height: 1.6;
+  letter-spacing: 0;
+}

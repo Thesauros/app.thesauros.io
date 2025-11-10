@@ -24,7 +24,7 @@
 
 .overlay {
   position: fixed;
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: #262f3880;
   width: 100%;
   height: 100%;
   z-index: 1;
@@ -47,8 +47,8 @@
 
 .modalContainer {
   border-radius: 20px;
-  padding: 24px;
-  background-color: rgba(254, 254, 254, 1);
+  padding: 32px 40px;
+  background-color: #fefefe;
   max-width: 464px;
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.08);
 
