@@ -3,7 +3,6 @@ import { simulateContract, writeContract } from '@wagmi/core';
 import { abi } from '../abi';
 import { TContractWriteProps } from './types';
 import { wagmiConfig } from '../config';
-import { useEffect, useRef } from 'react';
 
 export const useContractWrite = (props: TContractWriteProps) => {
   const { data: simulateData } = useSimulateContract({
@@ -15,26 +14,6 @@ export const useContractWrite = (props: TContractWriteProps) => {
   });
 
   const { writeContract, isSuccess, data, isPending, isError, error } = useWriteContract();
-
-  const onSuccessRef = useRef(props.onSuccess);
-  const onErrorRef = useRef(props.onError);
-
-  useEffect(() => {
-    onSuccessRef.current = props.onSuccess;
-    onErrorRef.current = props.onError;
-  }, [props.onSuccess, props.onError]);
-
-  useEffect(() => {
-    if (isSuccess && data && onSuccessRef.current) {
-      onSuccessRef.current(data);
-    }
-  }, [isSuccess, data]);
-
-  useEffect(() => {
-    if (isError && error && onErrorRef.current) {
-      onErrorRef.current(error);
-    }
-  }, [isError, error]);
 
   return {
     write: () =>

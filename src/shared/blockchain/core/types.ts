@@ -9,8 +9,6 @@ export type TContractWriteProps = {
   functionName: string;
   args: TArg[];
   chainID?: TChainID;
-  onSuccess?: (data: `0x${string}`) => void;
-  onError?: (error: Error | null) => void;
 };
 
 export type TVault = {
