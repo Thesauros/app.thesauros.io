@@ -13,7 +13,7 @@ export const PointProgramBanner = () => {
       <FlexBlock gap={16} direction="column">
         <Image src={BannerImage} width={174} height={220} alt="Point program banner" />
         <FlexBlock direction="column" gap={2}>
-          <Subtitle weight="bold">Season 2 Started!</Subtitle>
+          <Subtitle weight="bold">Season 1 Started!</Subtitle>
           <Link href={'/point-program'}>
             <Caption>Click here for details</Caption>
           </Link>
