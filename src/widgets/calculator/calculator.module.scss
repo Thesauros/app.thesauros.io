@@ -1,0 +1,61 @@
+@use '@breakpoints' as breakpoints;
+
+.description {
+  color: #64788c;
+}
+
+.earningsBlock {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+
+  @include breakpoints.tablet {
+    flex-direction: column;
+
+    & > div {
+      max-width: unset;
+    }
+  }
+}
+
+.depositBlock {
+  width: 100%;
+}
+
+.returnsBlock {
+  max-width: 265px;
+  width: 100%;
+}
+
+.pointsBlock {
+  max-width: 265px;
+  width: 100%;
+}
+
+.fullHeignt {
+  height: 100%;
+}
+
+.pointsInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #e2f1ff;
+  border-radius: 10px;
+  background-color: transparent;
+  border-radius: 10px;
+  gap: 8px;
+}
+
+.highlight {
+  font-weight: 700;
+  color: #030303;
+}
+
+.secondary {
+  color: #64788c;
+}

@@ -1,17 +1,16 @@
 .buttonContainer {
-  width: 34px;
-  height: 34px;
   cursor: pointer;
 
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2px;
+  padding: 11px;
   border-radius: 50%;
-  background-color: white;
+  background-color: #ffffff99;
+  border: 1px solid #fff;
   transition: 0.3s;
 
   &:hover {
-    background-color: #c5ddfe;
+    background-color: #fff;
   }
 }

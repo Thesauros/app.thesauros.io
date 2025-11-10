@@ -1,12 +1,9 @@
 import { vaults } from '@/shared/blockchain/config';
-import { Card } from '@/shared/ui/card';
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { CloseIcon } from '@/shared/ui/icons/close';
 import { useModal } from '@/shared/ui/modal';
-import { Texting } from '@/shared/ui/typography/texting';
 import { useMemo, useState } from 'react';
 import styles from './WithdrawModal.module.scss';
-import classNames from 'classnames';
 import { InputComponent } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import { TAddress, TVault } from '@/shared/blockchain/core/types';
@@ -17,36 +14,46 @@ import { useSwitchNetwork } from '@/shared/blockchain/core/useSwtichNetwork';
 import { round } from '@/shared/number/round';
 import { useContractRead } from '@/shared/blockchain/core/useContractRead';
 import { useWithdraw } from '../model/useWithdraw';
-
-export const erc20Abi = [
-  {
-    constant: true,
-    inputs: [{ name: 'owner', type: 'address' }],
-    name: 'balanceOf',
-    outputs: [{ name: 'balance', type: 'uint256' }],
-    type: 'function',
-  },
-  {
-    constant: true,
-    inputs: [],
-    name: 'decimals',
-    outputs: [{ name: '', type: 'uint8' }],
-    type: 'function',
-  },
-];
+import { Heading } from '@/shared/ui/new-typography/heading';
+import { Caption } from '@/shared/ui/new-typography/caption';
+import { Body } from '@/shared/ui/new-typography/body';
+import { Subtitle } from '@/shared/ui/new-typography/subtitle';
+import { UsdcIcon } from '@/shared/ui/icons/usdc-icon';
+import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
+import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
+import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
 
 export const WithdrawModal = () => {
-  const { close } = useModal();
-  const [choosenVault, setChoosenVault] = useState<TVault>(vaults[0]);
+  const { close, open } = useModal();
+  const [choosenVault, _] = useState<TVault>(vaults[0]);
   const [value, setValue] = useState('');
   const { address } = useAccount();
 
   const withdrawValue = Number(value) * 10 ** choosenVault.decimals;
 
+  const apy = useOnchainCurrentAPY({
+    vaultAddress: vaults[0].vaultAddress,
+    chainID: vaults[0].chainID,
+  });
+
   const { withdraw, isWithdrawingLoading } = useWithdraw({
     vaultAddress: choosenVault.vaultAddress,
     chainID: choosenVault.chainID,
     args: [withdrawValue, address, address],
+    onSuccess: data => {
+      open(
+        <TransactionStatusModal
+          data={data}
+          amount={Number(value)}
+          coinName={choosenVault.coinName}
+          status="success"
+          type="withdraw"
+        />
+      );
+    },
+    onError: error => {
+      if (error) open(<TransactionStatusModal status="failed" type="withdraw" />);
+    },
   });
 
   const { approve, isApproved } = useApprove({
@@ -71,7 +78,7 @@ export const WithdrawModal = () => {
     },
   });
 
-  const { data: symbol } = useContractRead({
+  const { data: tokenSymbol } = useContractRead({
     address: choosenVault.vaultAddress,
     functionName: 'symbol',
     watch: false,
@@ -85,106 +92,112 @@ export const WithdrawModal = () => {
     return 0;
   }, [coinBalance]);
 
-  const handlePercentageClick = (percentage: number) => {
-    if (percentage === 100) {
-      setValue(String(userCoinBalance));
-    } else {
-      const amount = (userCoinBalance * percentage) / 100;
-      setValue(String(amount.toFixed(2)));
-    }
-  };
-
   return (
-    <FlexBlock direction="column" gap={28} block>
+    <FlexBlock direction="column" gap={24} block>
+      {/* Header */}
       <FlexBlock justifyContent="space-between" alignItems="center" block>
-        <Texting level={1}>Withdraw Funds</Texting>
-        <FlexBlock gap={12} alignItems="center">
-          <CloseIcon onClick={close} />
-        </FlexBlock>
+        <Heading level={6} weight="regular">
+          Withdraw Funds
+        </Heading>
+        <CloseIcon onClick={close} />
       </FlexBlock>
-      {vaults.length > 1 && (
-        <FlexBlock direction="column" gap={16} block>
-          <Texting level={2}>Vaults</Texting>
-          <FlexBlock block alignItems="center">
-            {vaults.map(({ vaultAddress, coinName }) => (
-              <Card
-                size="s"
-                key={vaultAddress}
-                className={classNames(
-                  styles.vaultButton,
-                  choosenVault.vaultAddress === vaultAddress ? styles.active : ''
-                )}
-                onClick={() =>
-                  setChoosenVault(
-                    vaults.find(vault => vault.vaultAddress === vaultAddress) ?? vaults[0]
-                  )
-                }
-              >
-                {coinName}
-              </Card>
-            ))}
-          </FlexBlock>
+
+      {/* Withdraw block */}
+      <FlexBlock direction="column" gap={4} block>
+        <Caption>Amount to Deposit</Caption>
+        <InputComponent
+          id="id"
+          value={value}
+          type="number"
+          size="md"
+          numberPrefix="$"
+          textAlign="left"
+          postfix={
+            <Body level={2} weight="regular" className={styles.secondary}>
+              {tokenSymbol as string}
+            </Body>
+          }
+          fullWidth
+          onChange={setValue}
+          disabled={isWithdrawingLoading}
+        />
+      </FlexBlock>
+
+      {/* Funds */}
+      <FlexBlock direction="column" gap={8} block>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Avialable:
+          </Caption>
+          <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
+            <Body level={2} weight="regular">
+              {round(userCoinBalance)} {tokenSymbol as string}
+            </Body>
+          </div>
         </FlexBlock>
-      )}
-
-      <FlexBlock direction="column" gap={16} block>
-        <Texting level={2}>Amount</Texting>
-        <FlexBlock direction="column" gap={12} block>
-          <InputComponent
-            id="amount"
-            variant="secondary"
-            value={value}
-            type="number"
-            placeholder="$0.00"
-            onChange={setValue}
-            disabled={isWithdrawingLoading}
-          />
-
-          <FlexBlock gap={8} block>
-            <Card
-              size="s"
-              onClick={() => handlePercentageClick(25)}
-              className={styles.percentageButton}
-            >
-              25%
-            </Card>
-            <Card
-              size="s"
-              onClick={() => handlePercentageClick(50)}
-              className={styles.percentageButton}
-            >
-              50%
-            </Card>
-            <Card
-              size="s"
-              onClick={() => handlePercentageClick(75)}
-              className={styles.percentageButton}
-            >
-              75%
-            </Card>
-            <Card
-              size="s"
-              onClick={() => handlePercentageClick(100)}
-              className={styles.percentageButton}
-            >
-              Max
-            </Card>
-          </FlexBlock>
-
-          <FlexBlock justifyContent="space-between" alignItems="center" block>
-            <Texting level={3}>Available:</Texting>
-            <Texting level={3}>
-              {userCoinBalance ?? 0} {(symbol as string) ?? ''}
-            </Texting>
-          </FlexBlock>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Withdrawal Fee:
+          </Caption>
+          <Body level={2} weight="regular">
+            0 {tokenSymbol as string}
+          </Body>
         </FlexBlock>
       </FlexBlock>
 
-      <FlexBlock gap={16} alignItems="center" className={styles.buttonContainer} block>
-        <Button variant="secondary" onClick={() => close()} disabled={isWithdrawingLoading}>
+      <div className={styles.potentialProfitLoseBlock}>
+        <FlexBlock direction="column" justifyContent="space-between" alignItems="center" block>
+          <Caption weight="bold">Withdrawing will reduce your potential earnings per year:</Caption>
+          <FlexBlock justifyContent="center" alignItems="center">
+            <FlexBlock
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+              gap={4}
+              className={styles.innerPotentialProfitBlock}
+            >
+              <Subtitle level={2} weight="medium">
+                {round((Number(value) / 100) * apy)}
+              </Subtitle>
+              <FlexBlock gap={8} alignItems="center">
+                <UsdcIcon size={16} />
+                <Caption weight="regular">{choosenVault.coinName}</Caption>
+              </FlexBlock>
+            </FlexBlock>
+
+            <FlexBlock
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+              gap={4}
+              className={styles.innerPotentialProfitBlock}
+            >
+              <Subtitle level={2} weight="medium">
+                {365 * Number(value)}
+              </Subtitle>
+              <FlexBlock gap={8} alignItems="center">
+                <PointCoinIcon size={16} />
+                <Caption weight="regular">Points</Caption>
+              </FlexBlock>
+            </FlexBlock>
+          </FlexBlock>
+        </FlexBlock>
+      </div>
+
+      <FlexBlock gap={16} alignItems="center" block>
+        <Button
+          variant="text"
+          fullWidth
+          size="lg"
+          onClick={() => close()}
+          disabled={isWithdrawingLoading}
+        >
           Cancel
         </Button>
         <Button
+          variant="outline"
+          size="lg"
+          fullWidth
           onClick={() => {
             if (isNeedSwitch) {
               switchNetwork(choosenVault.chainID);

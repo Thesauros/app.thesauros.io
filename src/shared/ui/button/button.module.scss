@@ -4,81 +4,117 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 16px;
+  text-align: center;
 
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   white-space: nowrap;
-}
 
-.xxs {
-  font-size: 14px;
-  font-weight: 400;
-  padding: 8px 12px;
+  &.withPrefix {
+    .prefix {
+      margin-right: 8px;
+    }
+  }
 
-  @include breakpoints.laptop {
-    font-size: 14px;
+  &.withPostfix {
+    .postfix {
+      margin-left: 8px;
+    }
+  }
+
+  &.fullWidth {
+    width: 100%;
   }
 }
 
-.xs {
-  font-size: 14px;
-  font-weight: 500;
-  padding: 10px 40px;
-
-  @include breakpoints.laptop {
-    font-size: 14px;
-  }
+.prefix,
+.postfix {
+  display: flex;
+  align-items: center;
 }
 
-.s {
-  font-size: 14px;
-  font-weight: 500;
-  padding: 12px 26px;
-
-  @include breakpoints.laptop {
-    font-size: 14px;
-  }
-}
-
-.m {
-  font-size: 16px;
+.sm {
+  border-radius: 10px;
   font-weight: 600;
-  padding: 14px 28px;
+  font-size: 16px;
+  line-height: 150%;
+  padding: 4px 14px;
+}
 
-  @include breakpoints.laptop {
-    font-size: 16px;
-  }
+.md {
+  border-radius: 15px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+  padding: 8px 16px;
+}
+
+.lg {
+  border-radius: 15px;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0px;
+  padding: 12px 20px;
 }
 
 .primary {
-  background: var(--primary);
-  opacity: 0.9;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px); /* Safari */
-  border: 1px solid rgba(255, 255, 255, 0.2);
-
-  color: var(--button-primary-text);
+  background: #196aff;
+  color: #ffffff;
   transition: all 0.3s ease;
 
   &:hover {
-    opacity: 1;
-    box-shadow: var(--button-primary-box-shadow);
+    background-color: #007dff;
+  }
+
+  &:active {
+    background-color: #2656ec;
+  }
+
+  &:disabled {
+    background-color: #eceef2;
+    color: #cfd7dd;
   }
 }
 
-.secondary {
-  background: var(--card-bg);
-  border: 1px solid var(--button-secondary-border);
-  opacity: 0.9;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px); /* Safari */
-
-  color: var(--content-primary);
+.outline {
+  background: transparent;
+  border: 1px solid #88c7ff;
+  color: #030303;
   transition: all 0.3s ease;
 
   &:hover {
-    opacity: 1;
-    box-shadow: var(--button-secondary-box-shadow);
+    background-color: #e2f1ff;
+    border-color: #e2f1ff;
+  }
+
+  &:active {
+    border-color: #b9dcff;
+    background-color: #b9dcff;
+  }
+
+  &:disabled {
+    border-color: #cfd2df;
+    background-color: transparent;
+    color: #cfd7dd;
+  }
+}
+
+.text {
+  background: transparent;
+  color: #030303;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #eceef2;
+  }
+
+  &:active {
+    background-color: #cfd7dd;
+  }
+
+  &:disabled {
+    background-color: transparent;
+    color: #cfd2df;
   }
 }

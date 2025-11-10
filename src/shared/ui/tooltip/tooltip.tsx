@@ -2,16 +2,19 @@ import 'react-tooltip/dist/react-tooltip.css';
 import styles from './tooltip.module.scss';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { ReactNode } from 'react';
+import { FlexBlock } from '../flex-block';
+import { NewInfoIcon } from '../icons/new-info';
 
 type TProps = {
   tooltipText: string;
   children: ReactNode;
   display?: string;
+  withIcon?: boolean;
 };
 
 const createUniqueId = (name: string) => `tooltip-${name.toLowerCase()}`;
 
-export const Tooltip = ({ tooltipText, children, display = 'block' }: TProps) => {
+export const Tooltip = ({ tooltipText, children, display = 'block', withIcon = false }: TProps) => {
   const uniqueId = createUniqueId(tooltipText);
 
   return (
@@ -21,22 +24,26 @@ export const Tooltip = ({ tooltipText, children, display = 'block' }: TProps) =>
         data-tooltip-content={tooltipText}
         style={{ display: display }}
       >
-        {children}
+        <FlexBlock alignItems="center" gap={4}>
+          {children}
+          {withIcon && <NewInfoIcon />}
+        </FlexBlock>
       </div>
       <ReactTooltip
         className={styles.root}
         id={uniqueId}
-        place="bottom"
+        place={'bottom-end'}
+        noArrow
         content={tooltipText}
         opacity={1}
         style={{
-          backgroundColor: '#30343A',
+          backgroundColor: '#262F38',
           borderRadius: '8px',
-          padding: '8px',
-          fontSize: '16px',
-          lineHeight: '18px',
+          padding: '12px 16px',
+          fontSize: '12px',
+          lineHeight: '16px',
+          letterSpacing: 0,
           fontWeight: 400,
-          textAlign: 'center',
         }}
       />
     </div>
