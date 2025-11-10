@@ -1,7 +1,9 @@
 @use '@breakpoints' as breakpoints;
+@use '@scrollbar' as scrollbar;
 
 .pageContainer {
-  padding: 0 24px 24px;
+  @include scrollbar.hide-scrollbar();
+  padding: 0 24px 24px 0;
   min-height: 73vh;
   flex: 1;
   overflow-y: auto;
