@@ -75,7 +75,7 @@ export const Calculator = ({ apy }: { apy: number }) => {
                   withIcon
                 >
                   <Caption weight="regular" className={styles.secondary}>
-                    Current APY <span className={styles.highlight}>{round(apy)}%</span>
+                    24h average APY <span className={styles.highlight}>{round(apy)}%</span>
                   </Caption>
                 </Tooltip>
               </FlexBlock>
@@ -109,10 +109,11 @@ export const Calculator = ({ apy }: { apy: number }) => {
             <FlexBlock direction="column" gap={24}>
               <FlexBlock direction="column" gap={12}>
                 <Subtitle level={2} weight="regular" className={styles.description}>
-                  Potential return in{' '}
+                  In{' '}
                   <span className={styles.highlight}>
                     {PERIOD_TITLE_MAP_TO_TEXT[timePeriod.title as TPeriod]}
-                  </span>
+                  </span>{' '}
+                  you could have
                 </Subtitle>
                 <Heading level={5} weight="bold">
                   ${formatNumberWithCommas(potenitalReturns)}
@@ -123,8 +124,7 @@ export const Calculator = ({ apy }: { apy: number }) => {
                 withIcon
               >
                 <Caption weight="regular" className={styles.secondary}>
-                  Total cumulative profit{' '}
-                  <span className={styles.highlight}>{cumulativeProfit}%</span>
+                  Projected growth <span className={styles.highlight}>{cumulativeProfit}%</span>
                 </Caption>
               </Tooltip>
             </FlexBlock>
@@ -145,7 +145,7 @@ export const Calculator = ({ apy }: { apy: number }) => {
               <div className={styles.pointsInfo}>
                 <PointCoinIcon />
                 <Heading level={5} weight="bold">
-                  {pointsValue}
+                  {formatNumberWithCommas(pointsValue)}
                 </Heading>
               </div>
             </FlexBlock>

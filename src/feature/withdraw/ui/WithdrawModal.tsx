@@ -92,6 +92,8 @@ export const WithdrawModal = () => {
     return 0;
   }, [coinBalance]);
 
+  const isMoreThenBalance = Number(value) > userCoinBalance;
+
   return (
     <FlexBlock direction="column" gap={24} block>
       {/* Header */}
@@ -104,7 +106,7 @@ export const WithdrawModal = () => {
 
       {/* Withdraw block */}
       <FlexBlock direction="column" gap={4} block>
-        <Caption>Amount to Deposit</Caption>
+        <Caption>Amount to Withdraw</Caption>
         <InputComponent
           id="id"
           value={value}
@@ -207,7 +209,7 @@ export const WithdrawModal = () => {
               approve();
             }
           }}
-          disabled={isWithdrawingLoading}
+          disabled={isWithdrawingLoading || !withdrawValue || isMoreThenBalance}
         >
           {isNeedSwitch ? 'Switch network' : isApproved ? 'Confirm' : 'Approve'}
         </Button>

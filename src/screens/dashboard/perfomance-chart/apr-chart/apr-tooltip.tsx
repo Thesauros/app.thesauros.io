@@ -9,9 +9,9 @@ import { Body } from '@/shared/ui/new-typography/body';
 
 export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
-    const aprValue = payload[1]?.value;
-    const aprDate = payload[1].payload.date;
-    const aprMarketValue = payload[1].payload.marketValue;
+    const aprMarketValue = payload.find(item => item.dataKey === 'marketValue')?.value ?? 0;
+    const aprValue = payload.find(item => item.dataKey === 'dateValue')?.value ?? 0;
+    const aprDate = payload.find(item => item.dataKey === 'dateValue')?.payload.date ?? '';
 
     const diffPercent = round((aprValue / aprMarketValue) * 100 - 100);
 
@@ -36,5 +36,6 @@ export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
       </div>
     );
   }
+
   return null;
 };

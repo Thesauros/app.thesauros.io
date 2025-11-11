@@ -29,6 +29,7 @@ import { useCheckResolution } from '@/shared/browser/useCheckResolution';
 import { useEffect, useState } from 'react';
 import { CalculatorIcon } from '@/shared/ui/icons/calculator-icon';
 import { ChevronTopIcon } from '@/shared/ui/icons/chevron-top-icon';
+import { DepositBadge } from '@/shared/ui/deposit-badge';
 
 export const DashboardScreen = () => {
   const dashbardConstants = useDashboardConstants();
@@ -125,19 +126,6 @@ export const DashboardScreen = () => {
                     ${dashbardConstants.vaultsTVL}
                   </Body>
                 </FlexBlock>
-                {!isDeposited && (
-                  <FlexBlock direction="column" gap={4}>
-                    <Caption weight="regular" className={styles.secondaryHighlight}>
-                      Deposit now and get
-                    </Caption>
-                    <FlexBlock gap={4}>
-                      <PointCoinIcon size={16} />
-                      <Body level={2} weight="bold">
-                        500 points
-                      </Body>
-                    </FlexBlock>
-                  </FlexBlock>
-                )}
               </FlexBlock>
             </FlexBlock>
             <FlexBlock
@@ -162,7 +150,7 @@ export const DashboardScreen = () => {
                       <FlexBlock gap={4} alignItems="center">
                         <PointCoinIcon size={16} />
                         {dashbardConstants.totalPosition}
-                        <span className={styles.daily}>/daily</span>
+                        <span className={styles.daily}>/day</span>
                       </FlexBlock>
                     </Heading>
                   </Card>
@@ -176,25 +164,17 @@ export const DashboardScreen = () => {
                   </Card>
                 )}
                 <Card variant="secondary" className={styles.apyCard}>
-                  <Body level={2}>APY</Body>
+                  <Subtitle level={2} weight="regular">
+                    APY
+                  </Subtitle>
                   <FlexBlock alignItems="center" gap={12}>
-                    <Heading level={6} weight="bold" className={styles.highlight}>
+                    <Heading level={5} weight="bold">
                       {round(dashbardConstants.apy)}%
                     </Heading>
                     <StarsIcon />
                   </FlexBlock>
                 </Card>
               </FlexBlock>
-              {isDeposited && (
-                <FlexBlock alignItems="center" gap={12}>
-                  <Button variant="outline" size="lg" onClick={() => open(<WithdrawModal />)}>
-                    Withdraw
-                  </Button>
-                  <Button size="lg" onClick={() => open(<DepositModal />)}>
-                    Add to deposit
-                  </Button>
-                </FlexBlock>
-              )}
             </FlexBlock>
           </FlexBlock>
           {!isDeposited && (
@@ -204,12 +184,29 @@ export const DashboardScreen = () => {
               direction={isMobile ? 'column' : 'row'}
             >
               <FlexBlock alignItems="center" gap={20}>
-                <Button onClick={onDepositClick}>Deposit</Button>
-                <Caption weight="regular" className={styles.secondaryHighlight}>
-                  Withdraw anytime — no lock period 😎
-                </Caption>
+                <Button size="lg" onClick={onDepositClick}>
+                  Deposit
+                </Button>
+                <DepositBadge />
               </FlexBlock>
               <ConvertBadge />
+            </FlexBlock>
+          )}
+          {isDeposited && (
+            <FlexBlock
+              justifyContent="space-between"
+              alignItems="center"
+              direction={isMobile ? 'column' : 'row'}
+            >
+              <ConvertBadge />
+              <FlexBlock alignItems="center" gap={12}>
+                <Button variant="outline" size="lg" onClick={() => open(<WithdrawModal />)}>
+                  Withdraw
+                </Button>
+                <Button size="lg" onClick={() => open(<DepositModal />)}>
+                  Add to deposit
+                </Button>
+              </FlexBlock>
             </FlexBlock>
           )}
         </FlexBlock>
@@ -217,10 +214,10 @@ export const DashboardScreen = () => {
       <PerfomanceChart />
       <Card block>
         <FlexBlock direction="column" gap={16}>
-          <Subtitle level={2} weight="regular">
+          <Subtitle level={1} weight="regular">
             About
           </Subtitle>
-          <FlexBlock gap={28} direction="column" alignItems="flex-start">
+          <FlexBlock gap={16} direction="column" alignItems="flex-start">
             <FlexBlock gap={16} direction={isMobile ? 'column' : 'row'} block>
               <Card variant="secondary" className={styles.partnersBlock} block>
                 <FlexBlock justifyContent="space-between" gap={16}>
