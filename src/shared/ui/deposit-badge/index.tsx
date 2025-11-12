@@ -1,23 +1,24 @@
 import { FlexBlock } from '../flex-block';
-import { Card } from '../new-card';
 import { Body } from '../new-typography/body';
 import styles from './deposit-badge.module.scss';
 import { PointCoinIcon } from '../icons/point-icon';
+import { Caption } from '../new-typography/caption';
 
 export const DepositBadge = () => {
   return (
-    <Card className={styles.badgeContainer}>
+    <FlexBlock direction="column" gap={0}>
       <FlexBlock gap={8} alignItems="center">
-        <Body level={2} weight="regular">
+        <Body level={2} weight="bold">
           Deposit now and get
         </Body>
-        <FlexBlock gap={8}>
-          <PointCoinIcon size={24} />
-          <Body level={2} weight="bold" className={styles.highlight}>
+        <FlexBlock gap={4} alignItems="center">
+          <PointCoinIcon size={16} />
+          <Body level={2} weight="bold">
             500 points
           </Body>
         </FlexBlock>
       </FlexBlock>
-    </Card>
+      <Caption className={styles.secondary}>Withdraw anytime — no lock period</Caption>
+    </FlexBlock>
   );
 };
