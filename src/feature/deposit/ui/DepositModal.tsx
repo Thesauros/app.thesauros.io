@@ -89,6 +89,8 @@ export const DepositModal = () => {
     return 0;
   }, [coinBalance]);
 
+  const isMoreThenBalance = Number(value) > userCoinBalance;
+
   return (
     <FlexBlock direction="column" gap={16} block>
       {/* Header */}
@@ -267,7 +269,7 @@ export const DepositModal = () => {
           }
         }}
         fullWidth
-        disabled={isDepositLoading || !depositValue}
+        disabled={isDepositLoading || !depositValue || isMoreThenBalance}
       >
         {isNeedSwitch
           ? 'Switch network'

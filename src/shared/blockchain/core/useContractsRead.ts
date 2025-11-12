@@ -45,6 +45,7 @@ export const useContractsRead = <T = unknown>({
       abi: abi,
       chainId: contract.chainID,
       functionName: contract.functionName,
+      watch: contract.watch,
       args: contract.args,
     })),
     query: {
