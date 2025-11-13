@@ -26,6 +26,7 @@ import { InfoCircleIcon } from '@/shared/ui/icons/info-circle';
 import { SwapIcon } from '@/shared/ui/icons/swap';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
+import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 
 export const DepositModal = () => {
   const { open, close } = useModal();
@@ -33,7 +34,9 @@ export const DepositModal = () => {
   const [value, setValue] = useState('');
   const { address } = useAccount();
 
-  const depositValue = Number(value) * 10 ** choosenVault.decimals;
+  const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
+    ? 0
+    : Number(value) * 10 ** choosenVault.decimals;
 
   const { deposit, isDepositLoading } = useDeposit({
     vaultAddress: choosenVault.vaultAddress,
@@ -172,7 +175,7 @@ export const DepositModal = () => {
           <FlexBlock gap={2} alignItems="center">
             <PointCoinIcon size={16} />
             <Body level={2} weight="regular">
-              365 000
+              {formatNumberWithCommas(Number(value) * 365 * 1000)}
             </Body>
           </FlexBlock>
         </FlexBlock>
@@ -189,7 +192,7 @@ export const DepositModal = () => {
             Monthly
           </Caption>
           <Body level={2} weight="regular">
-            $6.92
+            ${round((apy * (Number(value) / 100)) / 12)}
           </Body>
         </FlexBlock>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
@@ -197,7 +200,7 @@ export const DepositModal = () => {
             Yearly
           </Caption>
           <Body level={2} weight="regular">
-            $83.00
+            ${round(apy * (Number(value) / 100))}
           </Body>
         </FlexBlock>
         <Overline className={styles.secondary}>
