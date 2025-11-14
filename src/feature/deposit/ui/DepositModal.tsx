@@ -175,7 +175,7 @@ export const DepositModal = () => {
           <FlexBlock gap={2} alignItems="center">
             <PointCoinIcon size={16} />
             <Body level={2} weight="regular">
-              {formatNumberWithCommas(Number(value) * 365 * 1000)}
+              {formatNumberWithCommas(Number(value) * 365)}
             </Body>
           </FlexBlock>
         </FlexBlock>
