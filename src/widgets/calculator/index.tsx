@@ -33,7 +33,7 @@ const PERIOD_TITLE_MAP_TO_TEXT: Record<TPeriod, string> = {
 
 export const Calculator = ({ apy }: { apy: number }) => {
   const [depositValue, setDepositValue] = useState('10000');
-  const [timePeriod, setTimePeriod] = useState(periods[0]);
+  const [timePeriod, setTimePeriod] = useState(periods[1]);
 
   const pointsValue = Number(depositValue) * timePeriod.value * 365;
 
