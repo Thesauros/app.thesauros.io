@@ -114,8 +114,16 @@ export const DepositModal = () => {
             Net APY
           </Caption>
           <Heading level={6} weight="bold" className={styles.highlight}>
-            {round(apy)}%
+            10%
           </Heading>
+        </FlexBlock>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Base APY
+          </Caption>
+          <Body level={2} weight="regular">
+            {round(apy)}%
+          </Body>
         </FlexBlock>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
           <Caption weight="regular" className={styles.secondary}>
@@ -154,7 +162,7 @@ export const DepositModal = () => {
       <FlexBlock direction="column" gap={16} block>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
           <Caption weight="regular" className={styles.secondary}>
-            Balance:
+            In your wallet:
           </Caption>
           <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
             <Body level={2} weight="regular">
@@ -189,7 +197,7 @@ export const DepositModal = () => {
       <FlexBlock direction="column" gap={12} block>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
           <Caption weight="regular" className={styles.secondary}>
-            Monthly
+            Monthly profit
           </Caption>
           <Body level={2} weight="regular">
             ${round((apy * (Number(value) / 100)) / 12)}
@@ -197,7 +205,7 @@ export const DepositModal = () => {
         </FlexBlock>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
           <Caption weight="regular" className={styles.secondary}>
-            Yearly
+            Yearly profit
           </Caption>
           <Body level={2} weight="regular">
             ${round(apy * (Number(value) / 100))}
