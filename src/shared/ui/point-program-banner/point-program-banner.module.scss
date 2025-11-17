@@ -1,3 +1,20 @@
 .bannerCard {
-  padding: 20px !important;
+  padding: 16px;
+  background-color: #fff;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0 0 10px 10px;
+}
+
+.customLink {
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.image {
+  border-radius: 10px 10px 0 0;
+}
+
+.secondary {
+  color: #64788c;
 }

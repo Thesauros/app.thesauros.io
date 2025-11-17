@@ -99,19 +99,16 @@
   }
 }
 
-.docsLinksContainer {
-  border-radius: 20px;
-  padding: 14px 20px;
-
-  display: flex;
-  align-items: center;
-  gap: 20px;
-
-  background-color: #ffffff99;
-  border: 1px solid #fff;
-}
-
 .link {
   text-decoration: unset;
   color: #030303;
+}
+
+.secondary {
+  color: #7b8c9d;
+
+  &:hover {
+    text-decoration: underline;
+    color: #196aff;
+  }
 }
