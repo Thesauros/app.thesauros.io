@@ -7,13 +7,11 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [modalContent, setModalContent] = useState<ReactNode>(null);
   const [onCloseHandler, setOncloseHandler] = useState<(() => void) | undefined>(undefined);
   const [withLayout, setWithLayout] = useState(true);
-  const [smallPaddings, setSmallPaddings] = useState(true);
 
   const open = useCallback((content: ReactNode, options?: TOpenOptions) => {
     setModalContent(content);
 
     setWithLayout(options?.withLayout ?? true);
-    setSmallPaddings(options?.smallPaddings ?? false);
     const handler = options?.onClose ? options.onClose : null;
     if (handler) {
       setOncloseHandler(() => handler);
@@ -41,11 +39,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
           />
           <div className={styles.content}>
             {withLayout ? (
-              <div
-                className={classNames(styles.modalContainer, smallPaddings && styles.smallPaddings)}
-              >
-                {modalContent}
-              </div>
+              <div className={styles.modalContainer}>{modalContent}</div>
             ) : (
               <div>{modalContent}</div>
             )}
