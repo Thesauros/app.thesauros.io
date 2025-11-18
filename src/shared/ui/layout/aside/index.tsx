@@ -7,29 +7,24 @@ import { Tooltip } from '../../tooltip/tooltip';
 import Link from 'next/link';
 import { Subtitle } from '../../new-typography/subtitle';
 import { PointProgramBanner } from '../../point-program-banner';
-import { DocIcon } from '../../icons/DocIcon';
-import { MessageQuestion } from '../../icons/message-question';
-import { FileCheck } from '../../icons/file-check';
-import { Caption } from '../../new-typography/caption';
+
 import { TelegramIcon } from '../../icons/telegram-icon';
 import { TwitterIcon } from '../../icons/twitter-icon';
 import { DiscordIcon } from '../../icons/discord-icon';
+import { Overline } from '../../new-typography/overline';
 
 const docsLinks = [
   {
-    id: 'Docs',
+    id: 'Documents',
     link: '/docs',
-    icon: <DocIcon />,
   },
   {
     id: 'FAQ',
     link: '/faq',
-    icon: <MessageQuestion />,
   },
   {
-    id: 'Terms',
+    id: 'Terms & Conditions',
     link: '/terms',
-    icon: <FileCheck />,
   },
 ];
 
@@ -107,22 +102,6 @@ export const Aside = () => {
         <PointProgramBanner />
       </FlexBlock>
       <FlexBlock direction="column" justifyContent="center" alignItems="center" gap={16} block>
-        <div className={styles.docsLinksContainer}>
-          {docsLinks.map(link => (
-            <a
-              href={link.link}
-              className={styles.link}
-              key={`${link.id}-doclink`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FlexBlock alignItems="center" gap={4}>
-                {link.icon}
-                <Caption weight="regular">{link.id}</Caption>
-              </FlexBlock>
-            </a>
-          ))}
-        </div>
         <FlexBlock gap={32} alignItems="center">
           {socialLinks.map(link => (
             <a
@@ -135,7 +114,22 @@ export const Aside = () => {
             </a>
           ))}
         </FlexBlock>
-        <Caption weight="regular">©Thesauros 2025</Caption>
+        <FlexBlock gap={8}>
+          {docsLinks.map(link => (
+            <a
+              href={link.link}
+              className={styles.link}
+              key={`${link.id}-doclink`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Overline weight="regular" className={styles.secondary}>
+                {link.id}
+              </Overline>
+            </a>
+          ))}
+        </FlexBlock>
+        <Overline weight="regular">©Thesauros 2025</Overline>
       </FlexBlock>
     </div>
   );
