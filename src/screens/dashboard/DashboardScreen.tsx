@@ -30,6 +30,7 @@ import { useEffect, useState } from 'react';
 import { CalculatorIcon } from '@/shared/ui/icons/calculator-icon';
 import { ChevronTopIcon } from '@/shared/ui/icons/chevron-top-icon';
 import { DepositBadge } from '@/shared/ui/deposit-badge';
+import { EarlyBirdModal } from '@/feature/early-bird';
 
 export const DashboardScreen = () => {
   const dashbardConstants = useDashboardConstants();
@@ -203,7 +204,8 @@ export const DashboardScreen = () => {
                 <Button variant="outline" size="lg" onClick={() => open(<WithdrawModal />)}>
                   Withdraw
                 </Button>
-                <Button size="lg" onClick={() => open(<DepositModal />)}>
+                {/* <Button size="lg" onClick={() => open(<DepositModal />)}> */}
+                <Button size="lg" onClick={() => open(<EarlyBirdModal />, { smallPaddings: true })}>
                   Add to deposit
                 </Button>
               </FlexBlock>
