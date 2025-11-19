@@ -10,27 +10,9 @@
   transition: all 0.3s ease-in-out;
   white-space: nowrap;
 
-  &.withPrefix {
-    .prefix {
-      margin-right: 8px;
-    }
-  }
-
-  &.withPostfix {
-    .postfix {
-      margin-left: 8px;
-    }
-  }
-
   &.fullWidth {
     width: 100%;
   }
-}
-
-.prefix,
-.postfix {
-  display: flex;
-  align-items: center;
 }
 
 .sm {

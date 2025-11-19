@@ -1,6 +1,7 @@
 import { ButtonHTMLAttributes, ReactNode } from 'react';
 import styles from './button.module.scss';
 import classNames from 'classnames';
+import { FlexBlock } from '../flex-block';
 
 type ButtonVariant = 'primary' | 'outline' | 'text';
 
@@ -30,16 +31,16 @@ export const Button = ({
         styles.button,
         styles[variant],
         styles[size],
-        !!prefix && styles.withPrefix,
-        !!postfix && styles.withPostfix,
         fullWidth && styles.fullWidth,
         className
       )}
       {...props}
     >
-      {prefix ? <span className={styles.prefix}>{prefix}</span> : null}
-      {children}
-      {postfix ? <span className={styles.postfix}>{postfix}</span> : null}
+      <FlexBlock alignItems="center" gap={8}>
+        {prefix ?? null}
+        {children}
+        {postfix ?? null}
+      </FlexBlock>
     </button>
   );
 };
