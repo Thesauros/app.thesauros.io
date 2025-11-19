@@ -150,7 +150,7 @@ export const APRChart = ({
               <Bar
                 yAxisId="right"
                 dataKey="profitValue"
-                fill="#B9DCFF"
+                fill="#009EFF"
                 radius={[4, 4, 0, 0]}
                 activeBar={{ fill: '#7cb2fc' }}
                 maxBarSize={20}

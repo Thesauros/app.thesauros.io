@@ -15,6 +15,7 @@ type TContractReadProps = {
   watch?: boolean;
   staleTime?: number;
   selectData?: ((data: ReadContractReturnType) => unknown) | undefined;
+  isEnabled?: boolean;
 };
 
 export const useContractRead = ({
@@ -25,6 +26,7 @@ export const useContractRead = ({
   watch,
   staleTime,
   selectData,
+  isEnabled,
 }: TContractReadProps) => {
   const queryClient = useQueryClient();
   const { data: blockNumber } = useBlockNumber({
@@ -40,6 +42,7 @@ export const useContractRead = ({
     functionName: functionName,
     args: args ?? [],
     query: {
+      enabled: isEnabled,
       select: selectData,
       staleTime: staleTimeResult,
     },

@@ -1,7 +1,7 @@
 import 'react-tooltip/dist/react-tooltip.css';
 import styles from './tooltip.module.scss';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { FlexBlock } from '../flex-block';
 import { NewInfoIcon } from '../icons/new-info';
 
@@ -47,5 +47,39 @@ export const Tooltip = ({ tooltipText, children, display = 'block', withIcon = f
         }}
       />
     </div>
+  );
+};
+
+export const TooltipWithContent = ({
+  children,
+  content,
+}: {
+  children: ReactNode;
+  content: ReactNode;
+}) => {
+  return (
+    <FlexBlock direction="column" gap={0}>
+      <a id="clickable">{children}</a>
+      <ReactTooltip
+        anchorSelect="#clickable"
+        place={'bottom-end'}
+        opacity={1}
+        style={{
+          width: '186px',
+          backgroundColor: '#262F38',
+          borderRadius: '8px',
+          padding: '10px 12px',
+          fontSize: '12px',
+          lineHeight: '16px',
+          letterSpacing: 0,
+          fontWeight: 400,
+          zIndex: 1,
+        }}
+        noArrow
+        clickable
+      >
+        {content}
+      </ReactTooltip>
+    </FlexBlock>
   );
 };

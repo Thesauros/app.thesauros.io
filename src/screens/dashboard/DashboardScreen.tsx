@@ -10,17 +10,16 @@ import styles from './main.module.scss';
 import { Calculator } from '@/widgets/calculator';
 import { UsdcIcon } from '@/shared/ui/icons/usdc-icon';
 import { Caption } from '@/shared/ui/new-typography/caption';
-import { Tooltip } from '@/shared/ui/tooltip/tooltip';
+import { Tooltip, TooltipWithContent } from '@/shared/ui/tooltip/tooltip';
 import { LightningIcon } from '@/shared/ui/icons/lightning-icon';
 import { StarsIcon } from '@/shared/ui/icons/stars-icon';
-import { round } from '@/shared/number/round';
 import { Button } from '@/shared/ui/button';
 import { ConvertBadge } from '@/shared/ui/convert-badge';
 import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 import ProtocolsIcons from '@/shared/ui/images/protocols.png';
 import { HexensIcon } from '@/shared/ui/icons/hexens-icon';
 import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
-import { useAccount } from '@/shared/blockchain';
+import { useAccount, vaults } from '@/shared/blockchain';
 import { InfoIcon } from '@/shared/ui/icons';
 import { DepositModal } from '@/feature/deposit/ui/DepositModal';
 import { useModal } from '@/shared/ui/modal';
@@ -31,15 +30,17 @@ import { CalculatorIcon } from '@/shared/ui/icons/calculator-icon';
 import { ChevronTopIcon } from '@/shared/ui/icons/chevron-top-icon';
 import { DepositBadge } from '@/shared/ui/deposit-badge';
 import { EarlyBirdModal } from '@/feature/early-bird';
+import { useWhitelist } from '@/shared/blockchain/useWhitelist';
+import { Overline } from '@/shared/ui/new-typography/overline';
 
 export const DashboardScreen = () => {
-  const dashbardConstants = useDashboardConstants();
+  const { totalPosition, vaultsTVL, complexApy } = useDashboardConstants();
   const { openConnectModal } = useConnectModal();
   const { isConnected } = useAccount();
   const { open } = useModal();
 
   const isMobile = useCheckResolution(576);
-  const isDeposited = dashbardConstants.totalPosition > 0;
+  const isDeposited = totalPosition > 0;
 
   const onDepositClick = () => {
     if (isConnected) {
@@ -58,6 +59,8 @@ export const DashboardScreen = () => {
     }
   }, [isDeposited]);
 
+  const isInWhiteList = useWhitelist(vaults[0]);
+
   return (
     <FlexBlock direction="column" gap={12} block>
       <FlexBlock direction="column" gap={20} block>
@@ -74,7 +77,7 @@ export const DashboardScreen = () => {
             Potential earnings
           </Button>
         </FlexBlock>
-        {isCalculatorOpened && <Calculator apy={dashbardConstants.apy} />}
+        {isCalculatorOpened && <Calculator apy={complexApy.netApy} />}
       </FlexBlock>
       <Card block>
         <FlexBlock direction="column" gap={28}>
@@ -124,7 +127,7 @@ export const DashboardScreen = () => {
                     </Caption>
                   </Tooltip>
                   <Body level={2} weight="bold">
-                    ${dashbardConstants.vaultsTVL}
+                    ${vaultsTVL}
                   </Body>
                 </FlexBlock>
               </FlexBlock>
@@ -150,7 +153,7 @@ export const DashboardScreen = () => {
                     <Heading level={6} weight="bold">
                       <FlexBlock gap={4} alignItems="center">
                         <PointCoinIcon size={16} />
-                        {dashbardConstants.totalPosition}
+                        {totalPosition}
                         <span className={styles.daily}>/day</span>
                       </FlexBlock>
                     </Heading>
@@ -160,21 +163,48 @@ export const DashboardScreen = () => {
                   <Card variant="secondary" className={styles.apyCard}>
                     <Body level={2}>Your funds</Body>
                     <Heading level={6} weight="bold">
-                      ${dashbardConstants.totalPosition}
+                      ${totalPosition}
                     </Heading>
                   </Card>
                 )}
-                <Card variant="secondary" className={styles.apyCard}>
-                  <Subtitle level={2} weight="regular">
-                    APY
-                  </Subtitle>
-                  <FlexBlock alignItems="center" gap={12}>
-                    <Heading level={5} weight="bold">
-                      {round(dashbardConstants.apy)}%
-                    </Heading>
-                    <StarsIcon />
-                  </FlexBlock>
-                </Card>
+                <TooltipWithContent
+                  content={
+                    <FlexBlock direction="column" gap={8} block>
+                      <FlexBlock direction="column" gap={0} className={styles.tooltipApyInfo} block>
+                        <FlexBlock justifyContent="space-between" block>
+                          <Overline>Base Rate</Overline>
+                          <Caption weight="regular">+{complexApy.baseApy}%</Caption>
+                        </FlexBlock>
+                        <FlexBlock justifyContent="space-between" block>
+                          <Overline>Reward Rate</Overline>
+                          <Caption weight="regular">+{complexApy.rewardApy}%</Caption>
+                        </FlexBlock>
+                        <FlexBlock justifyContent="space-between" block>
+                          <Overline>Net APY</Overline>
+                          <Caption weight="regular">+{complexApy.netApy}%</Caption>
+                        </FlexBlock>
+                      </FlexBlock>
+                      <Overline className={styles.tooltipApyDescription}>
+                        The displayed APY includes the base yield from DeFi strategies and an
+                        additional part earned as points. These points are accrued over time and
+                        will be converted into tokens once the points program ends and the token
+                        launches.
+                      </Overline>
+                    </FlexBlock>
+                  }
+                >
+                  <Card variant="secondary" className={styles.apyCard}>
+                    <Subtitle level={2} weight="regular">
+                      APY
+                    </Subtitle>
+                    <FlexBlock alignItems="center" gap={12}>
+                      <Heading level={5} weight="bold">
+                        {complexApy.netApy}%
+                      </Heading>
+                      <StarsIcon />
+                    </FlexBlock>
+                  </Card>
+                </TooltipWithContent>
               </FlexBlock>
             </FlexBlock>
           </FlexBlock>
@@ -204,8 +234,14 @@ export const DashboardScreen = () => {
                 <Button variant="outline" size="lg" onClick={() => open(<WithdrawModal />)}>
                   Withdraw
                 </Button>
-                {/* <Button size="lg" onClick={() => open(<DepositModal />)}> */}
-                <Button size="lg" onClick={() => open(<EarlyBirdModal />, { smallPaddings: true })}>
+                <Button
+                  size="lg"
+                  onClick={() =>
+                    open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal />, {
+                      smallPaddings: !isInWhiteList,
+                    })
+                  }
+                >
                   Add to deposit
                 </Button>
               </FlexBlock>

@@ -27,6 +27,7 @@ import { SwapIcon } from '@/shared/ui/icons/swap';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
+import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 
 export const DepositModal = () => {
   const { open, close } = useModal();
@@ -93,6 +94,7 @@ export const DepositModal = () => {
   }, [coinBalance]);
 
   const isMoreThenBalance = Number(value) > userCoinBalance;
+  const { complexApy } = useDashboardConstants();
 
   return (
     <FlexBlock direction="column" gap={16} block>
@@ -114,7 +116,7 @@ export const DepositModal = () => {
             Net APY
           </Caption>
           <Heading level={6} weight="bold" className={styles.highlight}>
-            10%
+            {complexApy.netApy}%
           </Heading>
         </FlexBlock>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
@@ -122,7 +124,7 @@ export const DepositModal = () => {
             Base APY
           </Caption>
           <Body level={2} weight="regular">
-            {round(apy)}%
+            {complexApy.baseApy}%
           </Body>
         </FlexBlock>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
@@ -130,7 +132,7 @@ export const DepositModal = () => {
             Reward APY
           </Caption>
           <Body level={2} weight="regular">
-            {round(10 - apy)}%
+            {complexApy.rewardApy}%
           </Body>
         </FlexBlock>
       </FlexBlock>
