@@ -19,7 +19,7 @@ import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 import ProtocolsIcons from '@/shared/ui/images/protocols.png';
 import { HexensIcon } from '@/shared/ui/icons/hexens-icon';
 import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
-import { useAccount, vaults } from '@/shared/blockchain';
+import { useAccount } from '@/shared/blockchain';
 import { InfoIcon } from '@/shared/ui/icons';
 import { DepositModal } from '@/feature/deposit/ui/DepositModal';
 import { useModal } from '@/shared/ui/modal';
@@ -30,13 +30,13 @@ import { CalculatorIcon } from '@/shared/ui/icons/calculator-icon';
 import { ChevronTopIcon } from '@/shared/ui/icons/chevron-top-icon';
 import { DepositBadge } from '@/shared/ui/deposit-badge';
 import { EarlyBirdModal } from '@/feature/early-bird';
-import { useWhitelist } from '@/shared/blockchain/useWhitelist';
+import { useWhiteList } from '@/shared/api/dashboard/useWhiteList';
 import { Overline } from '@/shared/ui/new-typography/overline';
 
 export const DashboardScreen = () => {
   const { totalPosition, vaultsTVL, complexApy } = useDashboardConstants();
   const { openConnectModal } = useConnectModal();
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { open } = useModal();
 
   const isMobile = useCheckResolution(576);
@@ -59,7 +59,9 @@ export const DashboardScreen = () => {
     }
   }, [isDeposited]);
 
-  const isInWhiteList = useWhitelist(vaults[0]);
+  const { isInWhiteList } = useWhiteList(address);
+
+  console.log('isInWhiteList', isInWhiteList);
 
   return (
     <FlexBlock direction="column" gap={12} block>

@@ -23,13 +23,13 @@ const fetchUserInfo = async (address: TAddress): Promise<TUserPointsInfoRaw> => 
 };
 
 export const useUserPointsInfo = (address?: TAddress) => {
-  const { data: userPointsInfo, isLoading } = useCustomQueryKey(
-    ['GET_USER_POINTS_INFO', address ?? ''],
-    () => fetchUserInfo(address!),
-    {
-      enabled: !!address,
-    }
-  );
+  const {
+    data: userPointsInfo,
+    isLoading,
+    refetch: refetchUserPointsInfo,
+  } = useCustomQueryKey(['GET_USER_POINTS_INFO', address ?? ''], () => fetchUserInfo(address!), {
+    enabled: !!address,
+  });
 
-  return { userPointsInfo: userPointsInfo?.data, isLoading };
+  return { userPointsInfo: userPointsInfo?.data, isLoading, refetchUserPointsInfo };
 };

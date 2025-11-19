@@ -28,6 +28,7 @@ import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
+import { useUserPointsInfo } from '@/shared/api/pointProgram';
 
 export const DepositModal = () => {
   const { open, close } = useModal();
@@ -38,6 +39,8 @@ export const DepositModal = () => {
   const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
     ? 0
     : Number(value) * 10 ** choosenVault.decimals;
+
+  const { refetchUserPointsInfo } = useUserPointsInfo(address);
 
   const { deposit, isDepositLoading } = useDeposit({
     vaultAddress: choosenVault.vaultAddress,
@@ -53,6 +56,7 @@ export const DepositModal = () => {
           type="deposit"
         />
       );
+      refetchUserPointsInfo();
     },
     onError: error => {
       if (error) open(<TransactionStatusModal status="failed" type="deposit" />);
