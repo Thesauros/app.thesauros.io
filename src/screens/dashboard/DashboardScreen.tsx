@@ -61,8 +61,6 @@ export const DashboardScreen = () => {
 
   const { isInWhiteList } = useWhiteList(address);
 
-  console.log('isInWhiteList', isInWhiteList);
-
   return (
     <FlexBlock direction="column" gap={12} block>
       <FlexBlock direction="column" gap={20} block>
