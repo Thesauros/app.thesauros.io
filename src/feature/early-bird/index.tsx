@@ -15,12 +15,12 @@ import { useModal } from '@/shared/ui/modal';
 import { useWhiteList } from '@/shared/api/dashboard';
 import { useAccount } from '@/shared/blockchain';
 
-export const EarlyBirdModal = () => {
+export const EarlyBirdModal = ({ isOnApproving = false }: { isOnApproving?: boolean }) => {
   const [email, setEmail] = useState('');
   const [telegram, setTelegram] = useState('');
   const { close } = useModal();
-  const { sendUserEmail, sendUserTelegram } = useWhiteList();
   const { address } = useAccount();
+  const { sendUserEmail, sendUserTelegram, refetchUserInfo } = useWhiteList(address);
   const [success, setSuccess] = useState(false);
 
   const isValidEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
@@ -47,6 +47,7 @@ export const EarlyBirdModal = () => {
 
     const res = await sendUserEmail(address, email);
     setSuccess(res.success);
+    refetchUserInfo();
   };
 
   const handleSubmitTelegram = async () => {
@@ -54,7 +55,10 @@ export const EarlyBirdModal = () => {
 
     const res = await sendUserTelegram(address, telegram);
     setSuccess(res.success);
+    refetchUserInfo();
   };
+
+  const isShowForm = !success && !isOnApproving;
 
   return (
     <div className={styles.modalBackground}>
@@ -77,7 +81,7 @@ export const EarlyBirdModal = () => {
               to notify you and send your first bonus ⭐
             </Body>
           </div>
-          {!success && (
+          {isShowForm && (
             <>
               {address && (
                 <FlexBlock block>
@@ -129,7 +133,7 @@ export const EarlyBirdModal = () => {
               )}
             </>
           )}
-          {success && (
+          {!isShowForm && (
             <Button size="lg" fullWidth onClick={close}>
               Got it
             </Button>
