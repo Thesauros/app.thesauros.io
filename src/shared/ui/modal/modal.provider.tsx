@@ -8,12 +8,17 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [onCloseHandler, setOncloseHandler] = useState<(() => void) | undefined>(undefined);
   const [withLayout, setWithLayout] = useState(true);
   const [smallPaddings, setSmallPaddings] = useState(true);
+  const [backgroundColor, setBackgroundColor] = useState<string | undefined>(undefined);
+  const [padding, setPadding] = useState<string | undefined>(undefined);
 
   const open = useCallback((content: ReactNode, options?: TOpenOptions) => {
     setModalContent(content);
 
     setWithLayout(options?.withLayout ?? true);
     setSmallPaddings(options?.smallPaddings ?? false);
+    setBackgroundColor(options?.backgroundColor ?? undefined);
+    setPadding(options?.padding ?? undefined);
+
     const handler = options?.onClose ? options.onClose : null;
     if (handler) {
       setOncloseHandler(() => handler);
@@ -43,6 +48,10 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
             {withLayout ? (
               <div
                 className={classNames(styles.modalContainer, smallPaddings && styles.smallPaddings)}
+                style={{
+                  backgroundColor: backgroundColor ?? undefined,
+                  padding: padding ?? undefined,
+                }}
               >
                 {modalContent}
               </div>

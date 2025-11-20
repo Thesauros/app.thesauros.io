@@ -1,3 +1,5 @@
+@use '@breakpoints' as breakpoints;
+
 .bannerCard {
   padding: 16px;
   background-color: #fff;
@@ -9,10 +11,19 @@
 .customLink {
   text-decoration: none !important;
   cursor: pointer;
+
+  @include breakpoints.mobile {
+    width: 100%;
+  }
 }
 
 .image {
   border-radius: 10px 10px 0 0;
+
+  @include breakpoints.mobile {
+    width: 100% !important;
+    height: auto !important;
+  }
 }
 
 .secondary {
