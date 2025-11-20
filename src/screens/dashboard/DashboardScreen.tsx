@@ -41,13 +41,18 @@ export const DashboardScreen = () => {
 
   const isMobile = useCheckResolution(576);
   const isDeposited = totalPosition > 0;
+  const { isInWhiteList, isOnApproving } = useWhiteList(address);
 
   const onDepositClick = () => {
     if (isConnected) {
-      open(<DepositModal />);
+      open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal isOnApproving={isOnApproving} />, {
+        smallPaddings: !isInWhiteList,
+      });
     } else if (openConnectModal) {
       openConnectModal();
-      open(<DepositModal />);
+      open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal isOnApproving={isOnApproving} />, {
+        smallPaddings: !isInWhiteList,
+      });
     }
   };
 
@@ -58,8 +63,6 @@ export const DashboardScreen = () => {
       setCalculatorOpened(false);
     }
   }, [isDeposited]);
-
-  const { isInWhiteList } = useWhiteList(address);
 
   return (
     <FlexBlock direction="column" gap={12} block>
