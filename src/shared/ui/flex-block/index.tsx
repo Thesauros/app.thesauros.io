@@ -5,7 +5,7 @@ import classNames from 'classnames';
 type TProps = {
   children: ReactNode;
   id?: string;
-  direction?: 'row' | 'column';
+  direction?: 'row' | 'column' | 'column-reverse';
   gap?:
     | 0
     | 2

@@ -9,6 +9,7 @@ import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 import { Tooltip } from '@/shared/ui/tooltip/tooltip';
 import { useAccount } from '@/shared/blockchain';
 import { useCheckResolution } from '@/shared/browser/useCheckResolution';
+import { InfoIcon } from '@/shared/ui/icons';
 
 const periods = [
   { title: '7D', value: 7 },
@@ -27,19 +28,27 @@ export const PerfomanceChart = () => {
           justifyContent="space-between"
           alignItems={isMobile ? 'flex-start' : 'center'}
           direction={isMobile ? 'column' : 'row'}
+          gap={isMobile ? 16 : 8}
         >
-          <Tooltip
-            withIcon
-            tooltipText={
-              isConnected
-                ? 'Here you can see how your deposit grows over time and what average return the strategy is generating for you. The chart shows both your earned amount for the selected period and the average APY the strategy maintained during that time.'
-                : 'Shows the current average yield the strategy generates from connected DeFi protocols. The percentage can move up or down depending on market conditions.'
-            }
+          <FlexBlock
+            alignItems="center"
+            gap={8}
+            justifyContent={isMobile ? 'space-between' : 'start'}
+            block={isMobile}
           >
             <Subtitle level={2} weight="regular">
               Thesauros Performance APY, %
             </Subtitle>
-          </Tooltip>
+            <Tooltip
+              tooltipText={
+                isConnected
+                  ? 'Here you can see how your deposit grows over time and what average return the strategy is generating for you. The chart shows both your earned amount for the selected period and the average APY the strategy maintained during that time.'
+                  : 'Shows the current average yield the strategy generates from connected DeFi protocols. The percentage can move up or down depending on market conditions.'
+              }
+            >
+              <InfoIcon />
+            </Tooltip>
+          </FlexBlock>
 
           <SwitchToggle active={timePeriod} onSelect={setTimePeriod} values={periods} />
         </FlexBlock>

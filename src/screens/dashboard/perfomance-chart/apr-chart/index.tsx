@@ -104,7 +104,7 @@ export const APRChart = ({
         <Loader />
       ) : (
         <ResponsiveContainer width="100%" height={394}>
-          <AreaChart data={combinedData} margin={{ left: 10, right: 10 }}>
+          <AreaChart data={combinedData} margin={{ left: 10, right: isMobile ? -40 : 10 }}>
             <defs>
               <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="5%" stopColor="#FFDDAD" stopOpacity={0.6} />

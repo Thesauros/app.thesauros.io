@@ -32,6 +32,7 @@ import { DepositBadge } from '@/shared/ui/deposit-badge';
 import { EarlyBirdModal } from '@/feature/early-bird';
 import { useWhiteList } from '@/shared/api/dashboard/useWhiteList';
 import { Overline } from '@/shared/ui/new-typography/overline';
+import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 
 export const DashboardScreen = () => {
   const { totalPosition, vaultsTVL, complexApy } = useDashboardConstants();
@@ -68,16 +69,16 @@ export const DashboardScreen = () => {
     <FlexBlock direction="column" gap={12} block>
       <FlexBlock direction="column" gap={20} block>
         <FlexBlock justifyContent="space-between" block>
-          <NewHeading level={4} weight="bold">
+          <NewHeading level={isMobile ? 5 : 4} weight="bold">
             Dashboard
           </NewHeading>
           <Button
-            size="lg"
+            size={isMobile ? 'md' : 'lg'}
             variant="outline"
             prefix={!isCalculatorOpened ? <CalculatorIcon /> : <ChevronTopIcon />}
             onClick={() => setCalculatorOpened(!isCalculatorOpened)}
           >
-            Potential earnings
+            {isMobile ? null : 'Potential earnings'}
           </Button>
         </FlexBlock>
         {isCalculatorOpened && <Calculator apy={complexApy.netApy} />}
@@ -91,17 +92,44 @@ export const DashboardScreen = () => {
             direction={isMobile ? 'column' : 'row'}
           >
             <FlexBlock direction="column" gap={16} className={styles.vaultInfoCard}>
-              <FlexBlock gap={12} alignItems="center">
-                <UsdcIcon />
-                <Heading level={5} weight="bold">
-                  USDC
-                </Heading>
+              <FlexBlock justifyContent="space-between" alignItems="center" block>
+                <FlexBlock gap={isMobile ? 8 : 12} alignItems="center">
+                  <UsdcIcon size={isMobile ? 24 : 40} />
+                  {isMobile ? (
+                    <Body level={2} weight="bold">
+                      USDC
+                    </Body>
+                  ) : (
+                    <Heading level={5} weight="bold">
+                      USDC
+                    </Heading>
+                  )}
+                </FlexBlock>
+                {isMobile && (
+                  <FlexBlock alignItems="center" gap={8}>
+                    <Subtitle level={2} weight="regular" className={styles.secondaryHighlight}>
+                      APY
+                    </Subtitle>
+                    <Body level={2} weight="bold">
+                      {complexApy.netApy}%
+                    </Body>
+                    <StarsIcon />
+                  </FlexBlock>
+                )}
               </FlexBlock>
-              <Body level={2} weight="regular" className={styles.secondaryHighlight}>
-                Your stablecoins are automatically allocated across top and safest DeFi providers
-                holding over $60 billion in assets. When yields shift, the system reallocates funds
-                to maintain the best available return.
-              </Body>
+              {!isMobile ? (
+                <Body level={2} weight="regular" className={styles.secondaryHighlight}>
+                  Your stablecoins are automatically allocated across top and safest DeFi providers
+                  holding over $60 billion in assets. When yields shift, the system reallocates
+                  funds to maintain the best available return.
+                </Body>
+              ) : (
+                <Caption weight="regular" className={styles.secondaryHighlight}>
+                  Your stablecoins are automatically allocated across top and safest DeFi providers
+                  holding over $60 billion in assets. When yields shift, the system reallocates
+                  funds to maintain the best available return.
+                </Caption>
+              )}
               <FlexBlock alignItems="center" gap={32}>
                 <FlexBlock direction="column" gap={4}>
                   <Tooltip
@@ -130,22 +158,20 @@ export const DashboardScreen = () => {
                     </Caption>
                   </Tooltip>
                   <Body level={2} weight="bold">
-                    ${vaultsTVL}
+                    ${formatNumberWithCommas(vaultsTVL ?? 0)}
                   </Body>
                 </FlexBlock>
               </FlexBlock>
             </FlexBlock>
-            <FlexBlock
-              direction="column"
-              justifyContent="space-between"
-              alignItems="flex-end"
-              fullHeight
-            >
-              <FlexBlock gap={8} alignItems="flex-start">
-                {isDeposited && (
-                  <Card variant="secondary" className={styles.apyCard}>
-                    <FlexBlock justifyContent="space-between" alignItems="center" block>
-                      <Body level={2}>Points</Body>
+
+            {isMobile && (
+              <FlexBlock direction="column" gap={8} block>
+                <Card variant="secondary" className={styles.mobilePointsCard}>
+                  <FlexBlock justifyContent="space-between" alignItems="center" block>
+                    <FlexBlock gap={4} alignItems="center">
+                      <Subtitle level={2} weight="regular" className={styles.secondaryHighlight}>
+                        Points
+                      </Subtitle>
                       <Tooltip
                         tooltipText="Shows the current average yield the strategy generates from connected DeFi protocols.
  The percentage can move up or down depending on market conditions."
@@ -153,63 +179,110 @@ export const DashboardScreen = () => {
                         <InfoIcon />
                       </Tooltip>
                     </FlexBlock>
-                    <Heading level={6} weight="bold">
-                      <FlexBlock gap={4} alignItems="center">
-                        <PointCoinIcon size={16} />
+                    <FlexBlock gap={4} alignItems="center">
+                      <PointCoinIcon size={16} />
+                      <Heading level={6} weight="bold">
                         {totalPosition}
-                        <span className={styles.daily}>/day</span>
-                      </FlexBlock>
-                    </Heading>
-                  </Card>
-                )}
-                {isDeposited && (
-                  <Card variant="secondary" className={styles.apyCard}>
-                    <Body level={2}>Your funds</Body>
-                    <Heading level={6} weight="bold">
-                      ${totalPosition}
-                    </Heading>
-                  </Card>
-                )}
-                <TooltipWithContent
-                  content={
-                    <FlexBlock direction="column" gap={8} block>
-                      <FlexBlock direction="column" gap={0} className={styles.tooltipApyInfo} block>
-                        <FlexBlock justifyContent="space-between" block>
-                          <Overline>Base Rate</Overline>
-                          <Caption weight="regular">+{complexApy.baseApy}%</Caption>
-                        </FlexBlock>
-                        <FlexBlock justifyContent="space-between" block>
-                          <Overline>Reward Rate</Overline>
-                          <Caption weight="regular">+{complexApy.rewardApy}%</Caption>
-                        </FlexBlock>
-                        <FlexBlock justifyContent="space-between" block>
-                          <Overline>Net APY</Overline>
-                          <Caption weight="regular">+{complexApy.netApy}%</Caption>
-                        </FlexBlock>
-                      </FlexBlock>
-                      <Overline className={styles.tooltipApyDescription}>
-                        The displayed APY includes the base yield from DeFi strategies and an
-                        additional part earned as points. These points are accrued over time and
-                        will be converted into tokens once the points program ends and the token
-                        launches.
-                      </Overline>
-                    </FlexBlock>
-                  }
-                >
-                  <Card variant="secondary" className={styles.apyCard}>
-                    <Subtitle level={2} weight="regular">
-                      APY
-                    </Subtitle>
-                    <FlexBlock alignItems="center" gap={12}>
-                      <Heading level={5} weight="bold">
-                        {complexApy.netApy}%
                       </Heading>
-                      <StarsIcon />
+                      <span className={styles.daily}>/day</span>
                     </FlexBlock>
-                  </Card>
-                </TooltipWithContent>
+                  </FlexBlock>
+                </Card>
+                <Card variant="secondary" className={styles.mobilePointsCard}>
+                  <FlexBlock justifyContent="space-between" alignItems="center" block>
+                    <Subtitle level={2} weight="regular" className={styles.secondaryHighlight}>
+                      Your funds
+                    </Subtitle>
+                    <Heading level={6} weight="bold">
+                      ${formatNumberWithCommas(totalPosition)}
+                    </Heading>
+                  </FlexBlock>
+                </Card>
               </FlexBlock>
-            </FlexBlock>
+            )}
+            {!isMobile && (
+              <FlexBlock
+                direction="column"
+                justifyContent="space-between"
+                alignItems="flex-end"
+                fullHeight
+              >
+                <FlexBlock gap={8} alignItems="flex-start">
+                  {isDeposited && !isMobile && (
+                    <Card variant="secondary" className={styles.apyCard}>
+                      <FlexBlock justifyContent="space-between" alignItems="center" block>
+                        <Body level={2}>Points</Body>
+                        <Tooltip
+                          tooltipText="Shows the current average yield the strategy generates from connected DeFi protocols.
+ The percentage can move up or down depending on market conditions."
+                        >
+                          <InfoIcon />
+                        </Tooltip>
+                      </FlexBlock>
+                      <Heading level={6} weight="bold">
+                        <FlexBlock gap={4} alignItems="center">
+                          <PointCoinIcon size={16} />
+                          {totalPosition}
+                          <span className={styles.daily}>/day</span>
+                        </FlexBlock>
+                      </Heading>
+                    </Card>
+                  )}
+                  {isDeposited && (
+                    <Card variant="secondary" className={styles.apyCard}>
+                      <Body level={2}>Your funds</Body>
+                      <Heading level={6} weight="bold">
+                        ${totalPosition}
+                      </Heading>
+                    </Card>
+                  )}
+
+                  <TooltipWithContent
+                    content={
+                      <FlexBlock direction="column" gap={8} block>
+                        <FlexBlock
+                          direction="column"
+                          gap={0}
+                          className={styles.tooltipApyInfo}
+                          block
+                        >
+                          <FlexBlock justifyContent="space-between" block>
+                            <Overline>Base Rate</Overline>
+                            <Caption weight="regular">+{complexApy.baseApy}%</Caption>
+                          </FlexBlock>
+                          <FlexBlock justifyContent="space-between" block>
+                            <Overline>Reward Rate</Overline>
+                            <Caption weight="regular">+{complexApy.rewardApy}%</Caption>
+                          </FlexBlock>
+                          <FlexBlock justifyContent="space-between" block>
+                            <Overline>Net APY</Overline>
+                            <Caption weight="regular">+{complexApy.netApy}%</Caption>
+                          </FlexBlock>
+                        </FlexBlock>
+                        <Overline className={styles.tooltipApyDescription}>
+                          The displayed APY includes the base yield from DeFi strategies and an
+                          additional part earned as points. These points are accrued over time and
+                          will be converted into tokens once the points program ends and the token
+                          launches.
+                        </Overline>
+                      </FlexBlock>
+                    }
+                  >
+                    <Card variant="secondary" className={styles.apyCard}>
+                      <Subtitle level={2} weight="regular">
+                        APY
+                      </Subtitle>
+                      <FlexBlock alignItems="center" gap={12}>
+                        <Heading level={5} weight="bold">
+                          {complexApy.netApy}%
+                        </Heading>
+                        <StarsIcon />
+                      </FlexBlock>
+                    </Card>
+                  </TooltipWithContent>
+                </FlexBlock>
+              </FlexBlock>
+            )}
           </FlexBlock>
           {!isDeposited && (
             <FlexBlock
@@ -217,13 +290,18 @@ export const DashboardScreen = () => {
               alignItems="center"
               direction={isMobile ? 'column' : 'row'}
             >
-              <FlexBlock alignItems="center" gap={20}>
-                <Button size="lg" onClick={onDepositClick}>
+              <FlexBlock
+                alignItems="center"
+                direction={isMobile ? 'column' : 'row'}
+                gap={isMobile ? 16 : 20}
+                block={isMobile}
+              >
+                <Button size="lg" onClick={onDepositClick} fullWidth={isMobile}>
                   Deposit
                 </Button>
                 <DepositBadge />
               </FlexBlock>
-              <ConvertBadge />
+              {!isMobile && <ConvertBadge />}
             </FlexBlock>
           )}
           {isDeposited && (
@@ -231,14 +309,26 @@ export const DashboardScreen = () => {
               justifyContent="space-between"
               alignItems="center"
               direction={isMobile ? 'column' : 'row'}
+              gap={isMobile ? 16 : 0}
             >
               <ConvertBadge />
-              <FlexBlock alignItems="center" gap={12}>
-                <Button variant="outline" size="lg" onClick={() => open(<WithdrawModal />)}>
+              <FlexBlock
+                alignItems="center"
+                direction={isMobile ? 'column-reverse' : 'row'}
+                gap={12}
+                block={isMobile}
+              >
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={() => open(<WithdrawModal />)}
+                  fullWidth={isMobile}
+                >
                   Withdraw
                 </Button>
                 <Button
                   size="lg"
+                  fullWidth={isMobile}
                   onClick={() =>
                     open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal />, {
                       smallPaddings: !isInWhiteList,
@@ -248,6 +338,11 @@ export const DashboardScreen = () => {
                   Add to deposit
                 </Button>
               </FlexBlock>
+              {isMobile && (
+                <Caption weight="regular" className={styles.secondaryHighlight}>
+                  Withdraw anytime — no lock period
+                </Caption>
+              )}
             </FlexBlock>
           )}
         </FlexBlock>
@@ -255,9 +350,13 @@ export const DashboardScreen = () => {
       <PerfomanceChart />
       <Card block>
         <FlexBlock direction="column" gap={16}>
-          <Subtitle level={1} weight="regular">
-            About
-          </Subtitle>
+          {!isMobile ? (
+            <Subtitle level={1} weight="regular">
+              About
+            </Subtitle>
+          ) : (
+            <Caption weight="regular">About</Caption>
+          )}
           <FlexBlock gap={16} direction="column" alignItems="flex-start">
             <FlexBlock gap={16} direction={isMobile ? 'column' : 'row'} block>
               <Card variant="secondary" className={styles.partnersBlock} block>

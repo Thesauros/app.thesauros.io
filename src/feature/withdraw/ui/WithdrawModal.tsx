@@ -133,7 +133,7 @@ export const WithdrawModal = () => {
           </Caption>
           <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
             <Body level={2} weight="regular">
-              {round(userCoinBalance)} {tokenSymbol as string}
+              {round(userCoinBalance)} {choosenVault.coinName}
             </Body>
           </div>
         </FlexBlock>
@@ -142,7 +142,7 @@ export const WithdrawModal = () => {
             Withdrawal Fee:
           </Caption>
           <Body level={2} weight="regular">
-            0 {tokenSymbol as string}
+            0 {choosenVault.coinName}
           </Body>
         </FlexBlock>
       </FlexBlock>

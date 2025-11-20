@@ -29,7 +29,7 @@ export const TransactionStatusModal = ({
 }) => {
   const { close } = useModal();
   const TYPE_MAP_TO_ICON = { deposit: <DownloadIcon />, withdraw: <CoinHand /> };
-  const TYPE_STATUS_TO_TEXT = { success: 'Successfully', failed: 'Unsuccessful' };
+  const TYPE_STATUS_TO_TEXT = { success: 'Successful', failed: 'Unsuccessful' };
 
   const handleOpenExplorer = () => {
     if (data) {
