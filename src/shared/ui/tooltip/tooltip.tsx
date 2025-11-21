@@ -7,6 +7,7 @@ import { NewInfoIcon } from '../icons/new-info';
 
 type TProps = {
   tooltipText: string;
+  fullWidth?: boolean;
   children: ReactNode;
   display?: string;
   withIcon?: boolean;
@@ -14,11 +15,17 @@ type TProps = {
 
 const createUniqueId = (name: string) => `tooltip-${name.toLowerCase()}`;
 
-export const Tooltip = ({ tooltipText, children, display = 'block', withIcon = false }: TProps) => {
+export const Tooltip = ({
+  tooltipText,
+  fullWidth = false,
+  children,
+  display = 'block',
+  withIcon = false,
+}: TProps) => {
   const uniqueId = createUniqueId(tooltipText);
 
   return (
-    <div style={{ display: display }}>
+    <div style={{ display: display, width: fullWidth ? '100%' : 'auto' }}>
       <div
         data-tooltip-id={uniqueId}
         data-tooltip-content={tooltipText}
