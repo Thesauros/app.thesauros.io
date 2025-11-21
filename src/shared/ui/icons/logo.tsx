@@ -1,13 +1,16 @@
 import { AppTheme, useTheme } from '../theme';
 
-export const LogoIcon = ({ size = 'm' }: { size?: 's' | 'm' }) => {
+export const LogoIcon = ({ size = 'l' }: { size?: 's' | 'm' | 'l' }) => {
   const { theme } = useTheme();
   const textColor = theme === AppTheme.LIGHT ? 'black' : 'white';
 
+  const width = size === 'l' ? 214 : size === 'm' ? 143 : 110;
+  const height = size === 'l' ? 36 : size === 'm' ? 36 : 22;
+
   return (
     <svg
-      width={size === 'm' ? 214 : 110}
-      height={size === 'm' ? 36 : 22}
+      width={width}
+      height={height}
       viewBox="0 0 549 109"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

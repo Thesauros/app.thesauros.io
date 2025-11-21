@@ -94,6 +94,12 @@
     max-height: 710px;
     overflow-y: scroll;
   }
+
+  @include breakpoints.small-mobile {
+    border-radius: 28px 28px 0 0;
+    max-height: 510px;
+    overflow-y: scroll;
+  }
 }
 
 @keyframes fadeIn {

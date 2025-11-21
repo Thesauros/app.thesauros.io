@@ -78,13 +78,6 @@ export const WithdrawModal = () => {
     },
   });
 
-  const { data: tokenSymbol } = useContractRead({
-    address: choosenVault.vaultAddress,
-    functionName: 'symbol',
-    watch: false,
-    chainID: choosenVault.chainID,
-  });
-
   const userCoinBalance: number = useMemo(() => {
     if (typeof coinBalance === 'number') {
       return coinBalance;
@@ -116,7 +109,7 @@ export const WithdrawModal = () => {
           textAlign="left"
           postfix={
             <Body level={2} weight="regular" className={styles.secondary}>
-              {tokenSymbol as string}
+              {choosenVault.coinName}
             </Body>
           }
           fullWidth
@@ -133,7 +126,7 @@ export const WithdrawModal = () => {
           </Caption>
           <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
             <Body level={2} weight="regular">
-              {round(userCoinBalance)} {tokenSymbol as string}
+              {round(userCoinBalance)} {choosenVault.coinName}
             </Body>
           </div>
         </FlexBlock>
@@ -142,7 +135,7 @@ export const WithdrawModal = () => {
             Withdrawal Fee:
           </Caption>
           <Body level={2} weight="regular">
-            0 {tokenSymbol as string}
+            0 {choosenVault.coinName}
           </Body>
         </FlexBlock>
       </FlexBlock>

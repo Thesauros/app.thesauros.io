@@ -3,6 +3,9 @@ import { createContext, ReactNode } from 'react';
 export type TOpenOptions = {
   onClose?: () => void;
   withLayout?: boolean;
+  smallPaddings?: boolean;
+  backgroundColor?: string;
+  padding?: string;
 };
 
 type TModalState = {

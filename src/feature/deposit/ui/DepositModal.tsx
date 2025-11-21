@@ -27,6 +27,8 @@ import { SwapIcon } from '@/shared/ui/icons/swap';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
+import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
+import { useUserPointsInfo } from '@/shared/api/pointProgram';
 
 export const DepositModal = () => {
   const { open, close } = useModal();
@@ -37,6 +39,8 @@ export const DepositModal = () => {
   const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
     ? 0
     : Number(value) * 10 ** choosenVault.decimals;
+
+  const { refetchUserPointsInfo } = useUserPointsInfo(address);
 
   const { deposit, isDepositLoading } = useDeposit({
     vaultAddress: choosenVault.vaultAddress,
@@ -52,6 +56,7 @@ export const DepositModal = () => {
           type="deposit"
         />
       );
+      refetchUserPointsInfo();
     },
     onError: error => {
       if (error) open(<TransactionStatusModal status="failed" type="deposit" />);
@@ -93,6 +98,7 @@ export const DepositModal = () => {
   }, [coinBalance]);
 
   const isMoreThenBalance = Number(value) > userCoinBalance;
+  const { complexApy } = useDashboardConstants();
 
   return (
     <FlexBlock direction="column" gap={16} block>
@@ -114,7 +120,7 @@ export const DepositModal = () => {
             Net APY
           </Caption>
           <Heading level={6} weight="bold" className={styles.highlight}>
-            10%
+            {complexApy.netApy}%
           </Heading>
         </FlexBlock>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
@@ -122,7 +128,7 @@ export const DepositModal = () => {
             Base APY
           </Caption>
           <Body level={2} weight="regular">
-            {round(apy)}%
+            {complexApy.baseApy}%
           </Body>
         </FlexBlock>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
@@ -130,7 +136,7 @@ export const DepositModal = () => {
             Reward APY
           </Caption>
           <Body level={2} weight="regular">
-            {round(10 - apy)}%
+            {complexApy.rewardApy}%
           </Body>
         </FlexBlock>
       </FlexBlock>
