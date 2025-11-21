@@ -85,6 +85,7 @@ export const MobileMenuModal = () => {
           return (
             <Link
               href={item.path}
+              onClick={close}
               className={`${styles.menuItem} ${isActive ? styles.active : ''}`}
               key={item.id}
             >
