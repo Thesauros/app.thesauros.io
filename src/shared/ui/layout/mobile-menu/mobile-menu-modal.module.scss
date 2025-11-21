@@ -1,23 +1,29 @@
 .menuItem {
   display: flex;
   align-items: center;
+  box-sizing: border-box;
   gap: var(--spacings-8);
-  padding: var(--spacings-8) var(--spacings-12);
+  padding: var(--spacings-12) var(--spacings-16);
   transition: 0.3s;
   cursor: pointer;
   border-radius: 8px;
   width: 100%;
   text-decoration: unset;
-  color: #0303038c;
+
+  p {
+    color: #64788c;
+  }
 
   svg > path {
     transition: 0.3s;
   }
 
-  &.active {
+  &:hover {
     background-color: var(--background-secondary);
-    color: #030303;
-    font-weight: 500;
+
+    p {
+      color: #030303;
+    }
 
     svg > path {
       stroke-opacity: 1;
@@ -28,10 +34,31 @@
     }
   }
 
+  &.active {
+    background-color: #ffffff;
+    font-weight: 500;
+
+    p {
+      color: #030303;
+    }
+
+    svg > path {
+      stroke: #196aff;
+      stroke-opacity: 1;
+      stroke-width: 2;
+    }
+
+    svg > g > path {
+      stroke-opacity: 1;
+      stroke-width: 2;
+      stroke: #196aff;
+    }
+  }
+
   &.disabled {
     cursor: not-allowed;
     opacity: 0.5;
-    color: #0303034c;
+    color: #b1bbc6;
 
     svg > path {
       stroke-opacity: 0.5;
@@ -45,5 +72,19 @@
       background-color: rgba(0, 0, 0, 0.05);
       opacity: 0.6;
     }
+  }
+}
+
+.link {
+  text-decoration: unset;
+  color: #030303;
+}
+
+.secondary {
+  color: #7b8c9d;
+
+  &:hover {
+    text-decoration: underline;
+    color: #196aff;
   }
 }

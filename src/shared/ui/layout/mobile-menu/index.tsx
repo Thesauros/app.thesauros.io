@@ -1,12 +1,18 @@
+import { MenuBurgerIcon } from '../../icons/menu-burger-icon';
 import { useModal } from '../../modal';
-import { ModalContainer } from './modal-container';
+import { MobileMenuModal } from './mobile-menu-modal';
 
 export const MobileMenu = () => {
   const { open } = useModal();
 
   return (
-    <div onClick={() => open(<ModalContainer />)} style={{ fontSize: 32 }}>
-      Ξ
+    <div
+      onClick={() =>
+        open(<MobileMenuModal />, { backgroundColor: '#D5EEFD', padding: '16px 12px' })
+      }
+      style={{ fontSize: 32 }}
+    >
+      <MenuBurgerIcon />
     </div>
   );
 };

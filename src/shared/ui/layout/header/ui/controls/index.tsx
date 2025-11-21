@@ -9,6 +9,8 @@ import { ProfileWindow } from '@/shared/ui/profile-window';
 import { MobileMenu } from '../../../mobile-menu';
 import { SelectChainButton } from '@/shared/ui/select-chain-button';
 import { ConnectWalletBadge } from '@/shared/ui/connect-wallet-badge';
+import { ThesaurosMiniLogo } from '@/shared/ui/icons/thesauros-mini-logo';
+import { WalletIcon } from '@/shared/ui/icons/wallet-icon';
 
 export const Controls = () => {
   const isMobile = useCheckResolution(576);
@@ -29,7 +31,21 @@ export const Controls = () => {
     },
   });
 
-  if (!isConnected) {
+  if (!isConnected && isMobile) {
+    return (
+      <FlexBlock alignItems="center" justifyContent="space-between" block>
+        <ThesaurosMiniLogo />
+        <FlexBlock alignItems="center" gap={24}>
+          <Button variant="primary" size="md" onClick={openConnectModal}>
+            <WalletIcon />
+          </Button>
+          {isMobile && <MobileMenu />}
+        </FlexBlock>
+      </FlexBlock>
+    );
+  }
+
+  if (!isConnected && !isMobile) {
     return (
       <FlexBlock
         alignItems="center"
@@ -46,12 +62,24 @@ export const Controls = () => {
     );
   }
 
+  if (isConnected && isMobile) {
+    return (
+      <FlexBlock gap={16} alignItems="center" justifyContent="space-between">
+        <ThesaurosMiniLogo />
+        <FlexBlock alignItems="center" gap={16}>
+          <SelectChainButton />
+          {address && <ProfileWindow />}
+        </FlexBlock>
+        <MobileMenu />
+      </FlexBlock>
+    );
+  }
+
   return (
-    <FlexBlock gap={16} alignItems="center" justifyContent={isMobile ? 'space-between' : undefined}>
+    <FlexBlock gap={16} alignItems="center">
       <SelectChainButton />
       <FlexBlock alignItems="flex-end" gap={12}>
         {address && <ProfileWindow />}
-        {isMobile && <MobileMenu />}
       </FlexBlock>
     </FlexBlock>
   );
