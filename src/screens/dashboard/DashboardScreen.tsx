@@ -51,9 +51,6 @@ export const DashboardScreen = () => {
       });
     } else if (openConnectModal) {
       openConnectModal();
-      open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal isOnApproving={isOnApproving} />, {
-        smallPaddings: !isInWhiteList,
-      });
     }
   };
 
