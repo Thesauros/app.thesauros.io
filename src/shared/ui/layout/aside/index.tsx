@@ -58,7 +58,7 @@ export const Aside = () => {
 
   return (
     <div className={styles.aside}>
-      <FlexBlock direction="column" gap={32}>
+      <FlexBlock direction="column" gap={16}>
         <FlexBlock gap={24} direction="column">
           <div
             role="presentation"
@@ -71,13 +71,13 @@ export const Aside = () => {
           >
             <LogoIcon />
           </div>
-          <FlexBlock direction="column">
+          <FlexBlock direction="column" gap={0} block>
             {MENU_ITEMS.map(item => {
               const isActive = isActiveRoute(item.path);
 
               if (item.disabled) {
                 return (
-                  <Tooltip key={item.id} tooltipText="Comming soon...">
+                  <Tooltip key={item.id} fullWidth tooltipText="Comming soon...">
                     <div className={`${styles.menuItem} ${styles.disabled}`} role="presentation">
                       {item.icon}
                       <Subtitle level={2}>{item.name}</Subtitle>
@@ -129,7 +129,9 @@ export const Aside = () => {
             </a>
           ))}
         </FlexBlock>
-        <Overline weight="regular">©Thesauros 2025</Overline>
+        <Overline weight="regular" className={styles.secondary}>
+          ©Thesauros 2025
+        </Overline>
       </FlexBlock>
     </div>
   );

@@ -6,7 +6,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   z-index: 100;
   align-items: center;
   justify-content: center;
@@ -26,7 +26,7 @@
   position: fixed;
   background-color: #262f3880;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   z-index: 1;
   overflow: auto;
   animation: fadeIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
@@ -90,12 +90,6 @@
   }
 
   @include breakpoints.mobile {
-    border-radius: 28px 28px 0 0;
-    max-height: 710px;
-    overflow-y: scroll;
-  }
-
-  @include breakpoints.small-mobile {
     border-radius: 28px 28px 0 0;
     max-height: 510px;
     overflow-y: scroll;
