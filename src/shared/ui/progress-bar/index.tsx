@@ -1,9 +1,9 @@
 import { useMemo, useState, useEffect, useRef } from 'react';
 import styles from './ProgressBar.module.scss';
-import { Texting } from '../typography/texting';
 import { FlexBlock } from '../flex-block';
 import { Higlight } from '../typography/highlight';
 import classNames from 'classnames';
+import { Caption } from '../new-typography/caption';
 
 type TProps = {
   value: number | string;
@@ -91,16 +91,16 @@ export const ProgressBar = ({
   }, [isVisible, targetPct, value, filledAnimation]);
 
   return (
-    <FlexBlock direction="column" gap={12} ref={ref} block>
+    <FlexBlock direction="column" gap={16} ref={ref} block>
       {withValues && (
-        <Texting level={3} className={styles.progressBarValue}>
+        <Caption weight="bold" className={styles.progressBarValue}>
           <Higlight>
             {valuePrefix}
             {currentValue}
           </Higlight>{' '}
           / {valuePrefix}
           {max} {postfix}
-        </Texting>
+        </Caption>
       )}
 
       <div
@@ -123,14 +123,14 @@ export const ProgressBar = ({
       {(showPercentage || showRemainingDays) && (
         <FlexBlock justifyContent="space-between" className={styles.progressInfo}>
           {showPercentage && (
-            <Texting level={4} weight="regular" className={styles.percentageText}>
+            <Caption weight="bold" className={styles.percentageText}>
               {Math.round(progressPct)}% Complete
-            </Texting>
+            </Caption>
           )}
           {showRemainingDays && (
-            <Texting level={4} weight="regular" className={styles.remainingDaysText}>
+            <Caption weight="regular" className={styles.remainingDaysText}>
               {remainingDays} days remaining
-            </Texting>
+            </Caption>
           )}
         </FlexBlock>
       )}

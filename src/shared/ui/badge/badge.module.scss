@@ -1,11 +1,7 @@
 .container {
   padding: 8px 12px;
   border-radius: 1000px;
-  background: linear-gradient(
-    93.94deg,
-    rgba(16, 185, 129, 0.15) -42.28%,
-    rgba(5, 150, 105, 0.15) 133.03%
-  );
+  background: #c3eccd;
 }
 
 .label {
@@ -13,5 +9,5 @@
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0%;
-  color: rgba(5, 150, 105, 1);
+  color: #009d41;
 }
