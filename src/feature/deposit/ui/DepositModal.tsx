@@ -249,7 +249,7 @@ export const DepositModal = () => {
       </FlexBlock>
 
       {/* Swap Block */}
-      {userCoinBalance === 0 && (
+      {userCoinBalance < 10 && (
         <div className={styles.swapBlock}>
           <FlexBlock alignItems="center">
             <InfoCircleIcon />
