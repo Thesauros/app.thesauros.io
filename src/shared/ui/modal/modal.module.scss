@@ -53,7 +53,7 @@
   box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.08);
 
   &::-webkit-scrollbar {
-    width: 0; /* ширина всей полосы прокрутки */
+    width: 0;
   }
 
   &.small {
@@ -68,6 +68,10 @@
     max-width: 700px;
   }
 
+  &.smallPaddings {
+    padding: 10px;
+  }
+
   max-height: calc(100vh - 100px);
   @include scrollbar.hide-scrollbar();
 
@@ -75,8 +79,6 @@
   z-index: 3;
   position: relative;
   overflow: auto;
-  // it doesn't work when you change some Modal containers in one opened modal (example SwapForm -> SelectToken)
-  // animation: scaleUp .2s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards;
 
   &.noCloseButton {
     padding: 24px;
