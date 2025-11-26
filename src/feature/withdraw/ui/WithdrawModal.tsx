@@ -69,10 +69,19 @@ export const WithdrawModal = () => {
 
   const { data: coinBalance } = useContractRead({
     address: choosenVault.vaultAddress,
-    functionName: 'balanceOf',
+    functionName: 'getBalanceOfAsset',
     args: [address],
     chainID: choosenVault.chainID,
     watch: true,
+    selectData: (data: unknown): number => {
+      return round(Number(data) / 10 ** choosenVault.decimals, 2);
+    },
+  });
+
+  const { data: feePercent } = useContractRead({
+    address: choosenVault.vaultAddress,
+    functionName: 'withdrawFeePercent',
+    chainID: choosenVault.chainID,
     selectData: (data: unknown): number => {
       return round(Number(data) / 10 ** choosenVault.decimals, 2);
     },
@@ -135,7 +144,7 @@ export const WithdrawModal = () => {
             Withdrawal Fee:
           </Caption>
           <Body level={2} weight="regular">
-            0 {choosenVault.coinName}
+            {round(Number(feePercent))}%
           </Body>
         </FlexBlock>
       </FlexBlock>
