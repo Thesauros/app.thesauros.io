@@ -1,13 +1,12 @@
 import { TAddress } from '@/shared/blockchain/core/types';
 import { customFetch, getApiUrl, useCustomQueryKey } from '../core';
+import { useUserData } from './useUserData';
 
 type TSendUserInfoRaw = {
   success: boolean;
 };
 
 type TWhitelistResponse = { data: { isWhitelisted: boolean } };
-
-type TUserInfoResponse = { data: { email: string | null; telegram: string | null } };
 
 const sendUserEmail = async (address: TAddress, email: string): Promise<TSendUserInfoRaw> => {
   return customFetch<TSendUserInfoRaw>(getApiUrl(`users/${address}/email`), {
@@ -38,11 +37,6 @@ const fetcWhiteList = async (address: TAddress): Promise<TWhitelistResponse> => 
   return response;
 };
 
-const fetcUserInfo = async (address: TAddress): Promise<TUserInfoResponse> => {
-  const response = await customFetch<TUserInfoResponse>(getApiUrl(`users/${address}`));
-  return response;
-};
-
 export const useWhiteList = (address?: TAddress) => {
   const { data: whiteList, isLoading: isLoadingWhiteList } = useCustomQueryKey(
     ['GET_WHITELIST', address ?? '0x'],
@@ -50,13 +44,7 @@ export const useWhiteList = (address?: TAddress) => {
     { enabled: !!address }
   );
 
-  const {
-    data: userInfo,
-    isLoading: isLoadingUserInfo,
-    refetch: refetchUserInfo,
-  } = useCustomQueryKey(['GET_USER_INFO', address ?? '0x'], () => fetcUserInfo(address ?? '0x'), {
-    enabled: !!address,
-  });
+  const { userInfo, isLoadingUserInfo, refetchUserInfo } = useUserData(address);
 
   const isLoading = isLoadingWhiteList || isLoadingUserInfo;
   const isInWhiteList = whiteList?.data?.isWhitelisted ?? false;

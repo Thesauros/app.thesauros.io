@@ -29,6 +29,7 @@ import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 import { useUserPointsInfo } from '@/shared/api/pointProgram';
+import { useVaultsPosition } from '@/shared/blockchain';
 
 export const DepositModal = () => {
   const { open, close } = useModal();
@@ -41,6 +42,7 @@ export const DepositModal = () => {
     : Number(value) * 10 ** choosenVault.decimals;
 
   const { refetchUserPointsInfo } = useUserPointsInfo(address);
+  const { refetchData: refetchVaultsPosition } = useVaultsPosition();
 
   const { deposit, isDepositLoading } = useDeposit({
     vaultAddress: choosenVault.vaultAddress,
@@ -57,6 +59,7 @@ export const DepositModal = () => {
         />
       );
       refetchUserPointsInfo();
+      refetchVaultsPosition();
     },
     onError: error => {
       if (error) open(<TransactionStatusModal status="failed" type="deposit" />);
