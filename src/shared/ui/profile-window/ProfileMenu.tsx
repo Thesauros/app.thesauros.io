@@ -7,7 +7,7 @@ import { LogoutIcon } from '../icons/logout';
 import { Avatar } from '../generated-avatar';
 import { shortString } from '@/shared/string';
 import { FlexBlock } from '../flex-block';
-import { Card } from '../card';
+import { Card } from '../new-card';
 import { useNetwork } from '@/shared/blockchain/useNetwork';
 
 export const ProfileMenu = () => {
@@ -32,12 +32,12 @@ export const ProfileMenu = () => {
           </div>
         </FlexBlock>
         <div className={styles.buttonsContainer}>
-          <Card size="xs" className={styles.actionButton}>
+          <Card variant="secondary" className={styles.actionButton}>
             <CopyButton value={address} text={<Texting level={4}>Copy</Texting>} />
           </Card>
 
           {isConnected && (
-            <Card size="xs" className={styles.actionButton} onClick={() => disconnect()}>
+            <Card variant="secondary" className={styles.actionButton} onClick={() => disconnect()}>
               <LogoutIcon width={16} height={16} />
               <Texting level={4}>Log out</Texting>
             </Card>

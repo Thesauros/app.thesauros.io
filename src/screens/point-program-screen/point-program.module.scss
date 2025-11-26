@@ -9,7 +9,14 @@
 .classContainer {
   @include breakpoints.tablet {
     flex-direction: column !important;
-    align-items: flex-end !important;
+    align-items: flex-start !important;
+  }
+}
+
+.taskContainer {
+  @include breakpoints.tablet {
+    flex-direction: column !important;
+    align-items: flex-start !important;
   }
 }
 
@@ -17,26 +24,22 @@
   color: #94a3b8;
 }
 
+.secondaryText {
+  color: #64788c !important;
+}
+
 .card {
   width: 100%;
   box-sizing: border-box;
 }
 
-.title {
-  color: #010101;
-}
-
 .value {
-  color: #196bff;
+  color: #196aff !important;
   white-space: nowrap;
 }
 
 .additionalInfo {
   color: #01010166;
-}
-
-.pointBlockDescription {
-  color: #7b8c9d;
 }
 
 .seasonDescription {
@@ -46,5 +49,4 @@
 
 .progressBarContainer {
   width: 100%;
-  padding-top: 24px;
 }
