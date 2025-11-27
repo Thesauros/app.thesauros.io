@@ -22,6 +22,7 @@ import { UsdcIcon } from '@/shared/ui/icons/usdc-icon';
 import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
+import { useVaultsPosition } from '@/shared/blockchain';
 
 export const WithdrawModal = () => {
   const { close, open } = useModal();
@@ -35,6 +36,8 @@ export const WithdrawModal = () => {
     vaultAddress: vaults[0].vaultAddress,
     chainID: vaults[0].chainID,
   });
+
+  const { refetchData: refetchVaultsPosition } = useVaultsPosition();
 
   const { withdraw, isWithdrawingLoading } = useWithdraw({
     vaultAddress: choosenVault.vaultAddress,
@@ -50,6 +53,7 @@ export const WithdrawModal = () => {
           type="withdraw"
         />
       );
+      refetchVaultsPosition();
     },
     onError: error => {
       if (error) open(<TransactionStatusModal status="failed" type="withdraw" />);
@@ -177,7 +181,7 @@ export const WithdrawModal = () => {
               className={styles.innerPotentialProfitBlock}
             >
               <Subtitle level={2} weight="medium">
-                {365 * Number(value)}
+                {round(365 * Number(value))}
               </Subtitle>
               <FlexBlock gap={8} alignItems="center">
                 <PointCoinIcon size={16} />

@@ -19,6 +19,7 @@ import { Body } from '@/shared/ui/new-typography/body';
 import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 import { Tooltip } from '@/shared/ui/tooltip/tooltip';
 import { NewInfoIcon } from '@/shared/ui/icons/new-info';
+import { useUserData } from '@/shared/api/dashboard/useUserData';
 
 export const PointProgramScreen = () => {
   const { open } = useModal();
@@ -34,6 +35,8 @@ export const PointProgramScreen = () => {
 
     return getProgressByDates(seasonInfo?.season.startDate, seasonInfo?.season.endDate);
   }, [seasonInfo?.season]);
+
+  const { userInfo } = useUserData(address);
 
   return (
     <FlexBlock direction="column" gap={16} block>
@@ -73,7 +76,7 @@ export const PointProgramScreen = () => {
             <Heading level={5} weight="bold">
               Season {seasonInfo?.seasonNumber}
             </Heading>
-            {isConnected && <Badge label="Main User" />}
+            {isConnected && userInfo?.data.status && <Badge label={userInfo?.data.status} />}
           </FlexBlock>
           <FlexBlock direction="column" gap={16} block>
             <Body level={2} weight="regular" className={styles.secondaryText}>

@@ -8,6 +8,7 @@ import { useAccount } from './useAccount';
 type TVaultPositionResult = {
   data: number | undefined;
   isLoading: boolean;
+  refetchData: () => void;
 };
 
 export const useVaultsPosition = (): TVaultPositionResult => {
@@ -21,7 +22,7 @@ export const useVaultsPosition = (): TVaultPositionResult => {
     watch: true,
   }));
 
-  const { data, isLoading } = useContractsRead<bigint>({
+  const { data, isLoading, refetch } = useContractsRead<bigint>({
     contracts,
     watch: true,
   });
@@ -46,5 +47,6 @@ export const useVaultsPosition = (): TVaultPositionResult => {
   return {
     data: totalPosition,
     isLoading,
+    refetchData: refetch,
   };
 };
