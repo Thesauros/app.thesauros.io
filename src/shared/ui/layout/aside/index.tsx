@@ -24,7 +24,7 @@ const docsLinks = [
   },
   {
     id: 'Terms & Conditions',
-    link: '/terms',
+    link: 'https://thesauros.io/terms',
   },
 ];
 
