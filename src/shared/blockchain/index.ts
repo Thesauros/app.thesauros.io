@@ -5,6 +5,7 @@ export { useAllowance } from './useAllowance';
 export { useApprove } from './useApprove';
 export { useNetwork } from './useNetwork';
 export { useWithdraw } from './useWithdraw';
+export { useMinAmount } from './useMinAmount';
 export { vaults, config, wagmiConfig } from './config';
 export { abi } from './abi';
 export * from './core/types';
