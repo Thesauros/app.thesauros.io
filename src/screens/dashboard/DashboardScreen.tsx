@@ -44,6 +44,8 @@ export const DashboardScreen = () => {
   const isDeposited = totalPosition > 0;
   const { isInWhiteList, isOnApproving } = useWhiteList(address);
 
+  console.log(isInWhiteList, isOnApproving);
+
   const onDepositClick = () => {
     if (isConnected) {
       open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal isOnApproving={isOnApproving} />, {
