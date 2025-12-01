@@ -4,12 +4,12 @@ import { useSwitchNetwork } from './core/useSwtichNetwork';
 
 export const useAutoSwitchToArbitrum = () => {
   const { isConnected } = useAccount();
-  const { isNeedSwitch, switchNetwork } = useSwitchNetwork({
+  const { switchNetwork } = useSwitchNetwork({
     targetChainID: 42161,
   });
 
   useEffect(() => {
-    if (isConnected && isNeedSwitch) {
+    if (isConnected) {
       try {
         switchNetwork(42161);
       } catch (error) {
@@ -18,5 +18,5 @@ export const useAutoSwitchToArbitrum = () => {
         }
       }
     }
-  }, [isConnected, isNeedSwitch, switchNetwork]);
+  }, [isConnected]);
 };

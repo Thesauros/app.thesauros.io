@@ -7,7 +7,6 @@ import styles from './DepositModal.module.scss';
 import { InputComponent } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import { useDeposit } from '@/feature/deposit/model/useDeposit';
-import { TVault } from '@/shared/blockchain/core/types';
 
 import { useAccount } from 'wagmi';
 import { useApprove } from '@/shared/blockchain/useApprove';
@@ -21,7 +20,6 @@ import { Caption } from '@/shared/ui/new-typography/caption';
 import { Body } from '@/shared/ui/new-typography/body';
 import { Tooltip } from '@/shared/ui/tooltip/tooltip';
 import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
-import { Overline } from '@/shared/ui/new-typography/overline';
 import { InfoCircleIcon } from '@/shared/ui/icons/info-circle';
 import { SwapIcon } from '@/shared/ui/icons/swap';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
@@ -30,12 +28,14 @@ import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 import { useUserPointsInfo } from '@/shared/api/pointProgram';
 import { useVaultsPosition } from '@/shared/blockchain';
+import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 
 export const DepositModal = () => {
   const { open, close } = useModal();
-  const [choosenVault, _] = useState<TVault>(vaults[0]);
   const [value, setValue] = useState('');
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
+
+  const choosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
 
   const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
     ? 0
@@ -117,35 +117,30 @@ export const DepositModal = () => {
       </FlexBlock>
 
       {/* APY area */}
-      <FlexBlock direction="column" gap={8} block>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
+      <FlexBlock gap={8} block>
+        <FlexBlock
+          alignItems="center"
+          justifyContent="space-between"
+          block
+          className={styles.apyBlock}
+        >
           <Caption weight="regular" className={styles.secondary}>
             Net APY
           </Caption>
-          <Heading level={6} weight="bold" className={styles.highlight}>
-            {complexApy.netApy}%
-          </Heading>
+          <Subtitle level={2}>{complexApy.netApy}%</Subtitle>
         </FlexBlock>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Base APY
-          </Caption>
-          <Body level={2} weight="regular">
-            {complexApy.baseApy}%
-          </Body>
-        </FlexBlock>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
+        <FlexBlock
+          alignItems="center"
+          justifyContent="space-between"
+          block
+          className={styles.apyBlock}
+        >
           <Caption weight="regular" className={styles.secondary}>
             Reward APY
           </Caption>
-          <Body level={2} weight="regular">
-            {complexApy.rewardApy}%
-          </Body>
+          <Subtitle level={2}>{complexApy.rewardApy}%</Subtitle>
         </FlexBlock>
       </FlexBlock>
-
-      {/* Divider */}
-      <div className={styles.divider} />
 
       {/*  Deposit Input*/}
 
@@ -168,10 +163,10 @@ export const DepositModal = () => {
       </FlexBlock>
 
       {/*  Balance block */}
-      <FlexBlock direction="column" gap={16} block>
+      <FlexBlock direction="column" gap={8} block>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
           <Caption weight="regular" className={styles.secondary}>
-            In your wallet:
+            Balance:
           </Caption>
           <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
             <Body level={2} weight="regular">
@@ -198,59 +193,49 @@ export const DepositModal = () => {
         </FlexBlock>
       </FlexBlock>
 
-      {/* Divider */}
-      <div className={styles.divider} />
+      <div className={styles.earningsBlock}>
+        <Caption weight="regular">Projected Earnings</Caption>
+        {/* Projected Earnings */}
 
-      {/* Projected Earnings */}
-
-      <FlexBlock direction="column" gap={12} block>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Monthly profit
-          </Caption>
-          <Body level={2} weight="regular">
-            ${round((apy * (Number(value) / 100)) / 12)}
-          </Body>
+        <FlexBlock direction="column" gap={6} block>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Caption weight="regular" className={styles.secondary}>
+              Monthly profit
+            </Caption>
+            <Body level={2} weight="regular">
+              ${round((apy * (Number(value) / 100)) / 12)}
+            </Body>
+          </FlexBlock>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Caption weight="regular" className={styles.secondary}>
+              Yearly profit
+            </Caption>
+            <Body level={2} weight="regular">
+              ${round(apy * (Number(value) / 100))}
+            </Body>
+          </FlexBlock>
         </FlexBlock>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Yearly profit
-          </Caption>
-          <Body level={2} weight="regular">
-            ${round(apy * (Number(value) / 100))}
-          </Body>
+        <div className={styles.divider} />
+        {/* Fee Block */}
+        <FlexBlock direction="column" gap={6} block>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Caption weight="regular" className={styles.secondary}>
+              Performance fee
+            </Caption>
+            <Body level={2} weight="regular">
+              0.1%
+            </Body>
+          </FlexBlock>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Caption weight="regular" className={styles.secondary}>
+              Withdrawal fee
+            </Caption>
+            <Body level={2} weight="regular">
+              0%
+            </Body>
+          </FlexBlock>
         </FlexBlock>
-        <Overline className={styles.secondary}>
-          * Based on current rates. Rates may change.
-        </Overline>
-      </FlexBlock>
-
-      {/* Divider */}
-      <div className={styles.divider} />
-
-      {/* Fee Block */}
-      <FlexBlock direction="column" gap={12} block>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Performance fee
-          </Caption>
-          <Body level={2} weight="regular">
-            0.1%
-          </Body>
-        </FlexBlock>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Withdrawal fee
-          </Caption>
-          <Body level={2} weight="regular">
-            0%
-          </Body>
-        </FlexBlock>
-        <Overline className={styles.secondary}>
-          * Based on current rates. Rates may change.
-        </Overline>
-      </FlexBlock>
-
+      </div>
       {/* Swap Block */}
       {userCoinBalance < 10 && (
         <div className={styles.swapBlock}>
