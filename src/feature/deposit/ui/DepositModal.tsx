@@ -7,7 +7,6 @@ import styles from './DepositModal.module.scss';
 import { InputComponent } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import { useDeposit } from '@/feature/deposit/model/useDeposit';
-import { TVault } from '@/shared/blockchain/core/types';
 
 import { useAccount } from 'wagmi';
 import { useApprove } from '@/shared/blockchain/useApprove';
@@ -33,9 +32,10 @@ import { useVaultsPosition } from '@/shared/blockchain';
 
 export const DepositModal = () => {
   const { open, close } = useModal();
-  const [choosenVault, _] = useState<TVault>(vaults[0]);
   const [value, setValue] = useState('');
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
+
+  const choosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
 
   const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
     ? 0
