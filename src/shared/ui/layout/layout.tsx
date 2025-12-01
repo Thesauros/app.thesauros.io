@@ -5,6 +5,7 @@ import styles from './layout.module.scss';
 import { Aside } from './aside';
 import { FlexBlock } from '../flex-block';
 import { useAutoSwitchToArbitrum } from '@/shared/blockchain/useAutoSwitchToArbitrum';
+import { useRequireSignature } from '@/feature/sign-terms';
 
 type TProps = {
   children: ReactNode;
@@ -12,6 +13,7 @@ type TProps = {
 
 export const Layout = ({ children }: TProps) => {
   useAutoSwitchToArbitrum();
+  useRequireSignature();
 
   return (
     <FlexBlock direction="column" block>

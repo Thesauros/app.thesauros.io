@@ -27,7 +27,7 @@ import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 import { useUserPointsInfo } from '@/shared/api/pointProgram';
-import { useVaultsPosition } from '@/shared/blockchain';
+import { useMinAmount, useVaultsPosition } from '@/shared/blockchain';
 import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 
 export const DepositModal = () => {
@@ -36,6 +36,12 @@ export const DepositModal = () => {
   const { address, chainId } = useAccount();
 
   const choosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
+
+  const { data: minAmount } = useMinAmount({
+    vaultAddress: choosenVault.vaultAddress,
+    chainID: choosenVault.chainID,
+    decimals: choosenVault.decimals,
+  });
 
   const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
     ? 0
@@ -101,6 +107,8 @@ export const DepositModal = () => {
   }, [coinBalance]);
 
   const isMoreThenBalance = Number(value) > userCoinBalance;
+  const isLessThanMinAmount =
+    minAmount !== undefined && Number(value) > 0 && Number(value) < minAmount;
   const { complexApy } = useDashboardConstants();
 
   return (
@@ -274,13 +282,15 @@ export const DepositModal = () => {
           }
         }}
         fullWidth
-        disabled={isDepositLoading || !depositValue || isMoreThenBalance}
+        disabled={isDepositLoading || !depositValue || isMoreThenBalance || isLessThanMinAmount}
       >
-        {isNeedSwitch
-          ? 'Switch network'
-          : isApproved
-            ? `Deposit ${value} ${choosenVault.coinName}`
-            : 'Approve'}
+        {isLessThanMinAmount
+          ? `Minimum amount is ${minAmount} ${choosenVault.coinName}`
+          : isNeedSwitch
+            ? 'Switch network'
+            : isApproved
+              ? `Deposit ${value} ${choosenVault.coinName}`
+              : 'Approve'}
       </Button>
 
       {/* First deposit block */}

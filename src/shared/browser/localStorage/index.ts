@@ -1,2 +1,2 @@
-export { LocalStorageKey } from './localStorage';
+export { LocalStorageKey, storage } from './localStorage';
 export { useLocalStorageState } from './useLocalStorageState';
