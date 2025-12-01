@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import styles from './WithdrawModal.module.scss';
 import { InputComponent } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
-import { TAddress, TVault } from '@/shared/blockchain/core/types';
+import { TAddress } from '@/shared/blockchain/core/types';
 
 import { useAccount } from 'wagmi';
 import { useApprove } from '@/shared/blockchain/useApprove';
@@ -26,9 +26,10 @@ import { useVaultsPosition } from '@/shared/blockchain';
 
 export const WithdrawModal = () => {
   const { close, open } = useModal();
-  const [choosenVault, _] = useState<TVault>(vaults[0]);
   const [value, setValue] = useState('');
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
+
+  const choosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
 
   const withdrawValue = Number(value) * 10 ** choosenVault.decimals;
 

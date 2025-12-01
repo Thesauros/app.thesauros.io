@@ -61,12 +61,12 @@ export const vaults: TVault[] = [
     coinName: 'USDC',
     coinAddress: '0xaf88d065e77c8cc2239327c5edb3a432268e5831',
   },
-  // {
-  //   chainID: 8453,
-  //   chainName: 'Base',
-  //   decimals: 6,
-  //   vaultAddress: '0x386b6872358981f199BF23f12c369dB26a5F2869',
-  //   coinName: 'USDC',
-  //   coinAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
-  // },
+  {
+    chainID: 8453,
+    chainName: 'Base',
+    decimals: 6,
+    vaultAddress: '0x6C7013b3596623d146781c90b4Ee182331Af6148',
+    coinName: 'USDC',
+    coinAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',
+  },
 ];

@@ -5,13 +5,9 @@
 }
 
 .divider {
-  background-color: #eceef2;
+  background-color: #e2f1ff;
   height: 1px;
   width: 100%;
-}
-
-.highlight {
-  color: #196bff;
 }
 
 .secondary {
@@ -23,10 +19,25 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  background-color: #e2f1ff;
+  box-sizing: border-box;
+}
+
+.apyBlock {
+  padding: 4px 8px;
+  background-color: #f5faff;
+  border-radius: 5px;
+  border: 1px solid #e2f1ff;
+}
+
+.earningsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   box-sizing: border-box;
 
-  padding: 16px;
-  border: 1px solid #88c7ff;
-  border-radius: 13px;
+  width: 100%;
+  padding: 8px 12px;
+  background-color: #f5faff;
+  border-radius: 10px;
+  border: 1px solid #e2f1ff;
 }
