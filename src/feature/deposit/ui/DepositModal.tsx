@@ -43,6 +43,15 @@ export const DepositModal = () => {
     decimals: choosenVault.decimals,
   });
 
+  const { data: feePercent } = useContractRead({
+    address: choosenVault.vaultAddress,
+    functionName: 'withdrawFeePercent',
+    chainID: choosenVault.chainID,
+    selectData: (data: unknown): number => {
+      return round(Number(data) / 10 ** choosenVault.decimals, 2);
+    },
+  });
+
   const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
     ? 0
     : Number(value) * 10 ** choosenVault.decimals;
@@ -225,23 +234,13 @@ export const DepositModal = () => {
         </FlexBlock>
         <div className={styles.divider} />
         {/* Fee Block */}
-        <FlexBlock direction="column" gap={6} block>
-          <FlexBlock alignItems="center" justifyContent="space-between" block>
-            <Caption weight="regular" className={styles.secondary}>
-              Performance fee
-            </Caption>
-            <Body level={2} weight="regular">
-              0.1%
-            </Body>
-          </FlexBlock>
-          <FlexBlock alignItems="center" justifyContent="space-between" block>
-            <Caption weight="regular" className={styles.secondary}>
-              Withdrawal fee
-            </Caption>
-            <Body level={2} weight="regular">
-              0%
-            </Body>
-          </FlexBlock>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Withdrawal fee
+          </Caption>
+          <Body level={2} weight="regular">
+            {round(Number(feePercent))}%
+          </Body>
         </FlexBlock>
       </div>
       {/* Swap Block */}
