@@ -43,7 +43,7 @@ const socialLinks = [
   },
   {
     id: 'discord',
-    link: 'https://discord.gg/WJgvrrr2',
+    link: 'https://discord.gg/TQHez89EAE',
     icon: <DiscordIcon />,
   },
 ];

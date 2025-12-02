@@ -6,6 +6,7 @@ export type TOpenOptions = {
   smallPaddings?: boolean;
   backgroundColor?: string;
   padding?: string;
+  maxWidth?: number;
 };
 
 type TModalState = {

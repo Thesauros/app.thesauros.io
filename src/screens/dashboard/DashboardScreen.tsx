@@ -44,13 +44,14 @@ export const DashboardScreen = () => {
 
   const isMobile = useCheckResolution(576);
   const isDeposited = totalPosition > 0;
-  const { isInWhiteList, isOnApproving } = useWhiteList(address);
+  const { isInWhiteList } = useWhiteList(address);
 
   const onDepositClick = () => {
     if (isConnected) {
       checkSignatureAndExecute(() => {
-        open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal isOnApproving={isOnApproving} />, {
+        open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal />, {
           smallPaddings: !isInWhiteList,
+          maxWidth: !isInWhiteList ? 596 : undefined,
         });
       });
     } else if (openConnectModal) {
@@ -334,6 +335,7 @@ export const DashboardScreen = () => {
                     checkSignatureAndExecute(() => {
                       open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal />, {
                         smallPaddings: !isInWhiteList,
+                        maxWidth: !isInWhiteList ? 596 : undefined,
                       });
                     });
                   }}
