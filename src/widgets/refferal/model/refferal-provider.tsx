@@ -1,8 +1,8 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { TAddress, useAccount } from '@/shared/blockchain';
-import { fetchRegisterReferral } from './fetch-refferal';
 import { LocalStorageKey, useLocalStorageState } from '@/shared/browser/localStorage';
+import { postRefferal } from './post-refferal';
 
 const ReferralContext = createContext<{
   referral: TAddress | null;
@@ -13,28 +13,32 @@ export const ReferralProvider = ({ children }: { children: React.ReactNode }) =>
   const [referral, setReferral] = useState<TAddress | null>(null);
   const { address } = useAccount();
   const router = useRouter();
+  const isPostingRef = useRef(false);
 
   const [refferalLS, setRefferalLS] = useLocalStorageState(LocalStorageKey.REGISTERED_REFERRALS);
 
   useEffect(() => {
     if (!address) return;
 
-    const referralID = router.query.refferalID;
+    const referralID = router.query.ref;
 
     if (!referralID || typeof referralID !== 'string') return;
 
-    if (refferalLS) {
+    if (refferalLS || isPostingRef.current) {
       return;
-    } else {
-      fetchRegisterReferral(address, referralID)
-        .then(() => {
-          setRefferalLS('true');
-        })
-        .catch(error => {
-          console.error('Failed to register referral:', error);
-        });
     }
-  }, [address, router.query.refferalID, refferalLS, setRefferalLS]);
+
+    isPostingRef.current = true;
+
+    postRefferal({ address, referrer_address: referralID })
+      .then(() => {
+        setRefferalLS('true');
+      })
+      .catch(error => {
+        console.error('Failed to register referral:', error);
+        isPostingRef.current = false;
+      });
+  }, [address, router.query.ref, refferalLS, setRefferalLS]);
 
   return (
     <ReferralContext.Provider value={{ referral, setReferral }}>
