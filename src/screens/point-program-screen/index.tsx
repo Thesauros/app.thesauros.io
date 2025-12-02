@@ -36,17 +36,7 @@ export const PointProgramScreen = () => {
 
   const { userInfo } = useUserData(address);
 
-  const tasks = [
-    ...(seasonInfo?.season.tasks ?? []),
-    {
-      id: 'invite_friends',
-      title: 'Invite Friends',
-      points: 100,
-      description: 'Invite friends to the platform and earn points',
-      isCompleted: false,
-      progress: { total: 100, current: 0, prefix: '', postfix: '' },
-    },
-  ];
+  const tasks = seasonInfo?.season.tasks ?? [];
 
   const { copy, isCopying } = useCopyToClipboard();
 
@@ -71,7 +61,7 @@ export const PointProgramScreen = () => {
                     <Subtitle level={2} weight="regular" className={styles.secondaryText}>
                       {item.title}
                     </Subtitle>
-                    <Tooltip tooltipText={''}>
+                    <Tooltip tooltipText={item.tooltipText}>
                       <NewInfoIcon />
                     </Tooltip>
                   </FlexBlock>

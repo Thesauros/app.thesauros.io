@@ -21,7 +21,7 @@ export const Footer = () => {
               <TwitterIcon />
             </a>
             <a
-              href="https://discord.gg/WJgvrrr2"
+              href="https://discord.gg/TQHez89EAE"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}

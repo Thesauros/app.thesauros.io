@@ -43,15 +43,6 @@ export const DepositModal = () => {
     decimals: choosenVault.decimals,
   });
 
-  const { data: feePercent } = useContractRead({
-    address: choosenVault.vaultAddress,
-    functionName: 'withdrawFeePercent',
-    chainID: choosenVault.chainID,
-    selectData: (data: unknown): number => {
-      return round(Number(data) / 10 ** choosenVault.decimals, 2);
-    },
-  });
-
   const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
     ? 0
     : Number(value) * 10 ** choosenVault.decimals;
@@ -144,7 +135,9 @@ export const DepositModal = () => {
           <Caption weight="regular" className={styles.secondary}>
             Net APY
           </Caption>
-          <Subtitle level={2}>{complexApy.netApy}%</Subtitle>
+          <Subtitle level={2} weight="bold" className={styles.highlight}>
+            {complexApy.netApy}%
+          </Subtitle>
         </FlexBlock>
         <FlexBlock
           alignItems="center"
@@ -156,6 +149,17 @@ export const DepositModal = () => {
             Reward APY
           </Caption>
           <Subtitle level={2}>{complexApy.rewardApy}%</Subtitle>
+        </FlexBlock>
+        <FlexBlock
+          alignItems="center"
+          justifyContent="space-between"
+          block
+          className={styles.apyBlock}
+        >
+          <Caption weight="regular" className={styles.secondary}>
+            Base APY
+          </Caption>
+          <Subtitle level={2}>{complexApy.baseApy}%</Subtitle>
         </FlexBlock>
       </FlexBlock>
 
@@ -208,6 +212,16 @@ export const DepositModal = () => {
             </Body>
           </FlexBlock>
         </FlexBlock>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Performance fee
+          </Caption>
+          <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
+            <Body level={2} weight="regular">
+              ≈0.054%/Day
+            </Body>
+          </div>
+        </FlexBlock>
       </FlexBlock>
 
       <div className={styles.earningsBlock}>
@@ -231,16 +245,6 @@ export const DepositModal = () => {
               ${round(apy * (Number(value) / 100))}
             </Body>
           </FlexBlock>
-        </FlexBlock>
-        <div className={styles.divider} />
-        {/* Fee Block */}
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Withdrawal fee
-          </Caption>
-          <Body level={2} weight="regular">
-            {round(Number(feePercent))}%
-          </Body>
         </FlexBlock>
       </div>
       {/* Swap Block */}

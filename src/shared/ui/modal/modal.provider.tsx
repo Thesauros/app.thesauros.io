@@ -10,6 +10,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [smallPaddings, setSmallPaddings] = useState(true);
   const [backgroundColor, setBackgroundColor] = useState<string | undefined>(undefined);
   const [padding, setPadding] = useState<string | undefined>(undefined);
+  const [maxWidth, setMaxWidth] = useState<number | undefined>(undefined);
 
   const open = useCallback((content: ReactNode, options?: TOpenOptions) => {
     setModalContent(content);
@@ -18,6 +19,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
     setSmallPaddings(options?.smallPaddings ?? false);
     setBackgroundColor(options?.backgroundColor ?? undefined);
     setPadding(options?.padding ?? undefined);
+    setMaxWidth(options?.maxWidth ?? undefined);
 
     const handler = options?.onClose ? options.onClose : null;
     if (handler) {
@@ -51,6 +53,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
                 style={{
                   backgroundColor: backgroundColor ?? undefined,
                   padding: padding ?? undefined,
+                  maxWidth: maxWidth ? `${maxWidth}px` : undefined,
                 }}
               >
                 {modalContent}
