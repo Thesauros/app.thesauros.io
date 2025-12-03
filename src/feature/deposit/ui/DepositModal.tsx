@@ -94,6 +94,17 @@ export const DepositModal = () => {
     },
   });
 
+  const { data: tokenBalance } = useContractRead({
+    address: choosenVault.vaultAddress,
+    functionName: 'getBalanceOfAsset',
+    args: [address],
+    chainID: choosenVault.chainID,
+    watch: true,
+    selectData: (data: unknown): number => {
+      return round(Number(data) / 10 ** choosenVault.decimals, 2);
+    },
+  });
+
   const apy = useOnchainCurrentAPY({
     vaultAddress: choosenVault.vaultAddress,
     chainID: choosenVault.chainID,
@@ -111,6 +122,7 @@ export const DepositModal = () => {
     minAmount !== undefined && Number(value) > 0 && Number(value) < minAmount;
   const { complexApy } = useDashboardConstants();
 
+  console.log('tokenBalance', tokenBalance);
   return (
     <FlexBlock direction="column" gap={16} block>
       {/* Header */}
@@ -297,15 +309,18 @@ export const DepositModal = () => {
       </Button>
 
       {/* First deposit block */}
-      <FlexBlock alignItems="center" gap={8} justifyContent="center">
-        <Body level={2} weight="regular">
-          +500
-        </Body>
-        <PointCoinIcon size={16} />
-        <Body level={2} weight="regular">
-          Points bonus for your first deposit
-        </Body>
-      </FlexBlock>
+
+      {Number(tokenBalance) === 0 && (
+        <FlexBlock alignItems="center" gap={8} justifyContent="center">
+          <Body level={2} weight="regular">
+            +500
+          </Body>
+          <PointCoinIcon size={16} />
+          <Body level={2} weight="regular">
+            Points bonus for your first deposit
+          </Body>
+        </FlexBlock>
+      )}
     </FlexBlock>
   );
 };
