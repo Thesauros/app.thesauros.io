@@ -20,6 +20,7 @@ import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
 import { useVaultsPosition } from '@/shared/blockchain';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const WithdrawModal = () => {
   const { close, open } = useModal();
@@ -35,6 +36,7 @@ export const WithdrawModal = () => {
     chainID: vaults[0].chainID,
   });
 
+  const queryClient = useQueryClient();
   const { refetchData: refetchVaultsPosition } = useVaultsPosition();
 
   const { withdraw, isWithdrawingLoading } = useWithdraw({
@@ -51,7 +53,23 @@ export const WithdrawModal = () => {
           type="withdraw"
         />
       );
-      refetchVaultsPosition();
+      // Wait for transaction to be confirmed before refetching
+      // Try multiple times to ensure data is updated
+      const refetchData = () => {
+        refetchVaultsPosition();
+        refetchCoinBalance();
+        // Invalidate all contract read queries to refresh dashboard
+        queryClient.invalidateQueries({ queryKey: ['readContract'] });
+      };
+
+      // Immediate refetch
+      refetchData();
+
+      // Refetch after 2 seconds (transaction might be confirmed)
+      setTimeout(refetchData, 2000);
+
+      // Refetch after 5 seconds (transaction should be confirmed by now)
+      setTimeout(refetchData, 5000);
     },
     onError: error => {
       if (error) open(<TransactionStatusModal status="failed" type="withdraw" />);
@@ -62,7 +80,7 @@ export const WithdrawModal = () => {
     targetChainID: choosenVault.chainID,
   });
 
-  const { data: coinBalance } = useContractRead({
+  const { data: coinBalance, refetch: refetchCoinBalance } = useContractRead({
     address: choosenVault.vaultAddress,
     functionName: 'getBalanceOfAsset',
     args: [address],

@@ -26,9 +26,9 @@ import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
-import { useUserPointsInfo } from '@/shared/api/pointProgram';
 import { useMinAmount, useVaultsPosition } from '@/shared/blockchain';
 import { Subtitle } from '@/shared/ui/new-typography/subtitle';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const DepositModal = () => {
   const { open, close } = useModal();
@@ -47,7 +47,7 @@ export const DepositModal = () => {
     ? 0
     : Number(value) * 10 ** choosenVault.decimals;
 
-  const { refetchUserPointsInfo } = useUserPointsInfo(address);
+  const queryClient = useQueryClient();
   const { refetchData: refetchVaultsPosition } = useVaultsPosition();
 
   const { deposit, isDepositLoading } = useDeposit({
@@ -64,8 +64,24 @@ export const DepositModal = () => {
           type="deposit"
         />
       );
-      refetchUserPointsInfo();
-      refetchVaultsPosition();
+      // Wait for transaction to be confirmed before refetching
+      // Try multiple times to ensure data is updated
+      const refetchData = () => {
+        refetchVaultsPosition();
+        refetchCoinBalance();
+        refetchTokenBalance();
+        // Invalidate all contract read queries to refresh dashboard
+        queryClient.invalidateQueries({ queryKey: ['readContract'] });
+      };
+
+      // Immediate refetch
+      refetchData();
+
+      // Refetch after 2 seconds (transaction might be confirmed)
+      setTimeout(refetchData, 2000);
+
+      // Refetch after 5 seconds (transaction should be confirmed by now)
+      setTimeout(refetchData, 5000);
     },
     onError: error => {
       if (error) open(<TransactionStatusModal status="failed" type="deposit" />);
@@ -83,7 +99,7 @@ export const DepositModal = () => {
     targetChainID: choosenVault.chainID,
   });
 
-  const { data: coinBalance } = useContractRead({
+  const { data: coinBalance, refetch: refetchCoinBalance } = useContractRead({
     address: choosenVault.coinAddress,
     functionName: 'balanceOf',
     args: [address],
@@ -94,7 +110,7 @@ export const DepositModal = () => {
     },
   });
 
-  const { data: tokenBalance } = useContractRead({
+  const { data: tokenBalance, refetch: refetchTokenBalance } = useContractRead({
     address: choosenVault.vaultAddress,
     functionName: 'getBalanceOfAsset',
     args: [address],
