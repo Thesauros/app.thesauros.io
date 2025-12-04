@@ -29,6 +29,8 @@ import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 import { useMinAmount, useVaultsPosition } from '@/shared/blockchain';
 import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTaskStatuses } from '@/shared/api/pointProgram/useTaskStatuses';
+import { useCurrentSeason } from '@/shared/api/pointProgram/useCurrentSeasonId';
 
 export const DepositModal = () => {
   const { open, close } = useModal();
@@ -49,6 +51,21 @@ export const DepositModal = () => {
 
   const queryClient = useQueryClient();
   const { refetchData: refetchVaultsPosition } = useVaultsPosition();
+  const { userTaskStatuses } = useTaskStatuses(address);
+  const { seasonInfo } = useCurrentSeason();
+
+  // Find first deposit task by ID (first_deposit)
+  const firstDepositTask = useMemo(() => {
+    return seasonInfo?.season.tasks?.find(task => task.id === 'first_deposit');
+  }, [seasonInfo?.season.tasks]);
+
+  // Check if first deposit task is completed
+  const isFirstDepositTaskCompleted = useMemo(() => {
+    if (!firstDepositTask?.id || !userTaskStatuses?.tasks) {
+      return false;
+    }
+    return userTaskStatuses.tasks[firstDepositTask.id] === 'done';
+  }, [firstDepositTask?.id, userTaskStatuses?.tasks]);
 
   const { deposit, isDepositLoading } = useDeposit({
     vaultAddress: choosenVault.vaultAddress,
@@ -325,8 +342,14 @@ export const DepositModal = () => {
       </Button>
 
       {/* First deposit block */}
-
-      {Number(tokenBalance) === 0 && (
+      {/* 
+        Show only if:
+        1. User has no deposit (tokenBalance === 0)
+        2. AND user hasn't completed the first deposit task yet
+        Even if user withdraws all funds and balance becomes 0, 
+        if they already completed the task, this block won't show
+      */}
+      {Number(tokenBalance) === 0 && !isFirstDepositTaskCompleted && (
         <FlexBlock alignItems="center" gap={8} justifyContent="center">
           <Body level={2} weight="regular">
             +500
