@@ -31,7 +31,7 @@ const docsLinks = [
 const socialLinks = [
   {
     id: 'telegram',
-    link: 'https://t.me/+p9DRrmX7ou05ODUy',
+    link: 'https://t.me/thesauros_io',
     icon: <TelegramIcon />,
   },
   {
