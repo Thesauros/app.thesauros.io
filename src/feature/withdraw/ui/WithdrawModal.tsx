@@ -6,10 +6,7 @@ import { useMemo, useState } from 'react';
 import styles from './WithdrawModal.module.scss';
 import { InputComponent } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
-import { TAddress } from '@/shared/blockchain/core/types';
-
 import { useAccount } from 'wagmi';
-import { useApprove } from '@/shared/blockchain/useApprove';
 import { useSwitchNetwork } from '@/shared/blockchain/core/useSwtichNetwork';
 import { round } from '@/shared/number/round';
 import { useContractRead } from '@/shared/blockchain/core/useContractRead';
@@ -59,13 +56,6 @@ export const WithdrawModal = () => {
     onError: error => {
       if (error) open(<TransactionStatusModal status="failed" type="withdraw" />);
     },
-  });
-
-  const { approve, isApproved } = useApprove({
-    tokenAddress: choosenVault.vaultAddress,
-    vaultAddress: address as TAddress,
-    userValue: Number(withdrawValue),
-    chainID: choosenVault.chainID,
   });
 
   const { isNeedSwitch, switchNetwork } = useSwitchNetwork({
@@ -210,15 +200,13 @@ export const WithdrawModal = () => {
           onClick={() => {
             if (isNeedSwitch) {
               switchNetwork(choosenVault.chainID);
-            } else if (isApproved) {
-              withdraw();
             } else {
-              approve();
+              withdraw();
             }
           }}
           disabled={isWithdrawingLoading || !withdrawValue || isMoreThenBalance}
         >
-          {isNeedSwitch ? 'Switch network' : isApproved ? 'Confirm' : 'Approve'}
+          {isNeedSwitch ? 'Switch network' : 'Confirm'}
         </Button>
       </FlexBlock>
     </FlexBlock>
