@@ -33,23 +33,26 @@ import { EarlyBirdModal } from '@/feature/early-bird';
 import { useWhiteList } from '@/shared/api/dashboard/useWhiteList';
 import { Overline } from '@/shared/ui/new-typography/overline';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
+import { useSignTermsWithCallback } from '@/feature/sign-terms';
 
 export const DashboardScreen = () => {
   const { totalPosition, vaultsTVL, complexApy } = useDashboardConstants();
   const { openConnectModal } = useConnectModal();
   const { address, isConnected } = useAccount();
   const { open } = useModal();
+  const { checkSignatureAndExecute } = useSignTermsWithCallback();
 
   const isMobile = useCheckResolution(576);
   const isDeposited = totalPosition > 0;
-  const { isInWhiteList, isOnApproving } = useWhiteList(address);
-
-  console.log(isInWhiteList, isOnApproving);
+  const { isInWhiteList } = useWhiteList(address);
 
   const onDepositClick = () => {
     if (isConnected) {
-      open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal isOnApproving={isOnApproving} />, {
-        smallPaddings: !isInWhiteList,
+      checkSignatureAndExecute(() => {
+        open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal />, {
+          smallPaddings: !isInWhiteList,
+          maxWidth: !isInWhiteList ? 596 : undefined,
+        });
       });
     } else if (openConnectModal) {
       openConnectModal();
@@ -328,11 +331,14 @@ export const DashboardScreen = () => {
                 <Button
                   size="lg"
                   fullWidth={isMobile}
-                  onClick={() =>
-                    open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal />, {
-                      smallPaddings: !isInWhiteList,
-                    })
-                  }
+                  onClick={() => {
+                    checkSignatureAndExecute(() => {
+                      open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal />, {
+                        smallPaddings: !isInWhiteList,
+                        maxWidth: !isInWhiteList ? 596 : undefined,
+                      });
+                    });
+                  }}
                 >
                   Add to deposit
                 </Button>

@@ -2,7 +2,7 @@ import { TAddress } from '@/shared/blockchain';
 import { customFetch, getApiUrl, useCustomQueryKey } from '../core';
 
 type TUserInfoResponse = {
-  data: { email: string | null; telegram: string | null; status: string };
+  data: { email: string | null; telegram: string | null; status: string; referralLink?: string };
 };
 
 const fetcUserInfo = async (address: TAddress): Promise<TUserInfoResponse> => {

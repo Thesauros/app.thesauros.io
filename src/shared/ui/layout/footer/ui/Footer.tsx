@@ -21,7 +21,7 @@ export const Footer = () => {
               <TwitterIcon />
             </a>
             <a
-              href="https://discord.gg/thesauros"
+              href="https://discord.gg/TQHez89EAE"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}
@@ -29,7 +29,7 @@ export const Footer = () => {
               <DiscordIcon />
             </a>
             <a
-              href="https://t.me/thesauros_io"
+              href="https://t.me/+p9DRrmX7ou05ODUy"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}

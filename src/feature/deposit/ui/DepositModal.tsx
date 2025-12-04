@@ -27,7 +27,7 @@ import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 import { useUserPointsInfo } from '@/shared/api/pointProgram';
-import { useVaultsPosition } from '@/shared/blockchain';
+import { useMinAmount, useVaultsPosition } from '@/shared/blockchain';
 import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 
 export const DepositModal = () => {
@@ -36,6 +36,12 @@ export const DepositModal = () => {
   const { address, chainId } = useAccount();
 
   const choosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
+
+  const { data: minAmount } = useMinAmount({
+    vaultAddress: choosenVault.vaultAddress,
+    chainID: choosenVault.chainID,
+    decimals: choosenVault.decimals,
+  });
 
   const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
     ? 0
@@ -88,6 +94,17 @@ export const DepositModal = () => {
     },
   });
 
+  const { data: tokenBalance } = useContractRead({
+    address: choosenVault.vaultAddress,
+    functionName: 'getBalanceOfAsset',
+    args: [address],
+    chainID: choosenVault.chainID,
+    watch: true,
+    selectData: (data: unknown): number => {
+      return round(Number(data) / 10 ** choosenVault.decimals, 2);
+    },
+  });
+
   const apy = useOnchainCurrentAPY({
     vaultAddress: choosenVault.vaultAddress,
     chainID: choosenVault.chainID,
@@ -101,8 +118,11 @@ export const DepositModal = () => {
   }, [coinBalance]);
 
   const isMoreThenBalance = Number(value) > userCoinBalance;
+  const isLessThanMinAmount =
+    minAmount !== undefined && Number(value) > 0 && Number(value) < minAmount;
   const { complexApy } = useDashboardConstants();
 
+  console.log('tokenBalance', tokenBalance);
   return (
     <FlexBlock direction="column" gap={16} block>
       {/* Header */}
@@ -127,7 +147,9 @@ export const DepositModal = () => {
           <Caption weight="regular" className={styles.secondary}>
             Net APY
           </Caption>
-          <Subtitle level={2}>{complexApy.netApy}%</Subtitle>
+          <Subtitle level={2} weight="bold" className={styles.highlight}>
+            {complexApy.netApy}%
+          </Subtitle>
         </FlexBlock>
         <FlexBlock
           alignItems="center"
@@ -139,6 +161,17 @@ export const DepositModal = () => {
             Reward APY
           </Caption>
           <Subtitle level={2}>{complexApy.rewardApy}%</Subtitle>
+        </FlexBlock>
+        <FlexBlock
+          alignItems="center"
+          justifyContent="space-between"
+          block
+          className={styles.apyBlock}
+        >
+          <Caption weight="regular" className={styles.secondary}>
+            Base APY
+          </Caption>
+          <Subtitle level={2}>{complexApy.baseApy}%</Subtitle>
         </FlexBlock>
       </FlexBlock>
 
@@ -191,6 +224,16 @@ export const DepositModal = () => {
             </Body>
           </FlexBlock>
         </FlexBlock>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
+          <Caption weight="regular" className={styles.secondary}>
+            Performance fee
+          </Caption>
+          <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
+            <Body level={2} weight="regular">
+              ≈0.054%/Day
+            </Body>
+          </div>
+        </FlexBlock>
       </FlexBlock>
 
       <div className={styles.earningsBlock}>
@@ -212,26 +255,6 @@ export const DepositModal = () => {
             </Caption>
             <Body level={2} weight="regular">
               ${round(apy * (Number(value) / 100))}
-            </Body>
-          </FlexBlock>
-        </FlexBlock>
-        <div className={styles.divider} />
-        {/* Fee Block */}
-        <FlexBlock direction="column" gap={6} block>
-          <FlexBlock alignItems="center" justifyContent="space-between" block>
-            <Caption weight="regular" className={styles.secondary}>
-              Performance fee
-            </Caption>
-            <Body level={2} weight="regular">
-              0.1%
-            </Body>
-          </FlexBlock>
-          <FlexBlock alignItems="center" justifyContent="space-between" block>
-            <Caption weight="regular" className={styles.secondary}>
-              Withdrawal fee
-            </Caption>
-            <Body level={2} weight="regular">
-              0%
             </Body>
           </FlexBlock>
         </FlexBlock>
@@ -274,25 +297,30 @@ export const DepositModal = () => {
           }
         }}
         fullWidth
-        disabled={isDepositLoading || !depositValue || isMoreThenBalance}
+        disabled={isDepositLoading || !depositValue || isMoreThenBalance || isLessThanMinAmount}
       >
-        {isNeedSwitch
-          ? 'Switch network'
-          : isApproved
-            ? `Deposit ${value} ${choosenVault.coinName}`
-            : 'Approve'}
+        {isLessThanMinAmount
+          ? `Minimum amount is ${minAmount} ${choosenVault.coinName}`
+          : isNeedSwitch
+            ? 'Switch network'
+            : isApproved
+              ? `Deposit ${value} ${choosenVault.coinName}`
+              : 'Approve'}
       </Button>
 
       {/* First deposit block */}
-      <FlexBlock alignItems="center" gap={8} justifyContent="center">
-        <Body level={2} weight="regular">
-          +500
-        </Body>
-        <PointCoinIcon size={16} />
-        <Body level={2} weight="regular">
-          Points bonus for your first deposit
-        </Body>
-      </FlexBlock>
+
+      {Number(tokenBalance) === 0 && (
+        <FlexBlock alignItems="center" gap={8} justifyContent="center">
+          <Body level={2} weight="regular">
+            +500
+          </Body>
+          <PointCoinIcon size={16} />
+          <Body level={2} weight="regular">
+            Points bonus for your first deposit
+          </Body>
+        </FlexBlock>
+      )}
     </FlexBlock>
   );
 };

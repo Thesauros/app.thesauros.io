@@ -10,9 +10,7 @@ import { useCurrentSeason } from '@/shared/api/pointProgram/useCurrentSeasonId';
 import { getProgressByDates } from './getProgressByDate';
 import { useMemo } from 'react';
 import { Badge } from '@/shared/ui/badge';
-import { GenerateLinkModal } from './generate-link-modal';
 import { Button } from '@/shared/ui/button';
-import { useModal } from '@/shared/ui/modal';
 import { useTaskStatuses } from '@/shared/api/pointProgram/useTaskStatuses';
 import { useAccount } from '@/shared/blockchain/useAccount';
 import { Body } from '@/shared/ui/new-typography/body';
@@ -20,9 +18,9 @@ import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 import { Tooltip } from '@/shared/ui/tooltip/tooltip';
 import { NewInfoIcon } from '@/shared/ui/icons/new-info';
 import { useUserData } from '@/shared/api/dashboard/useUserData';
+import { useCopyToClipboard } from '@/shared/browser/useCopyToClipboard';
 
 export const PointProgramScreen = () => {
-  const { open } = useModal();
   const { address, isConnected } = useAccount();
   const pointProgramInfo = useUserPointProgramInfo();
   const { seasonInfo } = useCurrentSeason();
@@ -37,6 +35,10 @@ export const PointProgramScreen = () => {
   }, [seasonInfo?.season]);
 
   const { userInfo } = useUserData(address);
+
+  const tasks = seasonInfo?.season.tasks ?? [];
+
+  const { copy, isCopying } = useCopyToClipboard();
 
   return (
     <FlexBlock direction="column" gap={16} block>
@@ -59,7 +61,7 @@ export const PointProgramScreen = () => {
                     <Subtitle level={2} weight="regular" className={styles.secondaryText}>
                       {item.title}
                     </Subtitle>
-                    <Tooltip tooltipText={''}>
+                    <Tooltip tooltipText={item.tooltipText}>
                       <NewInfoIcon />
                     </Tooltip>
                   </FlexBlock>
@@ -103,7 +105,7 @@ export const PointProgramScreen = () => {
             Earn Points
           </Heading>
           <FlexBlock direction="column" gap={12} block>
-            {seasonInfo?.season.tasks?.map(element => (
+            {tasks?.map(element => (
               <Card className={styles.card} key={element.title}>
                 <FlexBlock gap={12} block className={styles.classContainer}>
                   <FlexBlock
@@ -134,8 +136,8 @@ export const PointProgramScreen = () => {
                       +{element.points}PTS
                     </Subtitle>
                     {element.id === 'invite_friends' && (
-                      <Button size="sm" onClick={() => open(<GenerateLinkModal />)}>
-                        Generate Link
+                      <Button size="sm" onClick={() => copy(userInfo?.data.referralLink ?? '')}>
+                        {isCopying ? 'Copied' : 'Copy Link'}
                       </Button>
                     )}
                   </FlexBlock>

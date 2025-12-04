@@ -4,3 +4,4 @@ export { useHighestApr } from './useHighestAPR';
 export { useCurrentAPR } from './useCurrentAPR';
 export { useUserEarnedOverallicks } from './useUserEarnedOverall';
 export { useWhiteList } from './useWhiteList';
+export { useLargeDepositCount } from './useLargeDepositCount';

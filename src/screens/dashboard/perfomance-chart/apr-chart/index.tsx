@@ -135,6 +135,8 @@ export const APRChart = ({
               tick={{ fontSize: 12, fill: '#9D9D9D' }}
               tickMargin={20}
               tickFormatter={value => `${value.toFixed(2)}%`}
+              domain={[0, (dataMax: number) => dataMax * 1.1]}
+              allowDataOverflow={false}
             />
             <YAxis
               yAxisId="right"
@@ -144,6 +146,8 @@ export const APRChart = ({
               tickCount={4}
               tick={{ fontSize: 12, fill: '#9D9D9D' }}
               tickFormatter={value => formatNumberSmart(value as number)}
+              domain={[0, (dataMax: number) => dataMax * 1.1]}
+              allowDataOverflow={false}
             />
             <Tooltip content={<APRChartTooltip />} />
             {isDeposited && (
