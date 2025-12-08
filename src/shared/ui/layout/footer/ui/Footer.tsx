@@ -29,7 +29,7 @@ export const Footer = () => {
               <DiscordIcon />
             </a>
             <a
-              href="https://t.me/+p9DRrmX7ou05ODUy"
+              href="https://t.me/thesauros_io"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}

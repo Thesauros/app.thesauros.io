@@ -6,10 +6,7 @@ import { useMemo, useState } from 'react';
 import styles from './WithdrawModal.module.scss';
 import { InputComponent } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
-import { TAddress } from '@/shared/blockchain/core/types';
-
 import { useAccount } from 'wagmi';
-import { useApprove } from '@/shared/blockchain/useApprove';
 import { useSwitchNetwork } from '@/shared/blockchain/core/useSwtichNetwork';
 import { round } from '@/shared/number/round';
 import { useContractRead } from '@/shared/blockchain/core/useContractRead';
@@ -23,6 +20,7 @@ import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
 import { useVaultsPosition } from '@/shared/blockchain';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const WithdrawModal = () => {
   const { close, open } = useModal();
@@ -38,6 +36,7 @@ export const WithdrawModal = () => {
     chainID: vaults[0].chainID,
   });
 
+  const queryClient = useQueryClient();
   const { refetchData: refetchVaultsPosition } = useVaultsPosition();
 
   const { withdraw, isWithdrawingLoading } = useWithdraw({
@@ -54,25 +53,34 @@ export const WithdrawModal = () => {
           type="withdraw"
         />
       );
-      refetchVaultsPosition();
+      // Wait for transaction to be confirmed before refetching
+      // Try multiple times to ensure data is updated
+      const refetchData = () => {
+        refetchVaultsPosition();
+        refetchCoinBalance();
+        // Invalidate all contract read queries to refresh dashboard
+        queryClient.invalidateQueries({ queryKey: ['readContract'] });
+      };
+
+      // Immediate refetch
+      refetchData();
+
+      // Refetch after 2 seconds (transaction might be confirmed)
+      setTimeout(refetchData, 2000);
+
+      // Refetch after 5 seconds (transaction should be confirmed by now)
+      setTimeout(refetchData, 5000);
     },
     onError: error => {
       if (error) open(<TransactionStatusModal status="failed" type="withdraw" />);
     },
   });
 
-  const { approve, isApproved } = useApprove({
-    tokenAddress: choosenVault.vaultAddress,
-    vaultAddress: address as TAddress,
-    userValue: Number(withdrawValue),
-    chainID: choosenVault.chainID,
-  });
-
   const { isNeedSwitch, switchNetwork } = useSwitchNetwork({
     targetChainID: choosenVault.chainID,
   });
 
-  const { data: coinBalance } = useContractRead({
+  const { data: coinBalance, refetch: refetchCoinBalance } = useContractRead({
     address: choosenVault.vaultAddress,
     functionName: 'getBalanceOfAsset',
     args: [address],
@@ -210,15 +218,13 @@ export const WithdrawModal = () => {
           onClick={() => {
             if (isNeedSwitch) {
               switchNetwork(choosenVault.chainID);
-            } else if (isApproved) {
-              withdraw();
             } else {
-              approve();
+              withdraw();
             }
           }}
           disabled={isWithdrawingLoading || !withdrawValue || isMoreThenBalance}
         >
-          {isNeedSwitch ? 'Switch network' : isApproved ? 'Confirm' : 'Approve'}
+          {isNeedSwitch ? 'Switch network' : 'Confirm'}
         </Button>
       </FlexBlock>
     </FlexBlock>

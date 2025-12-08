@@ -25,7 +25,7 @@ const socialLinks = [
   {
     id: 'telegram',
     name: 'Telegram',
-    link: 'https://t.me/+p9DRrmX7ou05ODUy',
+    link: 'https://t.me/+p9DRrmX7ou05ODUy ',
     icon: <TelegramIcon color="#fff" size={24} />,
   },
   {
