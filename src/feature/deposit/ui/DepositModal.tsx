@@ -45,9 +45,13 @@ export const DepositModal = () => {
     decimals: choosenVault.decimals,
   });
 
-  const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
-    ? 0
-    : Number(value) * 10 ** choosenVault.decimals;
+  const depositValue = useMemo(() => {
+    const calculated = Number(value) * 10 ** choosenVault.decimals;
+    if (isNaN(calculated)) {
+      return 0;
+    }
+    return Math.floor(calculated);
+  }, [value, choosenVault.decimals]);
 
   const queryClient = useQueryClient();
   const { refetchData: refetchVaultsPosition } = useVaultsPosition();
@@ -116,6 +120,14 @@ export const DepositModal = () => {
     targetChainID: choosenVault.chainID,
   });
 
+  const { data: rawCoinBalance } = useContractRead({
+    address: choosenVault.coinAddress,
+    functionName: 'balanceOf',
+    args: [address],
+    chainID: choosenVault.chainID,
+    watch: true,
+  });
+
   const { data: coinBalance, refetch: refetchCoinBalance } = useContractRead({
     address: choosenVault.coinAddress,
     functionName: 'balanceOf',
@@ -150,7 +162,14 @@ export const DepositModal = () => {
     return 0;
   }, [coinBalance]);
 
-  const isMoreThenBalance = Number(value) > userCoinBalance;
+  const actualCoinBalance: number = useMemo(() => {
+    if (typeof rawCoinBalance === 'bigint' || typeof rawCoinBalance === 'number') {
+      return Number(rawCoinBalance) / 10 ** choosenVault.decimals;
+    }
+    return userCoinBalance;
+  }, [rawCoinBalance, choosenVault.decimals, userCoinBalance]);
+
+  const isMoreThenBalance = Number(value) > actualCoinBalance;
   const isLessThanMinAmount =
     minAmount !== undefined && Number(value) > 0 && Number(value) < minAmount;
   const { complexApy } = useDashboardConstants();
@@ -234,7 +253,17 @@ export const DepositModal = () => {
           <Caption weight="regular" className={styles.secondary}>
             Balance:
           </Caption>
-          <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
+          <div
+            style={{ cursor: 'pointer' }}
+            onClick={() => {
+              if (typeof rawCoinBalance === 'bigint' || typeof rawCoinBalance === 'number') {
+                const rawBalance = Number(rawCoinBalance) / 10 ** choosenVault.decimals;
+                setValue(String(rawBalance));
+              } else {
+                setValue(String(userCoinBalance));
+              }
+            }}
+          >
             <Body level={2} weight="regular">
               {userCoinBalance} {choosenVault.coinName}
             </Body>

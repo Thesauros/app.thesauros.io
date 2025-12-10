@@ -9,7 +9,11 @@ type TAllowanceProps = {
 };
 
 export const useAllowance = ({ tokenAddress, tokenChainId, account, spender }: TAllowanceProps) => {
-  const { data: allowance, isLoading } = useContractRead({
+  const {
+    data: allowance,
+    isLoading,
+    refetch,
+  } = useContractRead({
     address: tokenAddress,
     chainID: tokenChainId,
     functionName: 'allowance',
@@ -20,5 +24,6 @@ export const useAllowance = ({ tokenAddress, tokenChainId, account, spender }: T
   return {
     allowance,
     isLoading,
+    refetch,
   };
 };

@@ -1,1 +1,31 @@
-npx lint-staged
+#!/usr/bin/env sh
+
+# Find node and npm without loading nvm (to avoid .npmrc conflicts)
+NODE_DIR=""
+
+# Try to find node in common locations
+if command -v node >/dev/null 2>&1; then
+  # Node is in PATH, use it
+  NODE_DIR=$(dirname "$(command -v node)")
+elif [ -f "$HOME/.nvm/versions/node/v22.21.1/bin/node" ]; then
+  NODE_DIR="$HOME/.nvm/versions/node/v22.21.1/bin"
+elif [ -d "$HOME/.nvm/versions/node" ]; then
+  # Find latest node version
+  LATEST_NODE=$(ls -t "$HOME/.nvm/versions/node" 2>/dev/null | head -1)
+  if [ -n "$LATEST_NODE" ] && [ -f "$HOME/.nvm/versions/node/$LATEST_NODE/bin/node" ]; then
+    NODE_DIR="$HOME/.nvm/versions/node/$LATEST_NODE/bin"
+  fi
+fi
+
+# Add node directory to PATH if found
+if [ -n "$NODE_DIR" ]; then
+  export PATH="$NODE_DIR:$PATH"
+fi
+
+# Run lint-staged via npm script
+if command -v npm >/dev/null 2>&1; then
+  npm run lint-staged
+else
+  echo "Error: npm not found"
+  exit 1
+fi
