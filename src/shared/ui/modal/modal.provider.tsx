@@ -28,7 +28,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const close = useCallback(() => {
-    if (!!onCloseHandler) {
+    if (onCloseHandler) {
       onCloseHandler();
     }
 

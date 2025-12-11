@@ -32,9 +32,14 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTaskStatuses } from '@/shared/api/pointProgram/useTaskStatuses';
 import { useCurrentSeason } from '@/shared/api/pointProgram/useCurrentSeasonId';
 
+type DepositValue = {
+  formatted: string;
+  raw: number;
+};
+
 export const DepositModal = () => {
   const { open, close } = useModal();
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState<DepositValue>({ formatted: '', raw: 0 });
   const { address, chainId } = useAccount();
 
   const choosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
@@ -45,9 +50,17 @@ export const DepositModal = () => {
     decimals: choosenVault.decimals,
   });
 
-  const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
+  const depositValue = isNaN(value.raw * 10 ** choosenVault.decimals)
     ? 0
-    : Number(value) * 10 ** choosenVault.decimals;
+    : value.raw * 10 ** choosenVault.decimals;
+
+  const handleValueChange = (newValue: string) => {
+    const numericValue = newValue === '' ? 0 : parseFloat(newValue);
+    setValue({
+      formatted: newValue,
+      raw: isNaN(numericValue) ? 0 : numericValue,
+    });
+  };
 
   const queryClient = useQueryClient();
   const { refetchData: refetchVaultsPosition } = useVaultsPosition();
@@ -75,7 +88,7 @@ export const DepositModal = () => {
       open(
         <TransactionStatusModal
           data={data}
-          amount={Number(value)}
+          amount={value.raw}
           coinName={choosenVault.coinName}
           status="success"
           type="deposit"
@@ -122,8 +135,11 @@ export const DepositModal = () => {
     args: [address],
     chainID: choosenVault.chainID,
     watch: true,
-    selectData: (data: unknown): number => {
-      return round(Number(data) / 10 ** choosenVault.decimals, 2);
+    selectData: (data: unknown): { rawValue: number; value: number } => {
+      return {
+        rawValue: Number(data),
+        value: round(Number(data) / 10 ** choosenVault.decimals, 2),
+      };
     },
   });
 
@@ -144,18 +160,29 @@ export const DepositModal = () => {
   });
 
   const userCoinBalance: number = useMemo(() => {
-    if (typeof coinBalance === 'number') {
-      return coinBalance;
+    if (
+      coinBalance &&
+      typeof coinBalance === 'object' &&
+      coinBalance !== null &&
+      'value' in coinBalance &&
+      typeof (coinBalance as { value: unknown }).value === 'number'
+    ) {
+      return (coinBalance as { value: number }).value;
     }
     return 0;
   }, [coinBalance]);
 
-  const isMoreThenBalance = Number(value) > userCoinBalance;
-  const isLessThanMinAmount =
-    minAmount !== undefined && Number(value) > 0 && Number(value) < minAmount;
+  const setMaxValue = () => {
+    setValue({
+      formatted: String(userCoinBalance),
+      raw: userCoinBalance,
+    });
+  };
+
+  const isMoreThenBalance = value.raw > userCoinBalance;
+  const isLessThanMinAmount = minAmount !== undefined && value.raw > 0 && value.raw < minAmount;
   const { complexApy } = useDashboardConstants();
 
-  console.log('tokenBalance', tokenBalance);
   return (
     <FlexBlock direction="column" gap={16} block>
       {/* Header */}
@@ -214,7 +241,7 @@ export const DepositModal = () => {
         <Caption>Amount to Deposit</Caption>
         <InputComponent
           id="id"
-          value={value}
+          value={value.formatted}
           type="number"
           size="md"
           postfix={
@@ -223,7 +250,7 @@ export const DepositModal = () => {
             </Body>
           }
           fullWidth
-          onChange={setValue}
+          onChange={handleValueChange}
           disabled={isDepositLoading}
         />
       </FlexBlock>
@@ -234,7 +261,7 @@ export const DepositModal = () => {
           <Caption weight="regular" className={styles.secondary}>
             Balance:
           </Caption>
-          <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
+          <div style={{ cursor: 'pointer' }} onClick={setMaxValue}>
             <Body level={2} weight="regular">
               {userCoinBalance} {choosenVault.coinName}
             </Body>
@@ -253,7 +280,7 @@ export const DepositModal = () => {
           <FlexBlock gap={2} alignItems="center">
             <PointCoinIcon size={16} />
             <Body level={2} weight="regular">
-              {formatNumberWithCommas(Number(value) * 365)}
+              {formatNumberWithCommas(value.raw * 365)}
             </Body>
           </FlexBlock>
         </FlexBlock>
@@ -261,7 +288,7 @@ export const DepositModal = () => {
           <Caption weight="regular" className={styles.secondary}>
             Performance fee
           </Caption>
-          <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
+          <div>
             <Body level={2} weight="regular">
               ≈0.054%/Day
             </Body>
@@ -279,7 +306,7 @@ export const DepositModal = () => {
               Monthly profit
             </Caption>
             <Body level={2} weight="regular">
-              ${round((apy * (Number(value) / 100)) / 12)}
+              ${round((apy * (value.raw / 100)) / 12)}
             </Body>
           </FlexBlock>
           <FlexBlock alignItems="center" justifyContent="space-between" block>
@@ -287,7 +314,7 @@ export const DepositModal = () => {
               Yearly profit
             </Caption>
             <Body level={2} weight="regular">
-              ${round(apy * (Number(value) / 100))}
+              ${round(apy * (value.raw / 100))}
             </Body>
           </FlexBlock>
         </FlexBlock>
@@ -337,7 +364,7 @@ export const DepositModal = () => {
           : isNeedSwitch
             ? 'Switch network'
             : isApproved
-              ? `Deposit ${value} ${choosenVault.coinName}`
+              ? `Deposit ${value.formatted || 0} ${choosenVault.coinName}`
               : 'Approve'}
       </Button>
 
