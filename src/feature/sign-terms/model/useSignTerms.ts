@@ -108,8 +108,6 @@ export const useSignTerms = () => {
         } catch (backendError) {
           console.error('Error submitting signature to backend:', backendError);
         }
-      } catch (error) {
-        throw error;
       } finally {
         setIsLoading(false);
       }

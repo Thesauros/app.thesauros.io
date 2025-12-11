@@ -18,5 +18,6 @@ export const useAutoSwitchToArbitrum = () => {
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected]);
 };
