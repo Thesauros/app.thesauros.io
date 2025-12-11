@@ -1,6 +1,6 @@
 import type { AppProps } from 'next/app';
 import { Onest } from 'next/font/google';
-import Script from 'next/script';
+import Head from 'next/head';
 
 import '@shared/ui/ui-constants/globals.scss';
 import '@shared/ui/ui-constants/design-system.scss';
@@ -25,11 +25,11 @@ const onest = Onest({ subsets: ['latin'] });
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <div className={onest.className}>
-      <Script
-        id="contentsquare"
-        src={`https://t.contentsquare.net/uxa/${HOTJAR_ID}.js`}
-        strategy="afterInteractive"
-      />
+      {HOTJAR_ID && (
+        <Head>
+          <script src={`https://t.contentsquare.net/uxa/${HOTJAR_ID}.js`} />
+        </Head>
+      )}
       <ThemeProvider>
         <WagmiProvider config={wagmiConfig}>
           <QueryClientProvider client={queryClient}>
