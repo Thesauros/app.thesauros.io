@@ -1,0 +1,106 @@
+.root {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.progressLine {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.stepContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &.first {
+    width: 100%;
+  }
+
+  &.last {
+    padding-left: 4px;
+  }
+}
+
+.progressTrack {
+  height: 3px;
+  width: 100%;
+  background-color: #e5e7eb;
+  border-radius: 2px;
+  position: relative;
+}
+
+.progressFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background-color: #196bff;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.stepsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+}
+
+.stepItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stepCircle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &.completed {
+    background-color: #196aff;
+  }
+
+  &.active {
+    background-color: transparent;
+    border: 2px solid #196aff;
+  }
+
+  &.pending {
+    background-color: transparent;
+    border: 2px solid #cfd7dd;
+  }
+}
+
+.stepLabel {
+  font-size: 12px;
+  font-weight: 400;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+
+  &.completedLabel {
+    color: #030303;
+  }
+
+  &.activeLabel {
+    color: #030303;
+  }
+
+  &.pendingLabel {
+    color: #64788c;
+  }
+}
