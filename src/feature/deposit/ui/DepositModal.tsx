@@ -31,6 +31,7 @@ import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTaskStatuses } from '@/shared/api/pointProgram/useTaskStatuses';
 import { useCurrentSeason } from '@/shared/api/pointProgram/useCurrentSeasonId';
+import { StepsProgress, Step } from '@/shared/ui/steps-progress';
 
 type DepositValue = {
   formatted: string;
@@ -118,7 +119,11 @@ export const DepositModal = () => {
     },
   });
 
-  const { approve, isApproved } = useApprove({
+  const {
+    approve,
+    isApproved,
+    isLoading: isApproveLoading,
+  } = useApprove({
     tokenAddress: chosenVault.coinAddress,
     vaultAddress: chosenVault.vaultAddress,
     userValue: Number(depositValue),
@@ -198,6 +203,22 @@ export const DepositModal = () => {
   const isLessThanMinAmount =
     minAmount !== undefined && Number(value.formatted) > 0 && Number(value.formatted) < minAmount;
   const { complexApy } = useDashboardConstants();
+
+  const steps: Step[] = useMemo(() => {
+    const approveStatus =
+      Number(depositValue) > 0 && isApproved
+        ? 'completed'
+        : isApproveLoading
+          ? 'active'
+          : 'pending';
+
+    const depositStatus = isDepositLoading ? 'active' : 'pending';
+
+    return [
+      { label: 'Approve', status: approveStatus },
+      { label: 'Deposit', status: depositStatus },
+    ];
+  }, [isApproved, depositValue, isApproveLoading, isDepositLoading]);
 
   return (
     <FlexBlock direction="column" gap={16} block>
@@ -380,6 +401,7 @@ export const DepositModal = () => {
               ? `Deposit ${value.formatted || 0} ${chosenVault.coinName}`
               : 'Approve'}
       </Button>
+      <StepsProgress steps={steps} />
 
       {/* First deposit block */}
       {/* 
