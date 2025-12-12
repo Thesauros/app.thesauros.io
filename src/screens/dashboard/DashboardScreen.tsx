@@ -48,13 +48,12 @@ export const DashboardScreen = () => {
 
   const onDepositClick = () => {
     if (isConnected) {
-      open(<DepositModal />);
-      // checkSignatureAndExecute(() => {
-      //   open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal />, {
-      //     smallPaddings: !isInWhiteList,
-      //     maxWidth: !isInWhiteList ? 596 : undefined,
-      //   });
-      // });
+      checkSignatureAndExecute(() => {
+        open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal />, {
+          smallPaddings: !isInWhiteList,
+          maxWidth: !isInWhiteList ? 596 : undefined,
+        });
+      });
     } else if (openConnectModal) {
       openConnectModal();
     }
