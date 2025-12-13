@@ -10,8 +10,11 @@ export const ConvertBadge = () => {
 
   if (isMobile) {
     return (
-      <FlexBlock gap={8} alignItems="center">
-        <Caption>Convert any crypto to USDC during Deposit</Caption>
+      <FlexBlock justifyContent="space-between" alignItems="center" block>
+        <Caption>
+          Convert any crypto to <br />
+          USDC during Deposit
+        </Caption>
         <ConvertCoins />
       </FlexBlock>
     );

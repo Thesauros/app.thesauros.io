@@ -1,3 +1,5 @@
+@use '@breakpoints' as breakpoints;
+
 .container {
   position: relative;
   display: flex;
@@ -28,6 +30,12 @@
   border-radius: 10px;
   box-sizing: border-box;
   color: #030303;
+
+  // Prevent auto-zoom on iOS when focusing input
+  // iOS Safari zooms the page if font-size < 16px
+  @include breakpoints.mobile {
+    font-size: 16px;
+  }
 
   &.sm {
     padding: 6px 12px;
