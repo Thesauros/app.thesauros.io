@@ -11,6 +11,7 @@ export type TContractWriteProps = {
   chainID?: TChainID;
   onSuccess?: (data: `0x${string}`) => void;
   onError?: (error: Error | null) => void;
+  enabled?: boolean;
 };
 
 export type TVault = {

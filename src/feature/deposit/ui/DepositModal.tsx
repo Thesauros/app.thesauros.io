@@ -81,10 +81,22 @@ export const DepositModal = () => {
     return userTaskStatuses.tasks[firstDepositTask.id] === 'done';
   }, [firstDepositTask?.id, userTaskStatuses?.tasks]);
 
+  const {
+    approve,
+    isApproved,
+    isLoading: isApproveLoading,
+  } = useApprove({
+    tokenAddress: chosenVault.coinAddress,
+    vaultAddress: chosenVault.vaultAddress,
+    userValue: Number(depositValue),
+    chainID: chosenVault.chainID,
+  });
+
   const { deposit, isDepositLoading } = useDeposit({
     vaultAddress: chosenVault.vaultAddress,
     chainID: chosenVault.chainID,
     args: [depositValue, address],
+    enabled: isApproved,
     onSuccess: data => {
       open(
         <TransactionStatusModal
@@ -117,17 +129,6 @@ export const DepositModal = () => {
     onError: error => {
       if (error) open(<TransactionStatusModal status="failed" type="deposit" />);
     },
-  });
-
-  const {
-    approve,
-    isApproved,
-    isLoading: isApproveLoading,
-  } = useApprove({
-    tokenAddress: chosenVault.coinAddress,
-    vaultAddress: chosenVault.vaultAddress,
-    userValue: Number(depositValue),
-    chainID: chosenVault.chainID,
   });
 
   const { isNeedSwitch, switchNetwork } = useSwitchNetwork({
