@@ -132,7 +132,7 @@ export const DashboardScreen = () => {
                   funds to maintain the best available return.
                 </Caption>
               )}
-              <FlexBlock alignItems="center" gap={32}>
+              <FlexBlock alignItems="center" gap={isMobile ? 80 : 32}>
                 <FlexBlock direction="column" gap={4}>
                   <Tooltip
                     withIcon
@@ -166,7 +166,7 @@ export const DashboardScreen = () => {
               </FlexBlock>
             </FlexBlock>
 
-            {isMobile && (
+            {isMobile && isConnected && (
               <FlexBlock direction="column" gap={8} block>
                 <Card variant="secondary" className={styles.mobilePointsCard}>
                   <FlexBlock justifyContent="space-between" alignItems="center" block>
@@ -298,6 +298,7 @@ export const DashboardScreen = () => {
                 gap={isMobile ? 16 : 20}
                 block={isMobile}
               >
+                {isMobile && <ConvertBadge />}
                 <Button size="lg" onClick={onDepositClick} fullWidth={isMobile}>
                   Deposit
                 </Button>
