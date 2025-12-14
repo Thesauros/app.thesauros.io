@@ -7,12 +7,14 @@ export const useDeposit = ({
   args,
   onSuccess,
   onError,
+  enabled = true,
 }: {
   vaultAddress: TAddress;
   chainID: TChainID;
   args: TArg[];
   onSuccess?: (data: `0x${string}`) => void;
   onError?: (error: Error | null) => void;
+  enabled?: boolean;
 }) => {
   const { write, isLoading } = useContractWrite({
     address: vaultAddress,
@@ -21,6 +23,7 @@ export const useDeposit = ({
     args: args,
     onSuccess,
     onError,
+    enabled,
   });
 
   const deposit = () => {
