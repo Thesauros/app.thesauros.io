@@ -65,7 +65,7 @@ export const Calculator = ({ apy }: { apy: number }) => {
             {isMobile ? (
               <Caption weight="regular">Potential earnings</Caption>
             ) : (
-              <Subtitle level={2} weight="regular">
+              <Subtitle level={1} weight="regular">
                 Potential earnings
               </Subtitle>
             )}
