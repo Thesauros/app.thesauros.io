@@ -18,8 +18,9 @@ const periods = [
 
 export const PerfomanceChart = () => {
   const [timePeriod, setTimePeriod] = useState(periods[0]);
-  const { isConnected } = useAccount();
+  const { isConnected, chainId } = useAccount();
   const isMobile = useCheckResolution(576);
+  const chosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
 
   return (
     <Card block>
@@ -54,7 +55,7 @@ export const PerfomanceChart = () => {
         </FlexBlock>
         <FlexBlock direction="column" gap={20} block>
           <div className={styles.container}>
-            <APRChart currentVault={vaults[0]} period={timePeriod} />
+            <APRChart currentVault={chosenVault} period={timePeriod} />
           </div>
         </FlexBlock>
       </FlexBlock>

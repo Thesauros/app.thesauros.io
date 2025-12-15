@@ -6,7 +6,7 @@ type TUserPointsInfoRaw = {
   data: {
     user_address: string;
     season_number: number;
-    tasks: Record<string, string>;
+    tasks: Record<string, { status: string; value?: number }>;
   };
   message: string;
 };

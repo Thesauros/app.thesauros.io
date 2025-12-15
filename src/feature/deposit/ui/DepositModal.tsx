@@ -78,7 +78,7 @@ export const DepositModal = () => {
     if (!firstDepositTask?.id || !userTaskStatuses?.tasks) {
       return false;
     }
-    return userTaskStatuses.tasks[firstDepositTask.id] === 'done';
+    return userTaskStatuses.tasks[firstDepositTask.id].status === 'done';
   }, [firstDepositTask?.id, userTaskStatuses?.tasks]);
 
   const {
@@ -323,9 +323,14 @@ export const DepositModal = () => {
           </FlexBlock>
         </FlexBlock>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Performance fee
-          </Caption>
+          <Tooltip
+            tooltipText="Applied only to your net profit, never to your initial deposit."
+            withIcon
+          >
+            <Caption weight="regular" className={styles.secondary}>
+              Performance fee
+            </Caption>
+          </Tooltip>
           <div>
             <Body level={2} weight="regular">
               ≈0.054%/Day
