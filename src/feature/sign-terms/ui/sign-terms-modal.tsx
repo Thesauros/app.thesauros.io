@@ -15,18 +15,12 @@ import { useState } from 'react';
 
 export const SignTermsModal = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { close } = useModal();
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
   const { signTerms, isLoading } = useSignTerms();
   const [isChecked, setIsChecked] = useState(false);
 
   const handleSign = async () => {
     if (!isChecked) {
-      alert('Пожалуйста, примите условия использования');
-      return;
-    }
-
-    if (!isConnected) {
-      alert('Пожалуйста, подключите кошелек');
       return;
     }
 
@@ -34,13 +28,12 @@ export const SignTermsModal = ({ onSuccess }: { onSuccess?: () => void }) => {
       await signTerms();
       close();
 
-      // Вызываем callback после успешной подписи
+      // Call callback after successful signing
       if (onSuccess) {
         onSuccess();
       }
     } catch (error) {
-      console.error('Ошибка при подписании:', error);
-      alert('Не удалось подписать условия. Попробуйте еще раз.');
+      console.error('Error signing terms:', error);
     }
   };
 

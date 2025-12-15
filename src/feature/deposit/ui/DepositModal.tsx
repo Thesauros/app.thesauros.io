@@ -31,23 +31,37 @@ import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTaskStatuses } from '@/shared/api/pointProgram/useTaskStatuses';
 import { useCurrentSeason } from '@/shared/api/pointProgram/useCurrentSeasonId';
+import { StepsProgress, Step } from '@/shared/ui/steps-progress';
+
+type DepositValue = {
+  formatted: string;
+  raw: number;
+};
 
 export const DepositModal = () => {
   const { open, close } = useModal();
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState<DepositValue>({ formatted: '', raw: 0 });
   const { address, chainId } = useAccount();
 
-  const choosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
+  const chosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
 
   const { data: minAmount } = useMinAmount({
-    vaultAddress: choosenVault.vaultAddress,
-    chainID: choosenVault.chainID,
-    decimals: choosenVault.decimals,
+    vaultAddress: chosenVault.vaultAddress,
+    chainID: chosenVault.chainID,
+    decimals: chosenVault.decimals,
   });
 
-  const depositValue = isNaN(Number(value) * 10 ** choosenVault.decimals)
+  const depositValue = isNaN(value.raw * 10 ** chosenVault.decimals)
     ? 0
-    : Number(value) * 10 ** choosenVault.decimals;
+    : value.raw * 10 ** chosenVault.decimals;
+
+  const handleValueChange = (newValue: string) => {
+    const numericValue = newValue === '' ? 0 : parseFloat(newValue);
+    setValue({
+      formatted: newValue,
+      raw: isNaN(numericValue) ? 0 : numericValue,
+    });
+  };
 
   const queryClient = useQueryClient();
   const { refetchData: refetchVaultsPosition } = useVaultsPosition();
@@ -67,16 +81,28 @@ export const DepositModal = () => {
     return userTaskStatuses.tasks[firstDepositTask.id] === 'done';
   }, [firstDepositTask?.id, userTaskStatuses?.tasks]);
 
+  const {
+    approve,
+    isApproved,
+    isLoading: isApproveLoading,
+  } = useApprove({
+    tokenAddress: chosenVault.coinAddress,
+    vaultAddress: chosenVault.vaultAddress,
+    userValue: Number(depositValue),
+    chainID: chosenVault.chainID,
+  });
+
   const { deposit, isDepositLoading } = useDeposit({
-    vaultAddress: choosenVault.vaultAddress,
-    chainID: choosenVault.chainID,
+    vaultAddress: chosenVault.vaultAddress,
+    chainID: chosenVault.chainID,
     args: [depositValue, address],
+    enabled: isApproved,
     onSuccess: data => {
       open(
         <TransactionStatusModal
           data={data}
-          amount={Number(value)}
-          coinName={choosenVault.coinName}
+          amount={value.raw}
+          coinName={chosenVault.coinName}
           status="success"
           type="deposit"
         />
@@ -105,57 +131,96 @@ export const DepositModal = () => {
     },
   });
 
-  const { approve, isApproved } = useApprove({
-    tokenAddress: choosenVault.coinAddress,
-    vaultAddress: choosenVault.vaultAddress,
-    userValue: Number(depositValue),
-    chainID: choosenVault.chainID,
-  });
-
   const { isNeedSwitch, switchNetwork } = useSwitchNetwork({
-    targetChainID: choosenVault.chainID,
+    targetChainID: chosenVault.chainID,
   });
 
   const { data: coinBalance, refetch: refetchCoinBalance } = useContractRead({
-    address: choosenVault.coinAddress,
+    address: chosenVault.coinAddress,
     functionName: 'balanceOf',
     args: [address],
-    chainID: choosenVault.chainID,
+    chainID: chosenVault.chainID,
     watch: true,
-    selectData: (data: unknown): number => {
-      return round(Number(data) / 10 ** choosenVault.decimals, 2);
+    selectData: (data: unknown): { rawValue: number; value: number } => {
+      return {
+        rawValue: Number(data),
+        value: round(Number(data) / 10 ** chosenVault.decimals, 2),
+      };
     },
   });
 
   const { data: tokenBalance, refetch: refetchTokenBalance } = useContractRead({
-    address: choosenVault.vaultAddress,
+    address: chosenVault.vaultAddress,
     functionName: 'getBalanceOfAsset',
     args: [address],
-    chainID: choosenVault.chainID,
+    chainID: chosenVault.chainID,
     watch: true,
     selectData: (data: unknown): number => {
-      return round(Number(data) / 10 ** choosenVault.decimals, 2);
+      return round(Number(data) / 10 ** chosenVault.decimals, 2);
     },
   });
 
-  const apy = useOnchainCurrentAPY({
-    vaultAddress: choosenVault.vaultAddress,
-    chainID: choosenVault.chainID,
-  });
+  const apy =
+    useOnchainCurrentAPY({
+      vaultAddress: chosenVault.vaultAddress,
+      chainID: chosenVault.chainID,
+    }) ?? 0;
 
   const userCoinBalance: number = useMemo(() => {
-    if (typeof coinBalance === 'number') {
-      return coinBalance;
+    if (
+      coinBalance &&
+      typeof coinBalance === 'object' &&
+      coinBalance !== null &&
+      'value' in coinBalance &&
+      typeof (coinBalance as { value: unknown }).value === 'number'
+    ) {
+      return (coinBalance as { value: number }).value;
     }
     return 0;
   }, [coinBalance]);
 
-  const isMoreThenBalance = Number(value) > userCoinBalance;
+  const userCoinBalanceRaw: number = useMemo(() => {
+    if (
+      coinBalance &&
+      typeof coinBalance === 'object' &&
+      coinBalance !== null &&
+      'rawValue' in coinBalance &&
+      typeof (coinBalance as { rawValue: unknown }).rawValue === 'number'
+    ) {
+      // Divide by decimals to get human-readable value with full precision
+      return (coinBalance as { rawValue: number }).rawValue / 10 ** chosenVault.decimals;
+    }
+    return 0;
+  }, [coinBalance, chosenVault.decimals]);
+
+  const setMaxValue = () => {
+    setValue({
+      formatted: String(userCoinBalanceRaw),
+      raw: userCoinBalanceRaw,
+    });
+  };
+
+  const isMoreThanBalance = Number(value.formatted) > userCoinBalance;
   const isLessThanMinAmount =
-    minAmount !== undefined && Number(value) > 0 && Number(value) < minAmount;
+    minAmount !== undefined && Number(value.formatted) > 0 && Number(value.formatted) < minAmount;
   const { complexApy } = useDashboardConstants();
 
-  console.log('tokenBalance', tokenBalance);
+  const steps: Step[] = useMemo(() => {
+    const approveStatus =
+      Number(depositValue) > 0 && isApproved
+        ? 'completed'
+        : isApproveLoading
+          ? 'active'
+          : 'pending';
+
+    const depositStatus = isDepositLoading ? 'active' : 'pending';
+
+    return [
+      { label: 'Approve', status: approveStatus },
+      { label: 'Deposit', status: depositStatus },
+    ];
+  }, [isApproved, depositValue, isApproveLoading, isDepositLoading]);
+
   return (
     <FlexBlock direction="column" gap={16} block>
       {/* Header */}
@@ -163,7 +228,7 @@ export const DepositModal = () => {
         <FlexBlock gap={8} alignItems="center">
           <UsdcIcon size={33} />
           <Heading level={6} weight="regular">
-            Deposit {choosenVault.coinName}
+            Deposit {chosenVault.coinName}
           </Heading>
         </FlexBlock>
         <CloseIcon onClick={close} />
@@ -214,16 +279,16 @@ export const DepositModal = () => {
         <Caption>Amount to Deposit</Caption>
         <InputComponent
           id="id"
-          value={value}
+          value={value.formatted}
           type="number"
           size="md"
           postfix={
             <Body level={2} weight="regular" className={styles.secondary}>
-              {choosenVault.coinName}
+              {chosenVault.coinName}
             </Body>
           }
           fullWidth
-          onChange={setValue}
+          onChange={handleValueChange}
           disabled={isDepositLoading}
         />
       </FlexBlock>
@@ -234,9 +299,9 @@ export const DepositModal = () => {
           <Caption weight="regular" className={styles.secondary}>
             Balance:
           </Caption>
-          <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
+          <div style={{ cursor: 'pointer' }} onClick={setMaxValue}>
             <Body level={2} weight="regular">
-              {userCoinBalance} {choosenVault.coinName}
+              {userCoinBalance} {chosenVault.coinName}
             </Body>
           </div>
         </FlexBlock>
@@ -253,7 +318,7 @@ export const DepositModal = () => {
           <FlexBlock gap={2} alignItems="center">
             <PointCoinIcon size={16} />
             <Body level={2} weight="regular">
-              {formatNumberWithCommas(Number(value) * 365)}
+              {formatNumberWithCommas(Number(value.formatted) * 365)}
             </Body>
           </FlexBlock>
         </FlexBlock>
@@ -261,7 +326,7 @@ export const DepositModal = () => {
           <Caption weight="regular" className={styles.secondary}>
             Performance fee
           </Caption>
-          <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
+          <div>
             <Body level={2} weight="regular">
               ≈0.054%/Day
             </Body>
@@ -279,7 +344,7 @@ export const DepositModal = () => {
               Monthly profit
             </Caption>
             <Body level={2} weight="regular">
-              ${round((apy * (Number(value) / 100)) / 12)}
+              ${round((apy * (Number(value.formatted) / 100)) / 12, 2)}
             </Body>
           </FlexBlock>
           <FlexBlock alignItems="center" justifyContent="space-between" block>
@@ -287,7 +352,7 @@ export const DepositModal = () => {
               Yearly profit
             </Caption>
             <Body level={2} weight="regular">
-              ${round(apy * (Number(value) / 100))}
+              ${round(apy * (Number(value.formatted) / 100), 2)}
             </Body>
           </FlexBlock>
         </FlexBlock>
@@ -304,10 +369,7 @@ export const DepositModal = () => {
             prefix={<SwapIcon />}
             onClick={() => {
               open(
-                <SwapWidget
-                  coinAddress={choosenVault.coinAddress}
-                  chainID={choosenVault.chainID}
-                />,
+                <SwapWidget coinAddress={chosenVault.coinAddress} chainID={chosenVault.chainID} />,
                 { withLayout: false }
               );
             }}
@@ -322,7 +384,7 @@ export const DepositModal = () => {
         size="lg"
         onClick={() => {
           if (isNeedSwitch) {
-            switchNetwork(choosenVault.chainID);
+            switchNetwork(chosenVault.chainID);
           } else if (isApproved) {
             deposit();
           } else {
@@ -330,16 +392,17 @@ export const DepositModal = () => {
           }
         }}
         fullWidth
-        disabled={isDepositLoading || !depositValue || isMoreThenBalance || isLessThanMinAmount}
+        disabled={isDepositLoading || !depositValue || isMoreThanBalance || isLessThanMinAmount}
       >
         {isLessThanMinAmount
-          ? `Minimum amount is ${minAmount} ${choosenVault.coinName}`
+          ? `Minimum amount is ${minAmount} ${chosenVault.coinName}`
           : isNeedSwitch
             ? 'Switch network'
             : isApproved
-              ? `Deposit ${value} ${choosenVault.coinName}`
+              ? `Deposit ${value.formatted || 0} ${chosenVault.coinName}`
               : 'Approve'}
       </Button>
+      <StepsProgress steps={steps} />
 
       {/* First deposit block */}
       {/* 

@@ -23,7 +23,7 @@ export const Controls = () => {
 
   useAccountEffect({
     onConnect(data) {
-      if (!Boolean(isConnectedLS)) {
+      if (!isConnectedLS) {
         connectBonus(data.address).then(_ => {
           setConnectedLS('true');
         });

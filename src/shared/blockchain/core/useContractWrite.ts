@@ -12,6 +12,9 @@ export const useContractWrite = (props: TContractWriteProps) => {
     chainId: props.chainID,
     functionName: props.functionName,
     args: props.args,
+    query: {
+      enabled: props.enabled !== false,
+    },
   });
 
   const { writeContract, isSuccess, data, isPending, isError, error } = useWriteContract();
