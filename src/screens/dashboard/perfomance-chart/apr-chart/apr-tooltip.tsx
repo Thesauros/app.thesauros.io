@@ -1,9 +1,7 @@
 import styles from './apr-chart.module.scss';
 import { CustomTooltipProps } from '../types';
 import { FlexBlock } from '@/shared/ui/flex-block';
-import { ArrowTopRightIcon } from '@/shared/ui/icons/arrow-top-right';
 import { round } from '@/shared/number/round';
-import classNames from 'classnames';
 import { Caption } from '@/shared/ui/new-typography/caption';
 import { Body } from '@/shared/ui/new-typography/body';
 
@@ -13,22 +11,19 @@ export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
     const aprValue = payload.find(item => item.dataKey === 'dateValue')?.value ?? 0;
     const aprDate = payload.find(item => item.dataKey === 'dateValue')?.payload.date ?? '';
 
-    const diffPercent = round((aprValue / aprMarketValue) * 100 - 100);
-
     return (
       <div className={styles.revenueTooltip}>
-        <FlexBlock alignItems="center" gap={8}>
-          <Body level={2} weight="bold">
+        <FlexBlock alignItems="center" justifyContent="space-between" gap={8}>
+          <Caption weight="regular">Av. daily APY</Caption>
+          <Body level={1} weight="medium">
             {round(aprValue)}%
           </Body>
-          {diffPercent !== Infinity && (
-            <div
-              className={classNames(styles.tooltipChange, diffPercent < 0 ? styles.negative : '')}
-            >
-              <Caption weight="medium">{diffPercent}%</Caption>
-              {diffPercent > 0.1 && <ArrowTopRightIcon />}
-            </div>
-          )}
+        </FlexBlock>
+        <FlexBlock alignItems="center" justifyContent="space-between" gap={8}>
+          <Caption weight="regular">Market av. APY</Caption>
+          <Body level={1} weight="medium">
+            {round(aprMarketValue)}%
+          </Body>
         </FlexBlock>
         <Caption weight="regular" className={styles.tooltipDate}>
           {aprDate}
