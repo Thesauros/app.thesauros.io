@@ -8,7 +8,7 @@ type ButtonVariant = 'primary' | 'outline' | 'text';
 interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'prefix'> {
   children: ReactNode;
   variant?: ButtonVariant;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   prefix?: ReactNode;
   postfix?: ReactNode;

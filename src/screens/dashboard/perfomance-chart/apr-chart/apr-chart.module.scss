@@ -15,8 +15,9 @@
 .revenueTooltip {
   background: #fff;
   border-radius: 8px;
-  padding: 12px 16px;
-  box-shadow: 0px 1px 2px 0px rgba(10, 13, 20, 0.03);
+  padding: 12px;
+  backdrop-filter: blur(100px);
+  box-shadow: 0px 1px 2px 0px #0a0d1408;
 }
 
 .tooltipDate {

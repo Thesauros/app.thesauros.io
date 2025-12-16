@@ -9,7 +9,7 @@
   gap: 16px;
   width: 100%;
 
-  @include breakpoints.tablet {
+  @include breakpoints.laptop {
     flex-direction: column;
 
     & > div {

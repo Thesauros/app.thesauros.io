@@ -32,17 +32,17 @@ const socialLinks = [
   {
     id: 'telegram',
     link: 'https://t.me/thesauros_io',
-    icon: <TelegramIcon />,
+    icon: <TelegramIcon size={24} />,
   },
   {
     id: 'twitter',
     link: 'https://x.com/thesauros_io',
-    icon: <TwitterIcon />,
+    icon: <TwitterIcon size={24} />,
   },
   {
     id: 'discord',
     link: 'https://discord.gg/TQHez89EAE',
-    icon: <DiscordIcon />,
+    icon: <DiscordIcon size={24} />,
   },
 ];
 
