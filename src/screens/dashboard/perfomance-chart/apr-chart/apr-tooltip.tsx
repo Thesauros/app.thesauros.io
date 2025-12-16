@@ -9,6 +9,7 @@ export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     const aprMarketValue = payload.find(item => item.dataKey === 'marketValue')?.value ?? 0;
     const aprValue = payload.find(item => item.dataKey === 'dateValue')?.value ?? 0;
+    const profitValue = payload.find(item => item.dataKey === 'profitValue')?.value ?? 0;
     const aprDate = payload.find(item => item.dataKey === 'dateValue')?.payload.date ?? '';
 
     return (
@@ -23,6 +24,12 @@ export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
           <Caption weight="regular">Market av. APY</Caption>
           <Body level={1} weight="medium">
             {round(aprMarketValue)}%
+          </Body>
+        </FlexBlock>
+        <FlexBlock alignItems="center" justifyContent="space-between" gap={8}>
+          <Caption weight="regular">Daily Earnings</Caption>
+          <Body level={1} weight="medium">
+            {round(profitValue)}$
           </Body>
         </FlexBlock>
         <Caption weight="regular" className={styles.tooltipDate}>

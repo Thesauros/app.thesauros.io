@@ -15,12 +15,14 @@ type TProps = {
   error?: boolean;
   className?: string;
   autoComplete?: 'off' | 'on';
+  autoFocus?: boolean;
   icon?: ReactNode;
   id: string;
   variant?: 'primary' | 'secondary';
   minValue?: number;
   maxValue?: number;
   numberPrefix?: string;
+  formatWithCommas?: boolean;
   prefix?: ReactNode;
   postfix?: ReactNode;
   textAlign?: 'left' | 'center' | 'right';
@@ -65,12 +67,14 @@ export const InputComponent = ({
   error = false,
   className,
   autoComplete = 'off',
+  autoFocus = false,
   icon,
   id,
   variant = 'primary',
   minValue,
   maxValue,
   numberPrefix,
+  formatWithCommas = false,
   prefix,
   postfix,
   textAlign = 'left',
@@ -80,13 +84,16 @@ export const InputComponent = ({
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const displayValue = useMemo(() => {
-    if (type === 'number' && numberPrefix) {
+    const shouldFormat = type === 'number' && (numberPrefix || formatWithCommas);
+
+    if (shouldFormat) {
       if (value === '') {
         return String(value);
       }
 
       const valueStr = String(value);
       const hasTrailingDot = valueStr.endsWith('.');
+      const prefixStr = numberPrefix || '';
 
       // Если значение заканчивается на точку, сохраняем исходное значение с точкой
       if (hasTrailingDot) {
@@ -96,9 +103,9 @@ export const InputComponent = ({
         if (!isNaN(numValue)) {
           // Форматируем целую часть с запятыми и добавляем точку
           const formatted = formatNumberWithCommas(numValue);
-          return numberPrefix + formatted + '.';
+          return prefixStr + formatted + '.';
         }
-        return numberPrefix + valueStr;
+        return prefixStr + valueStr;
       }
 
       const numValue = typeof value === 'string' ? parseFloat(value.replace(/,/g, '')) : value;
@@ -113,14 +120,14 @@ export const InputComponent = ({
         const parts = valueStrCleaned.split('.');
         const integerPart = formatNumberWithCommas(parseFloat(parts[0]) || 0);
         const decimalPart = parts[1] || '';
-        return numberPrefix + integerPart + '.' + decimalPart;
+        return prefixStr + integerPart + '.' + decimalPart;
       }
 
       const formatted = formatNumberWithCommas(numValue);
-      return numberPrefix + formatted;
+      return prefixStr + formatted;
     }
     return String(value);
-  }, [value, type, numberPrefix]);
+  }, [value, type, numberPrefix, formatWithCommas]);
 
   const handleClick = () => {
     if (inputRef && inputRef.current) {
@@ -139,9 +146,9 @@ export const InputComponent = ({
     if (onChange && inputRef.current) {
       let newValue = inputRef.current.value;
 
-      // Если тип number, парсим значение (с префиксом или без)
+      // Если тип number, парсим значение (с префиксом, форматированием или без)
       if (type === 'number') {
-        if (numberPrefix) {
+        if (numberPrefix || formatWithCommas) {
           newValue = parseFormattedNumber(newValue, numberPrefix);
         } else {
           // Парсим для случая без префикса - разрешаем только цифры и точку (без минуса)
@@ -237,6 +244,7 @@ export const InputComponent = ({
           type={type === 'number' ? 'text' : type}
           inputMode={type === 'number' ? 'decimal' : undefined}
           autoComplete={autoComplete}
+          autoFocus={autoFocus}
           min={minValue !== undefined ? minValue : undefined}
           max={maxValue !== undefined ? maxValue : undefined}
         />

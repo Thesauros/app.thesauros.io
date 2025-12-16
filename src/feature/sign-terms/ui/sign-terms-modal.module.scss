@@ -12,28 +12,20 @@
   appearance: none;
   width: 16px;
   height: 16px;
+  min-width: 16px;
+  min-height: 16px;
   border: 1px solid #64788c;
   border-radius: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 
   &:checked {
-    background-color: #196aff;
-    border-color: #196aff;
-
-    &::after {
-      content: '';
-      position: absolute;
-      left: 5px;
-      top: 2px;
-      width: 3px;
-      height: 6px;
-      border: solid white;
-      border-width: 0 3px 3px 0;
-      border-radius: 2px;
-      transform: rotate(45deg);
-    }
+    border: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='16' height='16' rx='5' fill='%23196AFF'/%3E%3Cg clip-path='url(%23clip0_947_11319)'%3E%3Cpath d='M11.75 4.73438L6.61842 10.7344L4.25 8.59152' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_947_11319'%3E%3Crect width='12' height='12' fill='white' transform='translate(2 2)'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E");
   }
 }
 

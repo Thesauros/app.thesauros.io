@@ -42,7 +42,8 @@ export const DashboardScreen = () => {
   const { open } = useModal();
   const { checkSignatureAndExecute } = useSignTermsWithCallback();
 
-  const isMobile = useCheckResolution(576);
+  const isMobile = useCheckResolution(768);
+  const isLaptop = useCheckResolution(1024);
   const isDeposited = totalPosition > 0;
   const { isInWhiteList } = useWhiteList(address);
 
@@ -91,7 +92,7 @@ export const DashboardScreen = () => {
             justifyContent="space-between"
             alignItems="flex-start"
             gap={24}
-            direction={isMobile ? 'column' : 'row'}
+            direction={isLaptop ? 'column' : 'row'}
           >
             <FlexBlock direction="column" gap={16} className={styles.vaultInfoCard}>
               <FlexBlock justifyContent="space-between" alignItems="center" block>
@@ -165,7 +166,6 @@ export const DashboardScreen = () => {
                 </FlexBlock>
               </FlexBlock>
             </FlexBlock>
-
             {isMobile && isConnected && (
               <FlexBlock direction="column" gap={8} block>
                 <Card variant="secondary" className={styles.mobilePointsCard}>
@@ -271,7 +271,7 @@ export const DashboardScreen = () => {
                     }
                   >
                     <Card variant="secondary" className={styles.apyCard}>
-                      <Subtitle level={2} weight="regular">
+                      <Subtitle level={2} weight="regular" className={styles.secondaryHighlight}>
                         APY
                       </Subtitle>
                       <FlexBlock alignItems="center" gap={12}>
@@ -299,7 +299,7 @@ export const DashboardScreen = () => {
                 block={isMobile}
               >
                 {isMobile && <ConvertBadge />}
-                <Button size="lg" onClick={onDepositClick} fullWidth={isMobile}>
+                <Button size="xl" onClick={onDepositClick} fullWidth={isMobile}>
                   Deposit
                 </Button>
                 <DepositBadge />
@@ -369,7 +369,7 @@ export const DashboardScreen = () => {
                 <FlexBlock justifyContent="space-between" gap={16}>
                   <FlexBlock direction="column" gap={4}>
                     <Subtitle level={2}>Protocols</Subtitle>
-                    <Caption className={styles.grayText}>
+                    <Caption className={styles.grayText} weight="regular">
                       Funds are diversified across leading DeFi protocols (may vary)
                     </Caption>
                   </FlexBlock>
@@ -380,7 +380,7 @@ export const DashboardScreen = () => {
                 <FlexBlock justifyContent="space-between" gap={16}>
                   <FlexBlock direction="column" gap={4}>
                     <Subtitle level={2}>Audited by Hexens</Subtitle>
-                    <Caption className={styles.grayText}>
+                    <Caption className={styles.grayText} weight="regular">
                       Smart contracts reviewed and verified for safety and reliability
                     </Caption>
                   </FlexBlock>

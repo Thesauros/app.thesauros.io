@@ -27,7 +27,6 @@ import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 import { useMinAmount, useVaultsPosition } from '@/shared/blockchain';
-import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTaskStatuses } from '@/shared/api/pointProgram/useTaskStatuses';
 import { useCurrentSeason } from '@/shared/api/pointProgram/useCurrentSeasonId';
@@ -235,41 +234,30 @@ export const DepositModal = () => {
       </FlexBlock>
 
       {/* APY area */}
-      <FlexBlock gap={8} block>
-        <FlexBlock
-          alignItems="center"
-          justifyContent="space-between"
-          block
-          className={styles.apyBlock}
-        >
+      <FlexBlock gap={4} direction="column" block>
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
           <Caption weight="regular" className={styles.secondary}>
             Net APY
           </Caption>
-          <Subtitle level={2} weight="bold" className={styles.highlight}>
+          <Body level={2} weight="regular">
             {complexApy.netApy}%
-          </Subtitle>
+          </Body>
         </FlexBlock>
-        <FlexBlock
-          alignItems="center"
-          justifyContent="space-between"
-          block
-          className={styles.apyBlock}
-        >
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
           <Caption weight="regular" className={styles.secondary}>
             Reward APY
           </Caption>
-          <Subtitle level={2}>{complexApy.rewardApy}%</Subtitle>
+          <Body level={2} weight="regular">
+            {complexApy.rewardApy}%
+          </Body>
         </FlexBlock>
-        <FlexBlock
-          alignItems="center"
-          justifyContent="space-between"
-          block
-          className={styles.apyBlock}
-        >
+        <FlexBlock alignItems="center" justifyContent="space-between" block>
           <Caption weight="regular" className={styles.secondary}>
             Base APY
           </Caption>
-          <Subtitle level={2}>{complexApy.baseApy}%</Subtitle>
+          <Body level={2} weight="regular">
+            {complexApy.baseApy}%
+          </Body>
         </FlexBlock>
       </FlexBlock>
 
@@ -282,6 +270,8 @@ export const DepositModal = () => {
           value={value.formatted}
           type="number"
           size="md"
+          maxValue={1000000000}
+          formatWithCommas
           postfix={
             <Body level={2} weight="regular" className={styles.secondary}>
               {chosenVault.coinName}
@@ -290,6 +280,7 @@ export const DepositModal = () => {
           fullWidth
           onChange={handleValueChange}
           disabled={isDepositLoading}
+          autoFocus
         />
       </FlexBlock>
 
