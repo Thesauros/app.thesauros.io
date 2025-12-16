@@ -4,6 +4,7 @@ import { FlexBlock } from '@/shared/ui/flex-block';
 import { round } from '@/shared/number/round';
 import { Caption } from '@/shared/ui/new-typography/caption';
 import { Body } from '@/shared/ui/new-typography/body';
+import formatNumberSmart from '@/shared/number/formatNumberSmart';
 
 export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
@@ -29,7 +30,7 @@ export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
         <FlexBlock alignItems="center" justifyContent="space-between" gap={8}>
           <Caption weight="regular">Daily Earnings</Caption>
           <Body level={1} weight="medium">
-            {round(profitValue)}$
+            {formatNumberSmart(profitValue)}$
           </Body>
         </FlexBlock>
         <Caption weight="regular" className={styles.tooltipDate}>

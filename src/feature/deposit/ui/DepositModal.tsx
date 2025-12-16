@@ -42,7 +42,7 @@ export const DepositModal = () => {
   const [value, setValue] = useState<DepositValue>({ formatted: '', raw: 0 });
   const { address, chainId } = useAccount();
 
-  const chosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
+  const chosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[1];
 
   const { data: minAmount } = useMinAmount({
     vaultAddress: chosenVault.vaultAddress,
@@ -194,12 +194,13 @@ export const DepositModal = () => {
 
   const setMaxValue = () => {
     setValue({
-      formatted: String(userCoinBalanceRaw),
+      formatted: String(userCoinBalance),
       raw: userCoinBalanceRaw,
     });
   };
 
   const isMoreThanBalance = Number(value.formatted) > userCoinBalance;
+
   const isLessThanMinAmount =
     minAmount !== undefined && Number(value.formatted) > 0 && Number(value.formatted) < minAmount;
   const { complexApy } = useDashboardConstants();

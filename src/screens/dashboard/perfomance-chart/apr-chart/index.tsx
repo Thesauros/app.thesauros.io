@@ -32,6 +32,7 @@ export const APRChart = ({
 }) => {
   const { data, average, isLoading } = useAPRData({
     coinName: currentVault.coinName as 'USDC' | 'USDT',
+    chainID: currentVault.chainID,
     period: period.value,
   });
 
@@ -42,6 +43,7 @@ export const APRChart = ({
   } = useProfitData({
     coinName: currentVault.coinName as 'USDC' | 'USDT',
     period: period.value,
+    chainID: currentVault.chainID,
   });
 
   const isWeekPeriod = period.value === 7;

@@ -20,7 +20,7 @@ export const PerfomanceChart = () => {
   const [timePeriod, setTimePeriod] = useState(periods[0]);
   const { isConnected, chainId } = useAccount();
   const isMobile = useCheckResolution(576);
-  const chosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
+  const chosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[1];
 
   return (
     <Card block>
