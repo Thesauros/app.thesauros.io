@@ -85,7 +85,7 @@ export const WithdrawModal = () => {
     functionName: 'getBalanceOfAsset',
     args: [address],
     chainID: choosenVault.chainID,
-    watch: true,
+    staleTime: 1000,
     selectData: (data: unknown): number => {
       return round(Number(data) / 10 ** choosenVault.decimals, 2);
     },

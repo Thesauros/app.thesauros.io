@@ -139,7 +139,7 @@ export const DepositModal = () => {
     functionName: 'balanceOf',
     args: [address],
     chainID: chosenVault.chainID,
-    watch: true,
+    staleTime: 1000,
     selectData: (data: unknown): { rawValue: number; value: number } => {
       return {
         rawValue: Number(data),
@@ -153,7 +153,7 @@ export const DepositModal = () => {
     functionName: 'getBalanceOfAsset',
     args: [address],
     chainID: chosenVault.chainID,
-    watch: true,
+    staleTime: 1000,
     selectData: (data: unknown): number => {
       return round(Number(data) / 10 ** chosenVault.decimals, 2);
     },

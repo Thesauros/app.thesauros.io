@@ -34,6 +34,7 @@ export const useContractRead = ({
     watch: watch,
     chainId: chainID,
     query: {
+      enabled: watch,
       refetchInterval: 1000,
     },
   });
