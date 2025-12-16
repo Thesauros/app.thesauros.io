@@ -4,7 +4,7 @@ import { PageContainer } from './page-container';
 import styles from './layout.module.scss';
 import { Aside } from './aside';
 import { FlexBlock } from '../flex-block';
-import { useAutoSwitchToArbitrum } from '@/shared/blockchain/useAutoSwitchToArbitrum';
+import { useAutoSwitchToNetwork } from '@/shared/blockchain/useAutoSwitchToNetwork';
 import { useRequireSignature } from '@/feature/sign-terms';
 
 type TProps = {
@@ -12,7 +12,7 @@ type TProps = {
 };
 
 export const Layout = ({ children }: TProps) => {
-  useAutoSwitchToArbitrum();
+  useAutoSwitchToNetwork({ targetChainID: 8453 });
   useRequireSignature();
 
   return (

@@ -27,13 +27,13 @@ export const WithdrawModal = () => {
   const [value, setValue] = useState('');
   const { address, chainId } = useAccount();
 
-  const choosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[0];
+  const choosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[1];
 
   const withdrawValue = Number(value) * 10 ** choosenVault.decimals;
 
   const apy = useOnchainCurrentAPY({
-    vaultAddress: vaults[0].vaultAddress,
-    chainID: vaults[0].chainID,
+    vaultAddress: choosenVault.vaultAddress,
+    chainID: choosenVault.chainID,
   });
 
   const queryClient = useQueryClient();
@@ -85,7 +85,7 @@ export const WithdrawModal = () => {
     functionName: 'getBalanceOfAsset',
     args: [address],
     chainID: choosenVault.chainID,
-    watch: true,
+    staleTime: 1000,
     selectData: (data: unknown): number => {
       return round(Number(data) / 10 ** choosenVault.decimals, 2);
     },

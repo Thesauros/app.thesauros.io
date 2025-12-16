@@ -14,8 +14,8 @@ export const useDashboardConstants = () => {
   const totalEarned = useMemo(() => (data ? round(data[0].value, 6) : 0), [data]);
 
   const apy = useOnchainCurrentAPY({
-    vaultAddress: vaults[0].vaultAddress,
-    chainID: vaults[0].chainID,
+    vaultAddress: vaults[1].vaultAddress,
+    chainID: vaults[1].chainID,
   });
 
   const complexApy = {

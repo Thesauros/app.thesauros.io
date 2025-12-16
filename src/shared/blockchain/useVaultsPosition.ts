@@ -19,12 +19,12 @@ export const useVaultsPosition = (): TVaultPositionResult => {
     functionName: 'getBalanceOfAsset',
     args: [address],
     chainID: vault.chainID,
-    watch: true,
+    staleTime: 1000,
   }));
 
   const { data, isLoading, refetch } = useContractsRead<bigint>({
     contracts,
-    watch: true,
+    staleTime: 1000,
   });
 
   const totalPosition = useMemo(() => {

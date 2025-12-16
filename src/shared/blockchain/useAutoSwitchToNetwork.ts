@@ -2,16 +2,16 @@ import { useEffect } from 'react';
 import { useAccount } from './useAccount';
 import { useSwitchNetwork } from './core/useSwtichNetwork';
 
-export const useAutoSwitchToArbitrum = () => {
+export const useAutoSwitchToNetwork = ({ targetChainID }: { targetChainID: number }) => {
   const { isConnected } = useAccount();
   const { switchNetwork } = useSwitchNetwork({
-    targetChainID: 42161,
+    targetChainID,
   });
 
   useEffect(() => {
     if (isConnected) {
       try {
-        switchNetwork(42161);
+        switchNetwork(targetChainID);
       } catch (error) {
         if (error) {
           console.warn('Can`t switch the network:');

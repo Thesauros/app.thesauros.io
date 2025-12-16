@@ -29,8 +29,14 @@ export const useContractRead = ({
   isEnabled,
 }: TContractReadProps) => {
   const queryClient = useQueryClient();
+
   const { data: blockNumber } = useBlockNumber({
     watch: watch,
+    chainId: chainID,
+    query: {
+      enabled: watch,
+      refetchInterval: 1000,
+    },
   });
 
   const staleTimeResult = watch ? Infinity : (staleTime ?? 0);
