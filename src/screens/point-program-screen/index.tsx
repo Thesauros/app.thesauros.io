@@ -78,7 +78,7 @@ export const PointProgramScreen = () => {
             <Heading level={5} weight="bold">
               Season {seasonInfo?.seasonNumber}
             </Heading>
-            {isConnected && userInfo?.data.status && <Badge label={userInfo?.data.status} />}
+            {isConnected && userInfo?.data?.status && <Badge label={userInfo?.data?.status} />}
           </FlexBlock>
           <FlexBlock direction="column" gap={16} block>
             <Body level={2} weight="regular" className={styles.secondaryText}>
@@ -114,7 +114,7 @@ export const PointProgramScreen = () => {
                     alignItems="flex-start"
                     className={styles.taskContainer}
                   >
-                    {userTaskStatuses?.tasks[element.id]?.status === 'done' ? (
+                    {userTaskStatuses?.tasks?.[element.id]?.status === 'done' ? (
                       <SuccessIcon />
                     ) : (
                       <PendingIcon />
@@ -133,7 +133,7 @@ export const PointProgramScreen = () => {
                   </FlexBlock>
                   <FlexBlock gap={20} alignItems="center">
                     <Subtitle level={1} weight="bold" className={styles.value}>
-                      +{userTaskStatuses?.tasks[element.id]?.value ?? element.points} PTS
+                      +{userTaskStatuses?.tasks?.[element.id]?.value ?? element.points} PTS
                     </Subtitle>
                     {element.id === 'invite_friends' && (
                       <Button size="sm" onClick={() => copy(userInfo?.data.referralLink ?? '')}>

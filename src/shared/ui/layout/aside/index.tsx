@@ -10,7 +10,7 @@ import { PointProgramBanner } from '../../point-program-banner';
 
 import { TelegramIcon } from '../../icons/telegram-icon';
 import { TwitterIcon } from '../../icons/twitter-icon';
-import { DiscordIcon } from '../../icons/discord-icon';
+// import { DiscordIcon } from '../../icons/discord-icon';
 import { Overline } from '../../new-typography/overline';
 
 const docsLinks = [
@@ -39,11 +39,11 @@ const socialLinks = [
     link: 'https://x.com/thesauros_io',
     icon: <TwitterIcon size={24} />,
   },
-  {
-    id: 'discord',
-    link: 'https://discord.gg/TQHez89EAE',
-    icon: <DiscordIcon size={24} />,
-  },
+  // {
+  //   id: 'discord',
+  //   link: 'https://discord.gg/TQHez89EAE',
+  //   icon: <DiscordIcon size={24} />,
+  // },
 ];
 
 export const Aside = () => {
