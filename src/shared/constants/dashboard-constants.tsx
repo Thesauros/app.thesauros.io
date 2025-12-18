@@ -5,7 +5,7 @@ import { useHighestApr, useUserEarnedOverallicks } from '../api/dashboard';
 import { useOnchainCurrentAPY } from '../blockchain/useOnchainCurrentAPY';
 
 export const useDashboardConstants = () => {
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
   const { data } = useUserEarnedOverallicks({ interval: 1, intervals: 7, address: address });
   const { data: vaultsTVL } = useVaultsTVL();
   const { data: totalPosition } = useVaultsPosition();
@@ -13,9 +13,11 @@ export const useDashboardConstants = () => {
 
   const totalEarned = useMemo(() => (data ? round(data[0].value, 6) : 0), [data]);
 
+  const chosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[1];
+
   const apy = useOnchainCurrentAPY({
-    vaultAddress: vaults[1].vaultAddress,
-    chainID: vaults[1].chainID,
+    vaultAddress: chosenVault.vaultAddress,
+    chainID: chosenVault.chainID,
   });
 
   const complexApy = {
