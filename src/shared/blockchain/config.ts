@@ -1,11 +1,11 @@
 import { TVault } from './core/types';
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { mainnet, polygon, optimism, arbitrum, base } from 'wagmi/chains';
+import { arbitrum, base } from 'wagmi/chains';
 
 export const wagmiConfig = getDefaultConfig({
   appName: 'thesauros',
   projectId: 'c251732975350cbb92d74a64f88273c0',
-  chains: [arbitrum, mainnet, polygon, optimism, base],
+  chains: [base, arbitrum],
   ssr: true,
 });
 
