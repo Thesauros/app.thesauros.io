@@ -17,11 +17,12 @@ export const useVaultsTVL = (): TVaultTVLResult => {
     functionName: 'totalAssets',
     args: [],
     chainID: vault.chainID,
-    watch: true,
+    staleTime: 1000,
   }));
 
   const { data, isLoading, error, refetch } = useContractsRead<bigint>({
     contracts,
+    staleTime: 1000,
   });
 
   const totalTVL = useMemo(() => {

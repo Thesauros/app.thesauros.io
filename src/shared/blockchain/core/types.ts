@@ -2,7 +2,7 @@ export type TAddress = `0x${string}`;
 
 export type TArg = bigint | boolean | number | string | TAddress | undefined;
 
-export type TChainID = 1 | 10 | 137 | 42161 | 8453;
+export type TChainID = 42161 | 8453;
 
 export type TContractWriteProps = {
   address: TAddress;
