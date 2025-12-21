@@ -1,3 +1,7 @@
+.wrapper {
+  position: relative;
+}
+
 .buttonContainer {
   cursor: pointer;
 
@@ -12,5 +16,43 @@
 
   &:hover {
     background-color: #fff;
+  }
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 160px;
+  background: #ffffff85;
+  border: 1px solid white;
+  border-radius: 28px;
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 4px 16px -8px rgba(0, 0, 0, 0.08),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.02);
+  padding: 8px;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.chainOption {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #131313;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.6);
+  }
+
+  &.active {
+    background-color: rgba(255, 255, 255, 0.8);
   }
 }
