@@ -1,11 +1,16 @@
 import { TVault } from './core/types';
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { arbitrum, base } from 'wagmi/chains';
+import * as wagmiChains from 'wagmi/chains';
+import { type Chain } from 'viem';
+
+const allChains = Object.values(wagmiChains).filter(
+  chain => typeof chain === 'object' && chain !== null && 'id' in chain
+) as unknown as [Chain, ...Chain[]];
 
 export const wagmiConfig = getDefaultConfig({
   appName: 'thesauros',
   projectId: 'c251732975350cbb92d74a64f88273c0',
-  chains: [base, arbitrum],
+  chains: allChains,
   ssr: true,
 });
 
