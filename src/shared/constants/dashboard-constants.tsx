@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 import { useVaultsPosition, useVaultsTVL, useAccount, vaults } from '../blockchain';
 import { round } from '../number/round';
-import { useHighestApr, useUserEarnedOverallicks } from '../api/dashboard';
+import { useHighestApr, useUserEarnedOverallTicks } from '../api/dashboard';
 import { useOnchainCurrentAPY } from '../blockchain/useOnchainCurrentAPY';
 
 export const useDashboardConstants = () => {
   const { address, chainId } = useAccount();
-  const { data } = useUserEarnedOverallicks({ interval: 1, intervals: 7, address: address });
+  const { data } = useUserEarnedOverallTicks({ interval: 1, intervals: 7, address: address });
   const { data: vaultsTVL } = useVaultsTVL();
   const { data: totalPosition } = useVaultsPosition();
   const { data: performerOfTheWeek } = useHighestApr(7);

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useAccount } from './useAccount';
-import { useSwitchNetwork } from './core/useSwtichNetwork';
+import { useSwitchNetwork } from './core/useSwitchNetwork';
 
 const AUTO_SWITCH_DONE_KEY = 'autoSwitchNetworkDone';
 

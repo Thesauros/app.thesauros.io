@@ -4,7 +4,7 @@ import { useModal } from '@/shared/ui/modal';
 import { SignTermsModal } from '../ui/sign-terms-modal';
 import { useAccount } from '@/shared/blockchain';
 import { useWhiteList } from '@/shared/api/dashboard/useWhiteList';
-import { EarlyBirdModal } from '@/feature/early-bird';
+import { EarlyBirdModal } from '@/features/early-bird';
 
 export const useRequireSignature = () => {
   const { isSigned, isLoading, signatureData } = useSignTerms();

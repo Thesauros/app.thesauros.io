@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './perfomance-chart.module.scss';
+import styles from './performance-chart.module.scss';
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { APRChart } from './apr-chart';
 import { vaults } from '@/shared/blockchain/config';
@@ -16,7 +16,7 @@ const periods = [
   { title: '30D', value: 30 },
 ];
 
-export const PerfomanceChart = () => {
+export const PerformanceChart = () => {
   const [timePeriod, setTimePeriod] = useState(periods[0]);
   const { isConnected, chainId } = useAccount();
   const isMobile = useCheckResolution(576);
