@@ -5,7 +5,7 @@ export const useModal = () => {
   const context = useContext(ModalContext);
 
   if (!context) {
-    throw new Error('Theme context is required!');
+    throw new Error('Modal context is required!');
   }
   return context;
 };

@@ -1,4 +1,4 @@
-import { DepositModal } from '@/feature/deposit/ui/DepositModal';
+import { DepositModal } from '@/features/deposit/ui/DepositModal';
 import { TAddress } from '@/shared/blockchain';
 import { useModal } from '@/shared/ui/modal';
 import { LiFiWidget, useWidgetEvents, WidgetConfig, WidgetEvent } from '@lifi/widget';

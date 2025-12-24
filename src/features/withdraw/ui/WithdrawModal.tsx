@@ -1,4 +1,3 @@
-import { vaults } from '@/shared/blockchain/config';
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { CloseIcon } from '@/shared/ui/icons/close';
 import { useModal } from '@/shared/ui/modal';
@@ -7,7 +6,7 @@ import styles from './WithdrawModal.module.scss';
 import { InputComponent } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import { useAccount } from 'wagmi';
-import { useSwitchNetwork } from '@/shared/blockchain/core/useSwtichNetwork';
+import { useSwitchNetwork } from '@/shared/blockchain/core/useSwitchNetwork';
 import { round } from '@/shared/number/round';
 import { useContractRead } from '@/shared/blockchain/core/useContractRead';
 import { useWithdraw } from '../model/useWithdraw';
@@ -19,57 +18,51 @@ import { UsdcIcon } from '@/shared/ui/icons/usdc-icon';
 import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
-import { useVaultsPosition } from '@/shared/blockchain';
-import { useQueryClient } from '@tanstack/react-query';
+import { useSelectedVault, useRefetchAfterTransaction } from '@/shared/blockchain';
 
 export const WithdrawModal = () => {
   const { close, open } = useModal();
   const [value, setValue] = useState('');
-  const { address, chainId } = useAccount();
+  const { address } = useAccount();
 
-  const choosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[1];
+  const selectedVault = useSelectedVault();
+  const { createRefetchWithCallbacks } = useRefetchAfterTransaction();
 
-  const withdrawValue = Number(value) * 10 ** choosenVault.decimals;
+  const withdrawValue = Number(value) * 10 ** selectedVault.decimals;
 
   const apy = useOnchainCurrentAPY({
-    vaultAddress: choosenVault.vaultAddress,
-    chainID: choosenVault.chainID,
+    vaultAddress: selectedVault.vaultAddress,
+    chainID: selectedVault.chainID,
   });
 
-  const queryClient = useQueryClient();
-  const { refetchData: refetchVaultsPosition } = useVaultsPosition();
+  const { data: coinBalance, refetch: refetchCoinBalance } = useContractRead({
+    address: selectedVault.vaultAddress,
+    functionName: 'getBalanceOfAsset',
+    args: [address],
+    chainID: selectedVault.chainID,
+    staleTime: 1000,
+    selectData: (data: unknown): number => {
+      return round(Number(data) / 10 ** selectedVault.decimals, 2);
+    },
+  });
+
+  const refetchAfterWithdraw = createRefetchWithCallbacks(refetchCoinBalance);
 
   const { withdraw, isWithdrawingLoading } = useWithdraw({
-    vaultAddress: choosenVault.vaultAddress,
-    chainID: choosenVault.chainID,
+    vaultAddress: selectedVault.vaultAddress,
+    chainID: selectedVault.chainID,
     args: [withdrawValue, address, address],
     onSuccess: data => {
       open(
         <TransactionStatusModal
           data={data}
           amount={Number(value)}
-          coinName={choosenVault.coinName}
+          coinName={selectedVault.coinName}
           status="success"
           type="withdraw"
         />
       );
-      // Wait for transaction to be confirmed before refetching
-      // Try multiple times to ensure data is updated
-      const refetchData = () => {
-        refetchVaultsPosition();
-        refetchCoinBalance();
-        // Invalidate all contract read queries to refresh dashboard
-        queryClient.invalidateQueries({ queryKey: ['readContract'] });
-      };
-
-      // Immediate refetch
-      refetchData();
-
-      // Refetch after 2 seconds (transaction might be confirmed)
-      setTimeout(refetchData, 2000);
-
-      // Refetch after 5 seconds (transaction should be confirmed by now)
-      setTimeout(refetchData, 5000);
+      refetchAfterWithdraw();
     },
     onError: error => {
       if (error) open(<TransactionStatusModal status="failed" type="withdraw" />);
@@ -77,26 +70,15 @@ export const WithdrawModal = () => {
   });
 
   const { isNeedSwitch, switchNetwork } = useSwitchNetwork({
-    targetChainID: choosenVault.chainID,
-  });
-
-  const { data: coinBalance, refetch: refetchCoinBalance } = useContractRead({
-    address: choosenVault.vaultAddress,
-    functionName: 'getBalanceOfAsset',
-    args: [address],
-    chainID: choosenVault.chainID,
-    staleTime: 1000,
-    selectData: (data: unknown): number => {
-      return round(Number(data) / 10 ** choosenVault.decimals, 2);
-    },
+    targetChainID: selectedVault.chainID,
   });
 
   const { data: feePercent } = useContractRead({
-    address: choosenVault.vaultAddress,
+    address: selectedVault.vaultAddress,
     functionName: 'withdrawFeePercent',
-    chainID: choosenVault.chainID,
+    chainID: selectedVault.chainID,
     selectData: (data: unknown): number => {
-      return round(Number(data) / 10 ** choosenVault.decimals, 2);
+      return round(Number(data) / 10 ** selectedVault.decimals, 2);
     },
   });
 
@@ -107,7 +89,15 @@ export const WithdrawModal = () => {
     return 0;
   }, [coinBalance]);
 
-  const isMoreThenBalance = Number(value) > userCoinBalance;
+  const isMoreThanBalance = Number(value) > userCoinBalance;
+
+  const handleButtonClick = () => {
+    if (isNeedSwitch) {
+      switchNetwork(selectedVault.chainID);
+    } else {
+      withdraw();
+    }
+  };
 
   return (
     <FlexBlock direction="column" gap={24} block>
@@ -131,7 +121,7 @@ export const WithdrawModal = () => {
           textAlign="left"
           postfix={
             <Body level={2} weight="regular" className={styles.secondary}>
-              {choosenVault.coinName}
+              {selectedVault.coinName}
             </Body>
           }
           fullWidth
@@ -144,11 +134,11 @@ export const WithdrawModal = () => {
       <FlexBlock direction="column" gap={8} block>
         <FlexBlock alignItems="center" justifyContent="space-between" block>
           <Caption weight="regular" className={styles.secondary}>
-            Avialable:
+            Available:
           </Caption>
           <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
             <Body level={2} weight="regular">
-              {round(userCoinBalance)} {choosenVault.coinName}
+              {round(userCoinBalance)} {selectedVault.coinName}
             </Body>
           </div>
         </FlexBlock>
@@ -178,7 +168,7 @@ export const WithdrawModal = () => {
               </Subtitle>
               <FlexBlock gap={8} alignItems="center">
                 <UsdcIcon size={16} />
-                <Caption weight="regular">{choosenVault.coinName}</Caption>
+                <Caption weight="regular">{selectedVault.coinName}</Caption>
               </FlexBlock>
             </FlexBlock>
 
@@ -215,14 +205,8 @@ export const WithdrawModal = () => {
           variant="outline"
           size="lg"
           fullWidth
-          onClick={() => {
-            if (isNeedSwitch) {
-              switchNetwork(choosenVault.chainID);
-            } else {
-              withdraw();
-            }
-          }}
-          disabled={isWithdrawingLoading || !withdrawValue || isMoreThenBalance}
+          onClick={handleButtonClick}
+          disabled={isWithdrawingLoading || !withdrawValue || isMoreThanBalance}
         >
           {isNeedSwitch ? 'Switch network' : 'Confirm'}
         </Button>

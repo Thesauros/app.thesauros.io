@@ -5,7 +5,7 @@ import styles from './layout.module.scss';
 import { Aside } from './aside';
 import { FlexBlock } from '../flex-block';
 import { useAutoSwitchToNetwork } from '@/shared/blockchain/useAutoSwitchToNetwork';
-import { useRequireSignature } from '@/feature/sign-terms';
+import { useRequireSignature } from '@/features/sign-terms';
 
 type TProps = {
   children: ReactNode;

@@ -23,7 +23,7 @@ const fetchEarnedOverall = async (params: TParams): Promise<TAPRInfoRaw> => {
   );
 };
 
-export const useUserEarnedOverallicks = (params: TParams) => {
+export const useUserEarnedOverallTicks = (params: TParams) => {
   const { data, isLoading } = useCustomQueryKey(
     [
       'GET_USER_EARNED_OVERALL_TICKS',
