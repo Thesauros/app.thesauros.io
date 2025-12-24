@@ -20,10 +20,6 @@ export const wagmiConfig = getDefaultConfig({
   ssr: true,
 });
 
-/**
- * Vault configuration - single source of truth for all vault data.
- * To add a new vault, simply add a new entry to this array.
- */
 export const vaults: TVault[] = [
   {
     chainID: 42161,
@@ -43,21 +39,12 @@ export const vaults: TVault[] = [
   },
 ] as const;
 
-/**
- * Helper to get vault by chain ID
- */
 export const getVaultByChainId = (chainId: number): TVault | undefined => {
   return vaults.find(vault => vault.chainID === chainId);
 };
 
-/**
- * Helper to get all supported chain IDs
- */
 export const getSupportedChainIds = (): number[] => {
   return vaults.map(vault => vault.chainID);
 };
 
-/**
- * Default vault index (used when chain is not supported)
- */
 export const DEFAULT_VAULT_INDEX = 1;

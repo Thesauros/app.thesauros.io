@@ -5,7 +5,7 @@ type TUserInfoResponse = {
   data: { email: string | null; telegram: string | null; status: string; referralLink?: string };
 };
 
-const fetcUserInfo = async (address: TAddress): Promise<TUserInfoResponse> => {
+const fetchUserInfo = async (address: TAddress): Promise<TUserInfoResponse> => {
   const response = await customFetch<TUserInfoResponse>(getApiUrl(`users/${address}`));
   return response;
 };
@@ -15,7 +15,7 @@ export const useUserData = (address?: TAddress) => {
     data: userInfo,
     isLoading: isLoadingUserInfo,
     refetch: refetchUserInfo,
-  } = useCustomQueryKey(['GET_USER_INFO', address ?? '0x'], () => fetcUserInfo(address ?? '0x'), {
+  } = useCustomQueryKey(['GET_USER_INFO', address ?? '0x'], () => fetchUserInfo(address ?? '0x'), {
     enabled: !!address,
   });
 

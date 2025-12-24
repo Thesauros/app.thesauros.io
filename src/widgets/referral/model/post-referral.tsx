@@ -1,13 +1,13 @@
 import { customFetch, getApiUrl } from '@/shared/api/core';
 import { TAddress } from '@/shared/blockchain';
 
-export interface PostRefferalParams {
+export interface PostReferralParams {
   address: TAddress;
   referrer_address: string;
 }
 
-export const postRefferal = async (
-  params: PostRefferalParams
+export const postReferral = async (
+  params: PostReferralParams
 ): Promise<{ success: boolean; message: string }> => {
   return customFetch<{ success: boolean; message: string }>(getApiUrl('users'), {
     method: 'POST',

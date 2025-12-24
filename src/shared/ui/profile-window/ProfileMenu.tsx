@@ -1,6 +1,6 @@
 import styles from './ProfileMenu.module.scss';
 import { useAccount } from '@/shared/blockchain/useAccount';
-import { Texting } from '../typography/texting';
+import { Body } from '../new-typography/body';
 import { CopyButton } from '../copy-button';
 import { useDisconnect } from 'wagmi';
 import { LogoutIcon } from '../icons/logout';
@@ -23,23 +23,32 @@ export const ProfileMenu = () => {
             <Avatar value={address} />{' '}
           </div>
           <div className={styles.addressContainer}>
-            <Texting level={2} weight="regular" className={styles.address}>
+            <Body level={1} weight="regular" className={styles.address}>
               {shortString(address) ?? ''}
-            </Texting>
-            <Texting level={3} weight="regular" className={styles.balance}>
+            </Body>
+            <Body level={2} weight="regular" className={styles.balance}>
               {chain?.name}
-            </Texting>
+            </Body>
           </div>
         </FlexBlock>
         <div className={styles.buttonsContainer}>
           <Card variant="secondary" className={styles.actionButton}>
-            <CopyButton value={address} text={<Texting level={4}>Copy</Texting>} />
+            <CopyButton
+              value={address}
+              text={
+                <Body level={2} weight="regular">
+                  Copy
+                </Body>
+              }
+            />
           </Card>
 
           {isConnected && (
             <Card variant="secondary" className={styles.actionButton} onClick={() => disconnect()}>
               <LogoutIcon width={16} height={16} />
-              <Texting level={4}>Log out</Texting>
+              <Body level={2} weight="regular">
+                Log out
+              </Body>
             </Card>
           )}
         </div>

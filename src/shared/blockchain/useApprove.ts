@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { TAddress, TChainID } from './core/types';
 import { useContractWrite } from './core/useContractWrite';
 import { round } from '../number/round';
-import { useAccount } from 'wagmi';
 import { useAllowance } from './useAllowance';
+import { useAccount } from './useAccount';
 
 type TUseApproveProps = {
   tokenAddress: TAddress;

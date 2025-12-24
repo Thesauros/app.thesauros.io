@@ -2,7 +2,7 @@ import { FlexBlock } from '@/shared/ui/flex-block';
 import styles from './Footer.module.scss';
 import Link from 'next/link';
 import { TwitterIcon, TelegramIcon, DiscordIcon } from '@shared/ui/icons/media';
-import { Texting } from '@/shared/ui/typography/texting';
+import { Body } from '@/shared/ui/new-typography/body';
 import { LogoIcon } from '@/shared/ui/icons/logo';
 
 export const Footer = () => {
@@ -41,20 +41,20 @@ export const Footer = () => {
         <FlexBlock direction="column" gap={16}>
           <FlexBlock gap={40} alignItems="center" className={styles.docsLinksContainer}>
             <Link href="/privacy" target="_blank" className={styles.docLink}>
-              <Texting level={3} weight="regular">
+              <Body level={1} weight="regular">
                 Privacy Policy
-              </Texting>
+              </Body>
             </Link>
             <Link href="/terms" target="_blank" className={styles.docLink}>
-              <Texting level={3} weight="regular">
+              <Body level={1} weight="regular">
                 Terms of use
-              </Texting>
+              </Body>
             </Link>
           </FlexBlock>
 
-          <Texting level={4} weight="regular" className={styles.footerCopyright}>
+          <Body level={1} weight="regular" className={styles.footerCopyright}>
             © 2025 Thesauros. All Rights Reserved
-          </Texting>
+          </Body>
         </FlexBlock>
       </FlexBlock>
     </footer>

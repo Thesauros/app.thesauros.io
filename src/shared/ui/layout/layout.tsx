@@ -4,17 +4,12 @@ import { PageContainer } from './page-container';
 import styles from './layout.module.scss';
 import { Aside } from './aside';
 import { FlexBlock } from '../flex-block';
-import { useAutoSwitchToNetwork } from '@/shared/blockchain/useAutoSwitchToNetwork';
-import { useRequireSignature } from '@/features/sign-terms';
 
 type TProps = {
   children: ReactNode;
 };
 
 export const Layout = ({ children }: TProps) => {
-  useAutoSwitchToNetwork({ targetChainID: 8453 });
-  useRequireSignature();
-
   return (
     <FlexBlock direction="column" block>
       <div className={styles.layout}>

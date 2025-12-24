@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect, useRef } from 'react';
 import styles from './ProgressBar.module.scss';
 import { FlexBlock } from '../flex-block';
-import { Higlight } from '../typography/highlight';
+import { Body } from '../new-typography/body';
 import classNames from 'classnames';
 import { Caption } from '../new-typography/caption';
 
@@ -94,10 +94,10 @@ export const ProgressBar = ({
     <FlexBlock direction="column" gap={16} ref={ref} block>
       {withValues && (
         <Caption weight="bold" className={styles.progressBarValue}>
-          <Higlight>
+          <Body level={2} weight="regular">
             {valuePrefix}
             {currentValue}
-          </Higlight>{' '}
+          </Body>{' '}
           / {valuePrefix}
           {max} {postfix}
         </Caption>
