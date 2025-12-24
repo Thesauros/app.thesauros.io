@@ -9,20 +9,30 @@ import { Layout } from '@/shared/ui/layout';
 import { ModalProvider } from '@/shared/ui/modal';
 import ThemeProvider from '@/shared/ui/theme/theme.provider';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
 
 import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import { wagmiConfig } from '@/shared/blockchain/config';
-import { ReferralProvider } from '@/widgets/refferal';
+import { ReferralProvider } from '@/widgets/referral';
 
 const HOTJAR_ID = process.env.NEXT_PUBLIC_HOTJAR_ID;
-
-const queryClient = new QueryClient();
 
 const onest = Onest({ subsets: ['latin'] });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000, // 1 minute
+          },
+        },
+      })
+  );
+
   return (
     <div className={onest.className}>
       {HOTJAR_ID && (
