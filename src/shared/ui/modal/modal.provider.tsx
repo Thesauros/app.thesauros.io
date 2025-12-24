@@ -1,43 +1,53 @@
-import { ReactNode, useCallback, useState } from 'react';
+import { ReactNode, useCallback, useRef, useState } from 'react';
 import ModalContext, { TOpenOptions } from './modal.context';
 import styles from './modal.module.scss';
 import classNames from 'classnames';
 
+type TModalState = {
+  content: ReactNode;
+  withLayout: boolean;
+  smallPaddings: boolean;
+  backgroundColor?: string;
+  padding?: string;
+  maxWidth?: number;
+};
+
+const initialState: TModalState = {
+  content: null,
+  withLayout: true,
+  smallPaddings: false,
+  backgroundColor: undefined,
+  padding: undefined,
+  maxWidth: undefined,
+};
+
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
-  const [modalContent, setModalContent] = useState<ReactNode>(null);
-  const [onCloseHandler, setOncloseHandler] = useState<(() => void) | undefined>(undefined);
-  const [withLayout, setWithLayout] = useState(true);
-  const [smallPaddings, setSmallPaddings] = useState(true);
-  const [backgroundColor, setBackgroundColor] = useState<string | undefined>(undefined);
-  const [padding, setPadding] = useState<string | undefined>(undefined);
-  const [maxWidth, setMaxWidth] = useState<number | undefined>(undefined);
+  const [modalState, setModalState] = useState<TModalState>(initialState);
+  const onCloseRef = useRef<(() => void) | undefined>(undefined);
 
   const open = useCallback((content: ReactNode, options?: TOpenOptions) => {
-    setModalContent(content);
-
-    setWithLayout(options?.withLayout ?? true);
-    setSmallPaddings(options?.smallPaddings ?? false);
-    setBackgroundColor(options?.backgroundColor ?? undefined);
-    setPadding(options?.padding ?? undefined);
-    setMaxWidth(options?.maxWidth ?? undefined);
-
-    const handler = options?.onClose ? options.onClose : null;
-    if (handler) {
-      setOncloseHandler(() => handler);
-    }
+    onCloseRef.current = options?.onClose;
+    setModalState({
+      content,
+      withLayout: options?.withLayout ?? true,
+      smallPaddings: options?.smallPaddings ?? false,
+      backgroundColor: options?.backgroundColor,
+      padding: options?.padding,
+      maxWidth: options?.maxWidth,
+    });
   }, []);
 
   const close = useCallback(() => {
-    if (onCloseHandler) {
-      onCloseHandler();
-    }
+    onCloseRef.current?.();
+    onCloseRef.current = undefined;
+    setModalState(initialState);
+  }, []);
 
-    setModalContent(null);
-  }, [onCloseHandler]);
+  const { content, withLayout, smallPaddings, backgroundColor, padding, maxWidth } = modalState;
 
   return (
     <ModalContext.Provider value={{ open, close }}>
-      <div className={classNames(styles.container, !!modalContent && styles.visible)}>
+      <div className={classNames(styles.container, !!content && styles.visible)}>
         <div className={styles.modalWrapper}>
           <div
             className={styles.overlay}
@@ -51,15 +61,15 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
               <div
                 className={classNames(styles.modalContainer, smallPaddings && styles.smallPaddings)}
                 style={{
-                  backgroundColor: backgroundColor ?? undefined,
-                  padding: padding ?? undefined,
+                  backgroundColor: backgroundColor,
+                  padding: padding,
                   maxWidth: maxWidth ? `${maxWidth}px` : undefined,
                 }}
               >
-                {modalContent}
+                {content}
               </div>
             ) : (
-              <div>{modalContent}</div>
+              <div>{content}</div>
             )}
           </div>
         </div>

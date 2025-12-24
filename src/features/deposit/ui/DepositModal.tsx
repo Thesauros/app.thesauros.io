@@ -1,13 +1,11 @@
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { CloseIcon } from '@/shared/ui/icons/close';
 import { useModal } from '@/shared/ui/modal';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import styles from './DepositModal.module.scss';
 import { InputComponent } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import { useDeposit } from '@/features/deposit/model/useDeposit';
-
-import { useAccount } from 'wagmi';
 import { useApprove } from '@/shared/blockchain/useApprove';
 import { useSwitchNetwork } from '@/shared/blockchain/core/useSwitchNetwork';
 import { round } from '@/shared/number/round';
@@ -25,7 +23,12 @@ import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
-import { useMinAmount, useSelectedVault, useRefetchAfterTransaction } from '@/shared/blockchain';
+import {
+  useMinAmount,
+  useSelectedVault,
+  useRefetchAfterTransaction,
+  useAccount,
+} from '@/shared/blockchain';
 import { useTaskStatuses } from '@/shared/api/pointProgram/useTaskStatuses';
 import { useCurrentSeason } from '@/shared/api/pointProgram/useCurrentSeasonId';
 import { StepsProgress, Step } from '@/shared/ui/steps-progress';
@@ -58,23 +61,34 @@ export const DepositModal = () => {
     ? 0
     : value.raw * 10 ** selectedVault.decimals;
 
-  const handleValueChange = (newValue: string) => {
+  const handleValueChange = useCallback((newValue: string) => {
     const numericValue = newValue === '' ? 0 : parseFloat(newValue);
     setValue({
       formatted: newValue,
       raw: isNaN(numericValue) ? 0 : numericValue,
     });
-  };
+  }, []);
+
+  const selectCoinBalance = useCallback(
+    (data: unknown): CoinBalance => ({
+      rawValue: Number(data),
+      value: round(Number(data) / 10 ** selectedVault.decimals, 2),
+    }),
+    [selectedVault.decimals]
+  );
+
+  const selectTokenBalance = useCallback(
+    (data: unknown): number => round(Number(data) / 10 ** selectedVault.decimals, 2),
+    [selectedVault.decimals]
+  );
 
   const { userTaskStatuses } = useTaskStatuses(address);
   const { seasonInfo } = useCurrentSeason();
 
-  // Find first deposit task by ID (first_deposit)
   const firstDepositTask = useMemo(() => {
     return seasonInfo?.season.tasks?.find(task => task.id === 'first_deposit');
   }, [seasonInfo?.season.tasks]);
 
-  // Check if first deposit task is completed
   const isFirstDepositTaskCompleted = useMemo(() => {
     if (!firstDepositTask?.id || !userTaskStatuses?.tasks) {
       return false;
@@ -99,12 +113,7 @@ export const DepositModal = () => {
     args: [address],
     chainID: selectedVault.chainID,
     staleTime: 1000,
-    selectData: (data: unknown): CoinBalance => {
-      return {
-        rawValue: Number(data),
-        value: round(Number(data) / 10 ** selectedVault.decimals, 2),
-      };
-    },
+    selectData: selectCoinBalance,
   });
 
   const { data: tokenBalance, refetch: refetchTokenBalance } = useContractRead({
@@ -113,9 +122,7 @@ export const DepositModal = () => {
     args: [address],
     chainID: selectedVault.chainID,
     staleTime: 1000,
-    selectData: (data: unknown): number => {
-      return round(Number(data) / 10 ** selectedVault.decimals, 2);
-    },
+    selectData: selectTokenBalance,
   });
 
   const refetchAfterDeposit = createRefetchWithCallbacks(refetchCoinBalance, refetchTokenBalance);
@@ -164,12 +171,12 @@ export const DepositModal = () => {
     return 0;
   }, [coinBalance, selectedVault.decimals]);
 
-  const setMaxValue = () => {
+  const setMaxValue = useCallback(() => {
     setValue({
       formatted: String(userCoinBalance),
       raw: userCoinBalanceRaw,
     });
-  };
+  }, [userCoinBalance, userCoinBalanceRaw]);
 
   const isMoreThanBalance = Number(value.formatted) > userCoinBalance;
 
@@ -193,7 +200,7 @@ export const DepositModal = () => {
     ];
   }, [isApproved, depositValue, isApproveLoading, isDepositLoading]);
 
-  const handleButtonClick = () => {
+  const handleButtonClick = useCallback(() => {
     if (isNeedSwitch) {
       switchNetwork(selectedVault.chainID);
     } else if (isApproved) {
@@ -201,9 +208,9 @@ export const DepositModal = () => {
     } else {
       approve();
     }
-  };
+  }, [isNeedSwitch, switchNetwork, selectedVault.chainID, isApproved, deposit, approve]);
 
-  const getButtonText = () => {
+  const buttonText = useMemo(() => {
     if (isLessThanMinAmount) {
       return `Minimum amount is ${minAmount} ${selectedVault.coinName}`;
     }
@@ -214,7 +221,20 @@ export const DepositModal = () => {
       return `Deposit ${value.formatted || 0} ${selectedVault.coinName}`;
     }
     return 'Approve';
-  };
+  }, [
+    isLessThanMinAmount,
+    minAmount,
+    selectedVault.coinName,
+    isNeedSwitch,
+    isApproved,
+    value.formatted,
+  ]);
+
+  const handleSwapClick = useCallback(() => {
+    open(<SwapWidget coinAddress={selectedVault.coinAddress} chainID={selectedVault.chainID} />, {
+      withLayout: false,
+    });
+  }, [open, selectedVault.coinAddress, selectedVault.chainID]);
 
   return (
     <FlexBlock direction="column" gap={16} block>
@@ -355,19 +375,7 @@ For example, holding 1,000 USDC for one year gives you about 365,000 points."
             <InfoCircleIcon />
             <Caption weight="regular">Low on USDC? Swap from any token</Caption>
           </FlexBlock>
-          <Button
-            variant="text"
-            prefix={<SwapIcon />}
-            onClick={() => {
-              open(
-                <SwapWidget
-                  coinAddress={selectedVault.coinAddress}
-                  chainID={selectedVault.chainID}
-                />,
-                { withLayout: false }
-              );
-            }}
-          >
+          <Button variant="text" prefix={<SwapIcon />} onClick={handleSwapClick}>
             Swap
           </Button>
         </div>
@@ -380,7 +388,7 @@ For example, holding 1,000 USDC for one year gives you about 365,000 points."
         fullWidth
         disabled={isDepositLoading || !depositValue || isMoreThanBalance || isLessThanMinAmount}
       >
-        {getButtonText()}
+        {buttonText}
       </Button>
       <StepsProgress steps={steps} />
 

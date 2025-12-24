@@ -11,7 +11,7 @@ type TUserPointsInfoRaw = {
   message: string;
 };
 
-const fetcTaskStatuses = async (address: TAddress): Promise<TUserPointsInfoRaw> => {
+const fetchTaskStatuses = async (address: TAddress): Promise<TUserPointsInfoRaw> => {
   return customFetch<TUserPointsInfoRaw>(
     getApiUrl(`task-status/user/${address}/season?season_number=1`)
   );
@@ -20,7 +20,7 @@ const fetcTaskStatuses = async (address: TAddress): Promise<TUserPointsInfoRaw> 
 export const useTaskStatuses = (address?: TAddress) => {
   const { data: userTaskStatuses, isLoading } = useCustomQueryKey(
     ['GET_TASK_STATUSES', address ?? ''],
-    () => fetcTaskStatuses(address!),
+    () => fetchTaskStatuses(address!),
     {
       enabled: !!address,
     }

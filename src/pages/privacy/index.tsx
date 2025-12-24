@@ -1,6 +1,6 @@
 import { FlexBlock } from '@/shared/ui/flex-block';
-import { Heading } from '@/shared/ui/typography/heading';
-import { Texting } from '@/shared/ui/typography/texting';
+import { Heading } from '@/shared/ui/new-typography/heading';
+import { Body } from '@/shared/ui/new-typography/body';
 import styles from './privacy.module.scss';
 
 export default function PrivacyPage() {
@@ -10,34 +10,34 @@ export default function PrivacyPage() {
         <Heading level={1} weight="semibold" className={styles.title}>
           Privacy Policy
         </Heading>
-        <Texting level={2} weight="medium" className={styles.subtitle}>
+        <Body level={2} weight="medium" className={styles.subtitle}>
           Thesauros Protocol
-        </Texting>
-        <Texting level={3} weight="regular" className={styles.date}>
+        </Body>
+        <Body level={2} weight="regular" className={styles.date}>
           Last Updated: August 26, 2025
-        </Texting>
+        </Body>
 
         <div className={styles.section}>
           <Heading level={2} weight="semibold" className={styles.sectionTitle}>
             1. INTRODUCTION
           </Heading>
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             This Privacy Policy (&ldquo;Policy&rdquo;) explains how Thesauros Protocol
             (&ldquo;Protocol,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;)
             collects, uses, processes, and protects information when you use our decentralized yield
             optimization platform available at https://thesauros.io and related services.
-          </Texting>
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          </Body>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             Thesauros Protocol is committed to protecting your privacy while providing automated
             yield farming services across multiple DeFi protocols. This Policy describes our data
             practices in compliance with applicable privacy laws and regulations.
-          </Texting>
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          </Body>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Web3 Privacy Principles:</strong> We believe in the fundamental right to privacy
             and data sovereignty. Our approach aligns with Web3 principles of user control,
             transparency, and minimal data collection while maintaining protocol security and
             functionality.
-          </Texting>
+          </Body>
         </div>
 
         <div className={styles.section}>
@@ -49,9 +49,9 @@ export default function PrivacyPage() {
             2.1 Blockchain and Wallet Information
           </Heading>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Wallet Addresses:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>Public wallet addresses when you connect to the Protocol</li>
             <li>Transaction hashes and blockchain interaction data</li>
@@ -59,9 +59,9 @@ export default function PrivacyPage() {
             <li>Token balances and transfer history</li>
           </ul>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Transaction Data:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>Deposit and withdrawal amounts and timestamps</li>
             <li>Vault positions and share token holdings</li>
@@ -74,9 +74,9 @@ export default function PrivacyPage() {
             2.2 Technical Information
           </Heading>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Website Usage Data:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>IP addresses and geolocation data</li>
             <li>Browser type, version, and settings</li>
@@ -95,9 +95,9 @@ export default function PrivacyPage() {
             3.1 Core Protocol Operations
           </Heading>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Yield Optimization:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>Calculating optimal fund allocation across DeFi protocols</li>
             <li>Executing automated rebalancing transactions</li>
@@ -105,9 +105,9 @@ export default function PrivacyPage() {
             <li>Providing real-time APY and performance data</li>
           </ul>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>User Account Management:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>Tracking vault positions and share ownership</li>
             <li>Calculating and distributing earned yields</li>
@@ -125,9 +125,9 @@ export default function PrivacyPage() {
             4.1 Public Blockchain Data
           </Heading>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Inherently Public Information:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>All blockchain transactions are publicly visible</li>
             <li>Wallet addresses and transaction amounts are publicly accessible</li>
@@ -139,9 +139,9 @@ export default function PrivacyPage() {
             4.2 Service Providers and Partners
           </Heading>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Technical Partners:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>RPC providers for blockchain connectivity</li>
             <li>Analytics services for performance monitoring</li>
@@ -151,9 +151,9 @@ export default function PrivacyPage() {
             <li>Cross-chain bridge providers for asset transfers</li>
           </ul>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Data Processing Agreements:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>All service providers are bound by appropriate data protection agreements</li>
             <li>Access is limited to information necessary for service provision</li>
@@ -172,9 +172,9 @@ export default function PrivacyPage() {
             5.1 Security Measures
           </Heading>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Technical Safeguards:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>Encryption of data in transit and at rest</li>
             <li>Multi-factor authentication for administrative access</li>
@@ -190,9 +190,9 @@ export default function PrivacyPage() {
             5.2 User Security Responsibilities
           </Heading>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Wallet Security:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>Users responsible for private key and seed phrase security</li>
             <li>Protocol cannot recover lost or compromised wallets</li>
@@ -214,9 +214,9 @@ export default function PrivacyPage() {
             6.1 Access and Portability
           </Heading>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Data Access:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>Request copies of your transaction and points data</li>
             <li>Access to account settings and preferences</li>
@@ -238,13 +238,13 @@ export default function PrivacyPage() {
             7.1 Privacy Inquiries
           </Heading>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             For privacy-related questions, requests, or concerns:
-          </Texting>
+          </Body>
 
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>General Privacy Questions:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>Website: https://thesauros.io/privacy</li>
             <li>Documentation: Available in help center</li>
@@ -260,9 +260,9 @@ export default function PrivacyPage() {
           <Heading level={3} weight="semibold" className={styles.subsectionTitle}>
             8.1 Blockchain Transparency
           </Heading>
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Public Ledger Nature:</strong>
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>All blockchain transactions are permanently recorded and publicly accessible</li>
             <li>Wallet addresses and transaction amounts are visible to anyone</li>
@@ -295,9 +295,9 @@ export default function PrivacyPage() {
           <Heading level={2} weight="semibold" className={styles.sectionTitle}>
             9. ACKNOWLEDGMENT AND CONSENT
           </Heading>
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             By connecting your wallet and using the Thesauros Protocol, you acknowledge that:
-          </Texting>
+          </Body>
           <ul className={styles.list}>
             <li>You have read and understood this Privacy Policy</li>
             <li>You consent to the collection and processing of information as described</li>
@@ -312,27 +312,27 @@ export default function PrivacyPage() {
         </div>
 
         <div className={styles.section}>
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>
               This Privacy Policy is effective as of the date listed above and applies to all users
               of the Thesauros Protocol.
             </strong>
-          </Texting>
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          </Body>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <em>
               For the most current version of this Privacy Policy, please visit
               https://thesauros.io/privacy
             </em>
-          </Texting>
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          </Body>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Last Updated: August 26, 2025</strong>
-          </Texting>
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          </Body>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Version: 1.0</strong>
-          </Texting>
-          <Texting level={3} weight="regular" className={styles.paragraph}>
+          </Body>
+          <Body level={2} weight="regular" className={styles.paragraph}>
             <strong>Next Review Date: November 26, 2025</strong>
-          </Texting>
+          </Body>
         </div>
       </div>
     </FlexBlock>

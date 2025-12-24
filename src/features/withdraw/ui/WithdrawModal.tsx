@@ -1,11 +1,10 @@
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { CloseIcon } from '@/shared/ui/icons/close';
 import { useModal } from '@/shared/ui/modal';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import styles from './WithdrawModal.module.scss';
 import { InputComponent } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
-import { useAccount } from 'wagmi';
 import { useSwitchNetwork } from '@/shared/blockchain/core/useSwitchNetwork';
 import { round } from '@/shared/number/round';
 import { useContractRead } from '@/shared/blockchain/core/useContractRead';
@@ -18,7 +17,7 @@ import { UsdcIcon } from '@/shared/ui/icons/usdc-icon';
 import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
-import { useSelectedVault, useRefetchAfterTransaction } from '@/shared/blockchain';
+import { useSelectedVault, useRefetchAfterTransaction, useAccount } from '@/shared/blockchain';
 
 export const WithdrawModal = () => {
   const { close, open } = useModal();
@@ -35,15 +34,23 @@ export const WithdrawModal = () => {
     chainID: selectedVault.chainID,
   });
 
+  const selectBalance = useCallback(
+    (data: unknown): number => round(Number(data) / 10 ** selectedVault.decimals, 2),
+    [selectedVault.decimals]
+  );
+
+  const selectFeePercent = useCallback(
+    (data: unknown): number => round(Number(data) / 10 ** selectedVault.decimals, 2),
+    [selectedVault.decimals]
+  );
+
   const { data: coinBalance, refetch: refetchCoinBalance } = useContractRead({
     address: selectedVault.vaultAddress,
     functionName: 'getBalanceOfAsset',
     args: [address],
     chainID: selectedVault.chainID,
     staleTime: 1000,
-    selectData: (data: unknown): number => {
-      return round(Number(data) / 10 ** selectedVault.decimals, 2);
-    },
+    selectData: selectBalance,
   });
 
   const refetchAfterWithdraw = createRefetchWithCallbacks(refetchCoinBalance);
@@ -77,9 +84,7 @@ export const WithdrawModal = () => {
     address: selectedVault.vaultAddress,
     functionName: 'withdrawFeePercent',
     chainID: selectedVault.chainID,
-    selectData: (data: unknown): number => {
-      return round(Number(data) / 10 ** selectedVault.decimals, 2);
-    },
+    selectData: selectFeePercent,
   });
 
   const userCoinBalance: number = useMemo(() => {
@@ -91,13 +96,17 @@ export const WithdrawModal = () => {
 
   const isMoreThanBalance = Number(value) > userCoinBalance;
 
-  const handleButtonClick = () => {
+  const handleButtonClick = useCallback(() => {
     if (isNeedSwitch) {
       switchNetwork(selectedVault.chainID);
     } else {
       withdraw();
     }
-  };
+  }, [isNeedSwitch, switchNetwork, selectedVault.chainID, withdraw]);
+
+  const setMaxValue = useCallback(() => {
+    setValue(String(userCoinBalance));
+  }, [userCoinBalance]);
 
   return (
     <FlexBlock direction="column" gap={24} block>
@@ -136,7 +145,7 @@ export const WithdrawModal = () => {
           <Caption weight="regular" className={styles.secondary}>
             Available:
           </Caption>
-          <div style={{ cursor: 'pointer' }} onClick={() => setValue(String(userCoinBalance))}>
+          <div style={{ cursor: 'pointer' }} onClick={setMaxValue}>
             <Body level={2} weight="regular">
               {round(userCoinBalance)} {selectedVault.coinName}
             </Body>
@@ -192,13 +201,7 @@ export const WithdrawModal = () => {
       </div>
 
       <FlexBlock gap={16} alignItems="center" block>
-        <Button
-          variant="text"
-          fullWidth
-          size="lg"
-          onClick={() => close()}
-          disabled={isWithdrawingLoading}
-        >
+        <Button variant="text" fullWidth size="lg" onClick={close} disabled={isWithdrawingLoading}>
           Cancel
         </Button>
         <Button

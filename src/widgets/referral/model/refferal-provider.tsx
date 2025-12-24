@@ -2,7 +2,7 @@ import { createContext, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { TAddress, useAccount } from '@/shared/blockchain';
 import { LocalStorageKey, useLocalStorageState } from '@/shared/browser/localStorage';
-import { postRefferal } from './post-refferal';
+import { postReferral } from './post-referral';
 
 const ReferralContext = createContext<{
   referral: TAddress | null;
@@ -30,7 +30,7 @@ export const ReferralProvider = ({ children }: { children: React.ReactNode }) =>
 
     isPostingRef.current = true;
 
-    postRefferal({ address, referrer_address: referralID })
+    postReferral({ address, referrer_address: referralID })
       .then(() => {
         setRefferalLS('true');
       })

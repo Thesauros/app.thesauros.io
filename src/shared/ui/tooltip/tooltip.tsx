@@ -1,7 +1,7 @@
 import 'react-tooltip/dist/react-tooltip.css';
 import styles from './tooltip.module.scss';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { FlexBlock } from '../flex-block';
 import { NewInfoIcon } from '../icons/new-info';
 
@@ -13,7 +13,7 @@ type TProps = {
   withIcon?: boolean;
 };
 
-const createUniqueId = (name: string) => `tooltip-${name.toLowerCase()}`;
+const createUniqueId = (name: string) => `tooltip-${name.toLowerCase().replace(/\s+/g, '-')}`;
 
 export const Tooltip = ({
   tooltipText,
@@ -22,7 +22,7 @@ export const Tooltip = ({
   display = 'block',
   withIcon = false,
 }: TProps) => {
-  const uniqueId = createUniqueId(tooltipText);
+  const uniqueId = useMemo(() => createUniqueId(tooltipText), [tooltipText]);
 
   return (
     <div style={{ display: display, width: fullWidth ? '100%' : 'auto' }}>

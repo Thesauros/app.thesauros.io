@@ -16,6 +16,7 @@ import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import { wagmiConfig } from '@/shared/blockchain/config';
 import { ReferralProvider } from '@/widgets/referral';
+import { AppInitializer } from '@/shared/providers';
 
 const HOTJAR_ID = process.env.NEXT_PUBLIC_HOTJAR_ID;
 
@@ -46,9 +47,11 @@ export default function App({ Component, pageProps }: AppProps) {
             <RainbowKitProvider locale="en-US">
               <ModalProvider>
                 <ReferralProvider>
-                  <Layout>
-                    <Component {...pageProps} />
-                  </Layout>
+                  <AppInitializer>
+                    <Layout>
+                      <Component {...pageProps} />
+                    </Layout>
+                  </AppInitializer>
                 </ReferralProvider>
               </ModalProvider>
             </RainbowKitProvider>
