@@ -1,4 +1,4 @@
-import { customFetch, getGrafanaUrl, useCustomQueryKey } from '../core';
+import { customFetch, getVaultDataUrl, useCustomQueryKey } from '../core';
 
 type TCommonData = TTokenInfoRaw[];
 
@@ -15,7 +15,7 @@ type TTokenInfoRaw = {
 };
 
 const fetchCommonData = async (): Promise<TCommonData> => {
-  return customFetch<TCommonData>(getGrafanaUrl('lending'));
+  return customFetch<TCommonData>(getVaultDataUrl('lending', 42161));
 };
 
 export const useCurrentAPR = () => {

@@ -6,7 +6,12 @@ import { useOnchainCurrentAPY } from '../blockchain/useOnchainCurrentAPY';
 
 export const useDashboardConstants = () => {
   const { address, chainId } = useAccount();
-  const { data } = useUserEarnedOverallTicks({ interval: 1, intervals: 7, address: address });
+  const { data } = useUserEarnedOverallTicks({
+    interval: 1,
+    intervals: 7,
+    address: address,
+    chainID: chainId ?? 42161,
+  });
   const { data: vaultsTVL } = useVaultsTVL();
   const { data: totalPosition } = useVaultsPosition();
   const { data: performerOfTheWeek } = useHighestApr(7);
