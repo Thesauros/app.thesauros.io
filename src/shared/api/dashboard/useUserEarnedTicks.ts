@@ -1,6 +1,5 @@
 import { TAddress } from '@/shared/blockchain/core/types';
-import { customFetch, getGrafanaUrl, useCustomQueryKey } from '../core';
-import { getBaseUrl } from '../core/getApiUrl';
+import { customFetch, getVaultDataUrl, useCustomQueryKey } from '../core';
 
 type TAPRInfoRaw = TTickRaw[];
 
@@ -20,13 +19,10 @@ type TParams = {
 
 const fetchEarnedTicks = async (params: TParams): Promise<TAPRInfoRaw> => {
   return customFetch<TAPRInfoRaw>(
-    params.chainID === 42161
-      ? getGrafanaUrl(
-          `lending/${params.token}/user-earned-ticks/${params.address}/${params.interval}/${params.intervals}`
-        )
-      : getBaseUrl(
-          `lending/${params.token}/user-earned-ticks/${params.address}/${params.interval}/${params.intervals}`
-        )
+    getVaultDataUrl(
+      `lending/${params.token}/user-earned-ticks/${params.address}/${params.interval}/${params.intervals}`,
+      params.chainID
+    )
   );
 };
 
