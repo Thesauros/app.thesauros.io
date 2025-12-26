@@ -13,7 +13,7 @@ export const useAllowance = ({ tokenAddress, tokenChainId, account, spender }: T
     address: tokenAddress,
     chainID: tokenChainId,
     functionName: 'allowance',
-    staleTime: 1000,
+    watch: true,
     args: [account, spender],
   });
 
