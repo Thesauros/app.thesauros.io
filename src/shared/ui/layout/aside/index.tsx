@@ -130,7 +130,7 @@ export const Aside = () => {
           ))}
         </FlexBlock>
         <Overline weight="regular" className={styles.secondary}>
-          ©Thesauros 2025
+          ©Thesauros 2026
         </Overline>
       </FlexBlock>
     </div>

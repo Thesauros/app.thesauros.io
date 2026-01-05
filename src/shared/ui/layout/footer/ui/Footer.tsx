@@ -53,7 +53,7 @@ export const Footer = () => {
           </FlexBlock>
 
           <Body level={1} weight="regular" className={styles.footerCopyright}>
-            © 2025 Thesauros. All Rights Reserved
+            © 2026 Thesauros. All Rights Reserved
           </Body>
         </FlexBlock>
       </FlexBlock>
