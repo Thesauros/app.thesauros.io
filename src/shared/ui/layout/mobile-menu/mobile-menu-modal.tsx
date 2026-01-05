@@ -11,7 +11,6 @@ import { ModalCloseIcon } from './modal-close-icon';
 import { Subtitle } from '../../new-typography/subtitle';
 import { PointProgramBanner } from '../../point-program-banner';
 import { TwitterIcon } from '../../icons/twitter-icon';
-import { DiscordIcon } from '../../icons/discord-icon';
 import { TelegramIcon } from '../../icons/telegram-icon';
 import { Overline } from '../../new-typography/overline';
 
@@ -41,11 +40,11 @@ const socialLinks = [
     link: 'https://x.com/thesauros_io',
     icon: <TwitterIcon />,
   },
-  {
-    id: 'discord',
-    link: 'https://discord.gg/TQHez89EAE',
-    icon: <DiscordIcon />,
-  },
+  // {
+  //   id: 'discord',
+  //   link: 'https://discord.gg/TQHez89EAE',
+  //   icon: <DiscordIcon />,
+  // },
 ];
 
 export const MobileMenuModal = () => {
@@ -126,7 +125,7 @@ export const MobileMenuModal = () => {
             ))}
           </FlexBlock>
           <Overline weight="regular" className={styles.secondary}>
-            ©Thesauros 2025
+            ©Thesauros 2026
           </Overline>
         </FlexBlock>
       </FlexBlock>
