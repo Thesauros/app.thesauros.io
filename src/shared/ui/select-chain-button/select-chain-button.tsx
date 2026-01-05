@@ -1,10 +1,10 @@
 import styles from './select-chain-button.module.scss';
 import { useState, useRef } from 'react';
 import { useChainId, useSwitchChain } from 'wagmi';
-import { base, arbitrum } from 'wagmi/chains';
+import { base, arbitrum, mainnet } from 'wagmi/chains';
 import { useClickOutside } from '@/shared/browser/useClickOutside';
 
-const ALLOWED_CHAINS = [base, arbitrum];
+const ALLOWED_CHAINS = [base, arbitrum, mainnet];
 
 export const SelectChainButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,6 +66,7 @@ function getChainIcon(chainId: number): string {
   const icons: Record<number, string> = {
     [base.id]: 'https://icons.llamao.fi/icons/chains/rsz_base.jpg',
     [arbitrum.id]: 'https://icons.llamao.fi/icons/chains/rsz_arbitrum.jpg',
+    [mainnet.id]: 'https://icons.llamao.fi/icons/chains/rsz_ethereum.jpg',
   };
   return icons[chainId] ?? '';
 }
