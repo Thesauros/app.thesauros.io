@@ -24,7 +24,7 @@ export const useVaultsPosition = (): TVaultPositionResult => {
 
   const { data, isLoading, refetch } = useContractsRead<bigint>({
     contracts,
-    staleTime: 1000,
+    staleTime: 3000,
   });
 
   const totalPosition = useMemo(() => {

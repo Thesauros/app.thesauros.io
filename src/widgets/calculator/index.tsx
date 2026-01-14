@@ -56,7 +56,7 @@ export const Calculator = ({ apy }: CalculatorProps) => {
     const periodYears = timePeriod.value;
 
     return {
-      pointsValue: depositNum * periodYears * DAYS_IN_YEAR,
+      pointsValue: depositNum * 2 * periodYears * DAYS_IN_YEAR,
       potentialReturns: round(periodYears * apy * (depositNum / 100) + depositNum),
       cumulativeProfit: round(periodYears * apy),
       periodText: PERIOD_TITLE_MAP_TO_TEXT[timePeriod.title],

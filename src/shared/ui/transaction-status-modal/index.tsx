@@ -20,20 +20,33 @@ export const TransactionStatusModal = ({
   type,
   amount,
   coinName,
+  chainId,
 }: {
   data?: TAddress;
   status: 'success' | 'failed';
   type: 'deposit' | 'withdraw';
   amount?: number;
   coinName?: string;
+  chainId: number;
 }) => {
   const { close } = useModal();
   const TYPE_MAP_TO_ICON = { deposit: <DownloadIcon />, withdraw: <CoinHand /> };
   const TYPE_STATUS_TO_TEXT = { success: 'Successful', failed: 'Unsuccessful' };
 
+  const NETWORK_EXPLORER_URL: Record<number, string> = {
+    42161: 'https://arbiscan.io/tx/',
+    8453: 'https://basescan.org/tx/',
+    1: 'https://etherscan.io/tx/',
+  };
+
+  const getExplorerUrl = (chainId: number, data: TAddress) => {
+    return `${NETWORK_EXPLORER_URL[chainId]}/${data}`;
+  };
+
   const handleOpenExplorer = () => {
     if (data) {
-      window.open(`https://arbiscan.io/tx/${data}`, '_blank');
+      const explorerUrl = getExplorerUrl(chainId, data);
+      window.open(explorerUrl, '_blank');
     }
   };
 

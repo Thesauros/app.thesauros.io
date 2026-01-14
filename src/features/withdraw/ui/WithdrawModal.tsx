@@ -67,12 +67,16 @@ export const WithdrawModal = () => {
           coinName={selectedVault.coinName}
           status="success"
           type="withdraw"
+          chainId={selectedVault.chainID}
         />
       );
       refetchAfterWithdraw();
     },
     onError: error => {
-      if (error) open(<TransactionStatusModal status="failed" type="withdraw" />);
+      if (error)
+        open(
+          <TransactionStatusModal status="failed" type="withdraw" chainId={selectedVault.chainID} />
+        );
     },
   });
 
@@ -189,7 +193,7 @@ export const WithdrawModal = () => {
               className={styles.innerPotentialProfitBlock}
             >
               <Subtitle level={2} weight="medium">
-                {round(365 * Number(value))}
+                {round(2 * 365 * Number(value))}
               </Subtitle>
               <FlexBlock gap={8} alignItems="center">
                 <PointCoinIcon size={16} />
