@@ -44,7 +44,7 @@ export const ApyCards = ({ isDeposited, totalPosition, complexApy }: ApyCardsPro
             <Heading level={6} weight="bold">
               <FlexBlock gap={4} alignItems="center">
                 <PointCoinIcon size={16} />
-                {totalPosition}
+                {totalPosition * 2}
                 <span className={styles.daily}>/day</span>
               </FlexBlock>
             </Heading>

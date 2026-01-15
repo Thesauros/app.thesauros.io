@@ -15,7 +15,7 @@ type DepositCardProps = {
   onDepositChange: (value: string) => void;
 };
 
-const SLIDER_MIN = 1000;
+const SLIDER_MIN = 0;
 const SLIDER_MAX = 1000000;
 
 export const DepositCard = memo(function DepositCard({
@@ -23,6 +23,10 @@ export const DepositCard = memo(function DepositCard({
   apy,
   onDepositChange,
 }: DepositCardProps) {
+  const handleDepositChange = (value: string) => {
+    onDepositChange(value === '' ? String(SLIDER_MIN) : value);
+  };
+
   return (
     <Card variant="secondary" className={styles.depositBlock}>
       <FlexBlock direction="column" gap={24}>
@@ -53,7 +57,7 @@ export const DepositCard = memo(function DepositCard({
               textAlign="right"
               numberPrefix="$"
               type="number"
-              onChange={onDepositChange}
+              onChange={handleDepositChange}
             />
           </FlexBlock>
           <Slider
