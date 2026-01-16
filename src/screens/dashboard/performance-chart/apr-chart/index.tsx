@@ -19,7 +19,6 @@ import { Caption } from '@/shared/ui/new-typography/caption';
 import { Body } from '@/shared/ui/new-typography/body';
 import formatNumberSmart from '@/shared/number/formatNumberSmart';
 import { memo, useMemo } from 'react';
-import { round } from '@/shared/number/round';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 import { useCheckResolution } from '@/shared/browser/useCheckResolution';
 
@@ -78,7 +77,7 @@ export const APRChart = memo(
                   Earned in {period.title}
                 </Caption>
                 <Body level={2} weight="bold">
-                  ${round(total)}
+                  ${formatNumberSmart(total)}
                 </Body>
               </FlexBlock>
             </FlexBlock>
