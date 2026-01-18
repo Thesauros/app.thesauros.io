@@ -17,6 +17,9 @@ type TContractsReadProps = {
   contracts: TContractReadConfig[];
   watch?: boolean;
   staleTime?: number;
+  refetchOnWindowFocus?: boolean;
+  refetchOnMount?: boolean;
+  refetchOnReconnect?: boolean;
 };
 
 type TContractsReadResult<T = unknown> = {
@@ -34,10 +37,12 @@ type TContractsReadResult<T = unknown> = {
 
 export const useContractsRead = <T = unknown>({
   contracts,
-  watch = false,
   staleTime,
+  refetchOnWindowFocus = true,
+  refetchOnMount = true,
+  refetchOnReconnect = true,
 }: TContractsReadProps): TContractsReadResult<T> => {
-  const staleTimeResult = watch ? Infinity : (staleTime ?? 0);
+  const staleTimeResult = staleTime ?? Infinity;
 
   const result = useReadContracts({
     contracts: contracts.map(contract => ({
@@ -50,6 +55,9 @@ export const useContractsRead = <T = unknown>({
     })),
     query: {
       staleTime: staleTimeResult,
+      refetchOnWindowFocus,
+      refetchOnMount,
+      refetchOnReconnect,
     },
   });
 

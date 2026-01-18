@@ -3,6 +3,7 @@ import { TAddress } from '@/shared/blockchain';
 import { useModal } from '@/shared/ui/modal';
 import { LiFiWidget, useWidgetEvents, WidgetConfig, WidgetEvent } from '@lifi/widget';
 import { useEffect, useMemo } from 'react';
+import { useAccount } from 'wagmi';
 
 export const SwapWidget = ({
   coinAddress,
@@ -13,6 +14,7 @@ export const SwapWidget = ({
 }) => {
   const widgetEvents = useWidgetEvents();
   const { open } = useModal();
+  const { isConnected } = useAccount();
 
   useEffect(() => {
     const onRouteExecutionCompleted = () => {
@@ -36,8 +38,11 @@ export const SwapWidget = ({
         },
       },
       integrator: 'Thesauros',
+      walletConfig: {
+        usePartialWalletManagement: isConnected,
+      },
     }),
-    [coinAddress, chainID]
+    [coinAddress, chainID, isConnected]
   );
 
   return <LiFiWidget integrator="Thesauros" config={widgetConfig} />;
