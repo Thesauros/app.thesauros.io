@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useAccount as useAccountWagmi, useWalletClient, usePublicClient } from 'wagmi';
 import type { WalletClient, PublicClient, HttpTransport } from 'viem';
-import { providers } from 'ethers';
+import { BrowserProvider, JsonRpcProvider, FallbackProvider } from 'ethers';
 import { useNetwork } from './useNetwork';
 
 function walletClientToSigner(walletClient: WalletClient) {
@@ -10,10 +10,9 @@ function walletClientToSigner(walletClient: WalletClient) {
     ? {
         chainId: chain.id,
         name: chain.name,
-        ensAddress: chain.contracts?.ensRegistry?.address,
       }
     : undefined;
-  const provider = new providers.Web3Provider(transport, network);
+  const provider = new BrowserProvider(transport, network);
   return provider.getSigner(account?.address);
 }
 
@@ -31,23 +30,25 @@ function publicClientToProvider(publicClient: PublicClient) {
     ? {
         chainId: chain.id,
         name: chain.name,
-        ensAddress: chain.contracts?.ensRegistry?.address,
       }
     : undefined;
 
-  if (transport.type === 'fallback')
-    return new providers.FallbackProvider(
+  if (transport.type === 'fallback') {
+    return new FallbackProvider(
       (transport.transports as ReturnType<HttpTransport>[]).map(
-        ({ value }) => new providers.JsonRpcProvider(value?.url, network)
+        ({ value }) => new JsonRpcProvider(value?.url, network)
       )
     );
-  return new providers.JsonRpcProvider(transport.url, network);
+  }
+
+  const url = (transport as unknown as { value?: { url?: string } }).value?.url;
+  return new JsonRpcProvider(url, network);
 }
 
 function useEthersProvider({ chainId }: { chainId?: number } = {}) {
   const publicClient = usePublicClient({ chainId });
   return useMemo(
-    () => (publicClient ? publicClientToProvider(publicClient) : providers.FallbackProvider),
+    () => (publicClient ? publicClientToProvider(publicClient) : undefined),
     [publicClient]
   );
 }
