@@ -49,7 +49,7 @@ export const WithdrawModal = () => {
     functionName: 'getBalanceOfAsset',
     args: [address],
     chainID: selectedVault.chainID,
-    staleTime: 1000,
+    staleTime: 30000,
     selectData: selectBalance,
   });
 

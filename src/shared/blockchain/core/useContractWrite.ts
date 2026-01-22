@@ -39,9 +39,25 @@ export const useContractWrite = (props: TContractWriteProps) => {
     }
   }, [isError, error]);
 
+  const write = () => {
+    if (simulateData?.request) {
+      writeContract(simulateData.request);
+    }
+  };
+
+  const writeWithoutSimulation = () => {
+    writeContract({
+      address: props.address,
+      abi: abi,
+      chainId: props.chainID,
+      functionName: props.functionName,
+      args: props.args,
+    });
+  };
+
   return {
-    write: () =>
-      simulateData && simulateData?.request ? writeContract(simulateData.request) : null,
+    write,
+    writeWithoutSimulation,
     data,
     isSuccess,
     isLoading: isPending,
@@ -54,7 +70,7 @@ export const contractWrite = async (props: TContractWriteProps) => {
   const { request } = await simulateContract(wagmiConfig, {
     abi: abi,
     address: props.address,
-    chainId: props.chainID,
+    chainId: props.chainID as 1 | 42161 | 8453 | undefined,
     functionName: props.functionName,
     args: props.args,
   });

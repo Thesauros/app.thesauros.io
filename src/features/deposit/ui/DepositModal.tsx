@@ -127,7 +127,7 @@ export const DepositModal = () => {
     functionName: 'balanceOf',
     args: [address],
     chainID: selectedVault.chainID,
-    staleTime: 1000,
+    staleTime: 30000,
     selectData: selectCoinBalance,
   });
 
@@ -136,7 +136,7 @@ export const DepositModal = () => {
     functionName: 'getBalanceOfAsset',
     args: [address],
     chainID: selectedVault.chainID,
-    staleTime: 1000,
+    staleTime: 30000,
     selectData: selectTokenBalance,
   });
 
@@ -237,7 +237,6 @@ export const DepositModal = () => {
       return 'Switch network';
     }
     if (isApproved) {
-      console.log('value.formatted', value.formatted);
       return `Deposit ${value.formatted || 0} ${selectedVault.coinName}`;
     }
     return 'Approve';

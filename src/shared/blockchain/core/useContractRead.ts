@@ -35,7 +35,8 @@ export const useContractRead = ({
     chainId: chainID,
     query: {
       enabled: watch,
-      refetchInterval: 1000,
+      // Увеличено до 12 сек (примерно 1 блок на Ethereum) для экономии RPC кредитов
+      refetchInterval: 12000,
     },
   });
 
@@ -68,7 +69,7 @@ export const contractRead = async <T>(props: TContractReadProps): Promise<T> => 
   const { request } = await simulateContract(wagmiConfig, {
     abi: abi,
     address: props.address,
-    chainId: props.chainID,
+    chainId: props.chainID as 1 | 42161 | 8453 | undefined,
     functionName: props.functionName,
     args: props.args,
   });
