@@ -1,13 +1,10 @@
 import { TVault, TAddress } from './core/types';
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import * as wagmiChains from 'wagmi/chains';
-import { type Chain } from 'viem';
-
-const allChains = Object.values(wagmiChains).filter(
-  chain => typeof chain === 'object' && chain !== null && 'id' in chain
-) as unknown as [Chain, ...Chain[]];
+import { mainnet, arbitrum, base } from 'wagmi/chains';
+import { http } from 'viem';
 
 const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
+const moralisApiKey = process.env.NEXT_PUBLIC_MORALIS_API_KEY;
 
 if (!walletConnectProjectId) {
   throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not defined in environment variables');
@@ -16,7 +13,16 @@ if (!walletConnectProjectId) {
 export const wagmiConfig = getDefaultConfig({
   appName: 'thesauros',
   projectId: walletConnectProjectId,
-  chains: allChains,
+  chains: [mainnet, arbitrum, base],
+  transports: moralisApiKey
+    ? {
+        // Moralis RPC for Ethereum mainnet (better simulation support)
+        [mainnet.id]: http(`https://site1.moralis-nodes.com/eth/${moralisApiKey}`),
+        // Default public RPCs for L2s
+        [arbitrum.id]: http(),
+        [base.id]: http(),
+      }
+    : undefined,
   ssr: true,
 });
 

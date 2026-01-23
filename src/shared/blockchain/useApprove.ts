@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { TAddress, TChainID } from './core/types';
 import { useContractWrite } from './core/useContractWrite';
 import { round } from '../number/round';
@@ -34,12 +34,25 @@ export const useApprove = ({
     args: [vaultAddress, BigInt(Math.round(userValue))],
   });
 
-  const { allowance, isLoading: isLoadingAllowance } = useAllowance({
+  const {
+    allowance,
+    isLoading: isLoadingAllowance,
+    refetch,
+  } = useAllowance({
     tokenAddress: tokenAddress,
     tokenChainId: chainID,
     account: userAddress,
     spender: vaultAddress,
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => {
+        refetch();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, refetch]);
 
   const isApproved: boolean = useMemo(() => {
     const userInputValue = Number.isNaN(Number(userValue)) ? 0 : round(Number(userValue));

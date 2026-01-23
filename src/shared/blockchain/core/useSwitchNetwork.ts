@@ -19,5 +19,5 @@ export const useSwitchNetwork = ({ targetChainID }: { targetChainID: number }) =
 };
 
 export const switchNetwork = (chainId: TChainID) => {
-  return switchChain(wagmiConfig, { chainId });
+  return switchChain(wagmiConfig, { chainId: chainId as 1 | 42161 | 8453 });
 };

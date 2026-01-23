@@ -16,7 +16,7 @@ export const useDeposit = ({
   onError?: (error: Error | null) => void;
   enabled?: boolean;
 }) => {
-  const { write, isLoading } = useContractWrite({
+  const { writeWithoutSimulation, isLoading } = useContractWrite({
     address: vaultAddress,
     functionName: 'deposit',
     chainID: chainID,
@@ -26,8 +26,10 @@ export const useDeposit = ({
     enabled,
   });
 
+  // Use writeWithoutSimulation to avoid consuming paid RPC credits
+  // Wallet will validate the transaction before signing
   const deposit = () => {
-    write();
+    writeWithoutSimulation();
   };
 
   return { deposit, isDepositLoading: isLoading };
