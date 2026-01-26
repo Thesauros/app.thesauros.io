@@ -1,5 +1,5 @@
-import { customFetch, getGrafanaUrl, useCustomQueryKey } from '../core';
-import { getBaseUrl } from '../core/getApiUrl';
+import { customFetch, useCustomQueryKey } from '../core';
+import { getVaultDataUrl } from '../core';
 
 type TAPRInfoRaw = TTickRaw[];
 
@@ -18,9 +18,10 @@ type TParams = {
 
 const fetcAPRTicks = async (params: TParams): Promise<TAPRInfoRaw> => {
   return customFetch<TAPRInfoRaw>(
-    params.chainID === 42161
-      ? getGrafanaUrl(`lending/${params.token}/apr-ticks/${params.interval}/${params.intervals}`)
-      : getBaseUrl(`lending/${params.token}/apr-ticks/${params.interval}/${params.intervals}`)
+    getVaultDataUrl(
+      `lending/${params.token}/apr-ticks/${params.interval}/${params.intervals}`,
+      params.chainID
+    )
   );
 };
 

@@ -62,9 +62,24 @@ export const DepositModal = () => {
     : value.raw * 10 ** selectedVault.decimals;
 
   const handleValueChange = useCallback((newValue: string) => {
-    const numericValue = newValue === '' ? 0 : parseFloat(newValue);
+    if (newValue === '') {
+      setValue({ formatted: '', raw: 0 });
+      return;
+    }
+
+    const numericValue = parseFloat(newValue);
+
+    let formatted = newValue;
+    if (newValue.includes('.')) {
+      const [intPart, decPart] = newValue.split('.');
+      const normalizedInt = intPart === '' ? '0' : String(parseInt(intPart, 10) || 0);
+      formatted = `${normalizedInt}.${decPart}`;
+    } else {
+      formatted = String(parseInt(newValue, 10) || 0);
+    }
+
     setValue({
-      formatted: newValue,
+      formatted,
       raw: isNaN(numericValue) ? 0 : numericValue,
     });
   }, []);
@@ -112,7 +127,7 @@ export const DepositModal = () => {
     functionName: 'balanceOf',
     args: [address],
     chainID: selectedVault.chainID,
-    staleTime: 1000,
+    staleTime: 30000,
     selectData: selectCoinBalance,
   });
 
@@ -121,7 +136,7 @@ export const DepositModal = () => {
     functionName: 'getBalanceOfAsset',
     args: [address],
     chainID: selectedVault.chainID,
-    staleTime: 1000,
+    staleTime: 30000,
     selectData: selectTokenBalance,
   });
 
@@ -140,12 +155,16 @@ export const DepositModal = () => {
           coinName={selectedVault.coinName}
           status="success"
           type="deposit"
+          chainId={selectedVault.chainID}
         />
       );
       refetchAfterDeposit();
     },
     onError: error => {
-      if (error) open(<TransactionStatusModal status="failed" type="deposit" />);
+      if (error)
+        open(
+          <TransactionStatusModal status="failed" type="deposit" chainId={selectedVault.chainID} />
+        );
     },
   });
 
@@ -324,7 +343,7 @@ For example, holding 1,000 USDC for one year gives you about 365,000 points."
           <FlexBlock gap={2} alignItems="center">
             <PointCoinIcon size={16} />
             <Body level={2} weight="regular">
-              {formatNumberWithCommas(Number(value.formatted) * 365)}
+              {formatNumberWithCommas(Number(value.formatted) * 2 * 365)}
             </Body>
           </FlexBlock>
         </FlexBlock>

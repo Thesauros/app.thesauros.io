@@ -31,7 +31,7 @@ export const MobileUserCards = ({ totalPosition }: MobileUserCardsProps) => {
           <FlexBlock gap={4} alignItems="center">
             <PointCoinIcon size={16} />
             <Heading level={6} weight="bold">
-              {totalPosition}
+              {totalPosition * 2}
             </Heading>
             <span className={styles.daily}>/day</span>
           </FlexBlock>

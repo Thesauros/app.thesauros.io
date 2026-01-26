@@ -14,34 +14,38 @@ type TVaultPositionResult = {
 export const useVaultsPosition = (): TVaultPositionResult => {
   const { address } = useAccount();
 
-  const contracts = (address ? vaults : []).map((vault: TVault) => ({
-    address: vault.vaultAddress,
-    functionName: 'getBalanceOfAsset',
-    args: [address],
-    chainID: vault.chainID,
-    staleTime: 1000,
-  }));
+  const contracts = useMemo(
+    () =>
+      (address ? vaults : []).map((vault: TVault) => ({
+        address: vault.vaultAddress,
+        functionName: 'getBalanceOfAsset',
+        args: [address],
+        chainID: vault.chainID,
+      })),
+    [address]
+  );
 
   const { data, isLoading, refetch } = useContractsRead<bigint>({
     contracts,
-    staleTime: 1000,
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 
   const totalPosition = useMemo(() => {
-    if (!address) return undefined;
-    if (isLoading) return undefined;
+    if (!address || isLoading || !data) return undefined;
 
-    const validResults = data?.filter((value): value is bigint => value !== undefined) || [];
-    if (validResults.length === 0) return undefined;
+    const positionsInDollars = data.reduce((sum, position, index) => {
+      if (position === undefined) return sum;
 
-    const positionsInDollars = validResults.map((position, index) => {
       const vault = vaults[index];
       const divisor = BigInt(10 ** vault.decimals);
       const value = Number(position) / Number(divisor);
-      return value;
-    });
+      return sum + value;
+    }, 0);
 
-    return round(positionsInDollars.reduce((sum, v) => sum + v, 0));
+    return positionsInDollars > 0 ? round(positionsInDollars) : undefined;
   }, [address, data, isLoading]);
 
   return {

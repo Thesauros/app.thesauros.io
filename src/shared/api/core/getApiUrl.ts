@@ -1,15 +1,19 @@
 const API_URL = 'https://api.thesauros.tech/api/';
-const GRAFANA_URL = 'https://api-production-ca82.up.railway.app/';
-const BASE_URL = 'https://api-base-production-87ce.up.railway.app/';
+const VAULT_DATA_URL = process.env.NEXT_PUBLIC_VAULT_DATA_URL || '';
+
+const NETWORK_MAP: Record<number, string> = {
+  42161: 'Arbitrum',
+  8453: 'Base',
+  56: 'BSC',
+  1: 'Ethereum',
+};
 
 export const getApiUrl = (endpoint: string): string => {
   return `${API_URL}${endpoint}`;
 };
 
-export const getGrafanaUrl = (endpoint: string): string => {
-  return `${GRAFANA_URL}${endpoint}`;
-};
+export const getVaultDataUrl = (endpoint: string, chainID: number): string => {
+  const network = NETWORK_MAP[chainID];
 
-export const getBaseUrl = (endpoint: string): string => {
-  return `${BASE_URL}${endpoint}`;
+  return `${VAULT_DATA_URL}${endpoint}?network=${network}`;
 };
