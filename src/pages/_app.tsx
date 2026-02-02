@@ -11,10 +11,10 @@ import ThemeProvider from '@/shared/ui/theme/theme.provider';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import '@rainbow-me/rainbowkit/styles.css';
-import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import { WagmiProvider } from 'wagmi';
+import { PrivyProvider } from '@privy-io/react-auth';
+import { WagmiProvider } from '@privy-io/wagmi';
 import { wagmiConfig } from '@/shared/blockchain/config';
+import { privyConfig } from '@/shared/blockchain/privyConfig';
 import { ReferralProvider } from '@/widgets/referral';
 import { AppInitializer } from '@/shared/providers';
 
@@ -42,9 +42,9 @@ export default function App({ Component, pageProps }: AppProps) {
         </Head>
       )}
       <ThemeProvider>
-        <WagmiProvider config={wagmiConfig}>
+        <PrivyProvider appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ''} config={privyConfig}>
           <QueryClientProvider client={queryClient}>
-            <RainbowKitProvider locale="en-US">
+            <WagmiProvider config={wagmiConfig}>
               <ModalProvider>
                 <ReferralProvider>
                   <AppInitializer>
@@ -54,9 +54,9 @@ export default function App({ Component, pageProps }: AppProps) {
                   </AppInitializer>
                 </ReferralProvider>
               </ModalProvider>
-            </RainbowKitProvider>
+            </WagmiProvider>
           </QueryClientProvider>
-        </WagmiProvider>
+        </PrivyProvider>
       </ThemeProvider>
     </div>
   );

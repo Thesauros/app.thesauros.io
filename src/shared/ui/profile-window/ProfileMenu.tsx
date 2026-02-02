@@ -11,9 +11,17 @@ import { Card } from '../new-card';
 import { useNetwork } from '@/shared/blockchain/useNetwork';
 
 export const ProfileMenu = () => {
-  const { address = '', isConnected } = useAccount();
+  const { address = '', isConnected, authenticated, logout } = useAccount();
   const { chain } = useNetwork();
   const { disconnect } = useDisconnect();
+
+  const handleLogout = async () => {
+    if (authenticated) {
+      await logout();
+    } else {
+      disconnect();
+    }
+  };
 
   return (
     <div className={styles.root}>
@@ -44,7 +52,7 @@ export const ProfileMenu = () => {
           </Card>
 
           {isConnected && (
-            <Card variant="secondary" className={styles.actionButton} onClick={() => disconnect()}>
+            <Card variant="secondary" className={styles.actionButton} onClick={handleLogout}>
               <LogoutIcon width={16} height={16} />
               <Body level={2} weight="regular">
                 Log out
