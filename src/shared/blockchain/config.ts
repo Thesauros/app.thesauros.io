@@ -1,18 +1,11 @@
 import { TVault, TAddress } from './core/types';
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { mainnet, arbitrum, base } from 'wagmi/chains';
-import { http } from 'viem';
+import { createConfig } from '@privy-io/wagmi';
+import { mainnet, arbitrum, base } from 'viem/chains';
+import { http } from 'wagmi';
 
-const walletConnectProjectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID;
 const moralisApiKey = process.env.NEXT_PUBLIC_MORALIS_API_KEY;
 
-if (!walletConnectProjectId) {
-  throw new Error('NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID is not defined in environment variables');
-}
-
-export const wagmiConfig = getDefaultConfig({
-  appName: 'thesauros',
-  projectId: walletConnectProjectId,
+export const wagmiConfig = createConfig({
   chains: [mainnet, arbitrum, base],
   transports: moralisApiKey
     ? {
@@ -22,8 +15,12 @@ export const wagmiConfig = getDefaultConfig({
         [arbitrum.id]: http(),
         [base.id]: http(),
       }
-    : undefined,
-  ssr: true,
+    : {
+        // Default public RPCs for all chains
+        [mainnet.id]: http(),
+        [arbitrum.id]: http(),
+        [base.id]: http(),
+      },
 });
 
 export const vaults: TVault[] = [

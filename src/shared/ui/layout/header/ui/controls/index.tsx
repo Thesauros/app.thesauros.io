@@ -1,5 +1,5 @@
-import { useConnectModal } from '@rainbow-me/rainbowkit';
-import { useAccount, useAccountEffect } from 'wagmi';
+import { useAccountEffect } from 'wagmi';
+import { useAccount } from '@/shared/blockchain';
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { Button } from '@/shared/ui/button';
 import { useCheckResolution } from '@/shared/browser/useCheckResolution';
@@ -14,8 +14,8 @@ import { WalletIcon } from '@/shared/ui/icons/wallet-icon';
 
 export const Controls = () => {
   const isMobile = useCheckResolution(576);
-  const { openConnectModal } = useConnectModal();
-  const { isConnected, address } = useAccount();
+  const { login, isConnected, isReady, address } = useAccount();
+
   const [isConnectedLS, setConnectedLS] = useLocalStorageState(
     LocalStorageKey.CONNECTED_WALLET,
     'false'
@@ -31,12 +31,16 @@ export const Controls = () => {
     },
   });
 
+  if (!isReady) {
+    return null;
+  }
+
   if (!isConnected && isMobile) {
     return (
       <FlexBlock alignItems="center" justifyContent="space-between" block>
         <ThesaurosMiniLogo />
         <FlexBlock alignItems="center" gap={24}>
-          <Button variant="primary" size="md" onClick={openConnectModal}>
+          <Button variant="primary" size="md" onClick={login}>
             <WalletIcon />
           </Button>
           {isMobile && <MobileMenu />}
@@ -54,7 +58,7 @@ export const Controls = () => {
         block={!!isMobile}
       >
         {!isMobile && <ConnectWalletBadge />}
-        <Button variant="primary" size="lg" onClick={openConnectModal}>
+        <Button variant="primary" size="lg" onClick={login}>
           Connect wallet
         </Button>
         {isMobile && <MobileMenu />}

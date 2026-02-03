@@ -1,4 +1,3 @@
-import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useEffect, useState } from 'react';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 import { Card } from '@/shared/ui/new-card';
@@ -27,8 +26,8 @@ import {
 
 export const DashboardScreen = () => {
   const { totalPosition, vaultsTVL, complexApy } = useDashboardConstants();
-  const { openConnectModal } = useConnectModal();
-  const { address, isConnected } = useAccount();
+  const { login, address, isConnected } = useAccount();
+
   const { open } = useModal();
   const { checkSignatureAndExecute } = useSignTermsWithCallback();
   const { isInWhiteList } = useWhiteList(address);
@@ -55,8 +54,8 @@ export const DashboardScreen = () => {
   const handleDepositClick = () => {
     if (isConnected) {
       checkSignatureAndExecute(openDepositModal);
-    } else if (openConnectModal) {
-      openConnectModal();
+    } else {
+      login();
     }
   };
 
