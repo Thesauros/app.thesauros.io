@@ -16,8 +16,4 @@ export const privyConfig: PrivyClientConfig = {
 
   loginMethods: ['wallet', 'email', 'sms'],
   supportedChains: [mainnet, arbitrum, base],
-  legal: {
-    termsAndConditionsUrl: 'https://thesauros.tech/privacy',
-    privacyPolicyUrl: 'https://thesauros.tech/privacy',
-  },
 };
