@@ -23,9 +23,13 @@ export const ProfileWindow = () => {
 
   return (
     !!address && (
-      <div className={styles.button} ref={ref}>
+      <div className={styles.button} ref={ref} data-testid="user-wallet-button">
         {address && (
-          <div onClick={() => setOpened(true)} style={{ cursor: 'pointer' }}>
+          <div
+            onClick={() => setOpened(true)}
+            style={{ cursor: 'pointer' }}
+            data-testid="user-wallet-button-trigger"
+          >
             <FlexBlock gap={8} alignItems="center">
               <Avatar value={address} />
               <Subtitle>{shortString(address)}</Subtitle>
@@ -35,7 +39,9 @@ export const ProfileWindow = () => {
         {opened && (
           <>
             <div className={styles.overlay} onClick={() => setOpened(false)} />
-            <div className={styles.profileWidget}>{<ProfileMenu />}</div>
+            <div className={styles.profileWidget} data-testid="user-wallet-dropdown">
+              {<ProfileMenu />}
+            </div>
           </>
         )}
       </div>

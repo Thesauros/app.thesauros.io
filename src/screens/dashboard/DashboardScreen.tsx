@@ -81,39 +81,47 @@ export const DashboardScreen = () => {
             {isMobile ? null : 'Potential earnings'}
           </Button>
         </FlexBlock>
-        {isCalculatorOpened && <Calculator apy={complexApy.netApy} />}
+        {isCalculatorOpened && (
+          <div data-testid="dashboard-block-potential-earnings">
+            <Calculator apy={complexApy.netApy} />
+          </div>
+        )}
       </FlexBlock>
       {/* Main Vault Card */}
-      <Card block>
-        <FlexBlock direction="column" gap={28}>
-          <FlexBlock
-            justifyContent="space-between"
-            alignItems="flex-start"
-            gap={24}
-            direction={isLaptop ? 'column' : 'row'}
-          >
-            <VaultInfoCard isMobile={isMobile} netApy={complexApy.netApy} />
+      <div data-testid="dashboard-block-usdc">
+        <Card block>
+          <FlexBlock direction="column" gap={28}>
+            <FlexBlock
+              justifyContent="space-between"
+              alignItems="flex-start"
+              gap={24}
+              direction={isLaptop ? 'column' : 'row'}
+            >
+              <VaultInfoCard isMobile={isMobile} netApy={complexApy.netApy} />
 
-            {isMobile && isConnected && <MobileUserCards totalPosition={totalPosition} />}
+              {isMobile && isConnected && <MobileUserCards totalPosition={totalPosition} />}
 
-            {!isMobile && (
-              <ApyCards
-                isDeposited={isDeposited}
-                totalPosition={totalPosition}
-                complexApy={complexApy}
-              />
-            )}
+              {!isMobile && (
+                <ApyCards
+                  isDeposited={isDeposited}
+                  totalPosition={totalPosition}
+                  complexApy={complexApy}
+                />
+              )}
+            </FlexBlock>
+
+            <DepositActions
+              isMobile={isMobile}
+              isDeposited={isDeposited}
+              onDepositClick={handleDepositClick}
+              onWithdrawClick={handleWithdrawClick}
+            />
           </FlexBlock>
-
-          <DepositActions
-            isMobile={isMobile}
-            isDeposited={isDeposited}
-            onDepositClick={handleDepositClick}
-            onWithdrawClick={handleWithdrawClick}
-          />
-        </FlexBlock>
-      </Card>
-      <PerformanceChart />
+        </Card>
+      </div>
+      <div data-testid="dashboard-block-performance">
+        <PerformanceChart />
+      </div>
       <AboutSection isMobile={isMobile} />
     </FlexBlock>
   );
