@@ -32,32 +32,33 @@ export const ProfileMenu = () => {
           </div>
         </FlexBlock>
         <div className={styles.buttonsContainer}>
-          <div data-testid="user-wallet-copy-button">
-            <Card variant="secondary" className={styles.actionButton}>
-              <CopyButton
-                value={address}
-                text={
-                  <Body level={2} weight="regular">
-                    Copy
-                  </Body>
-                }
-              />
-            </Card>
-          </div>
+          <Card
+            variant="secondary"
+            className={styles.actionButton}
+            dataTestId="user-wallet-copy-button-card"
+          >
+            <CopyButton
+              value={address}
+              text={
+                <Body level={2} weight="regular">
+                  Copy
+                </Body>
+              }
+            />
+          </Card>
 
           {isConnected && (
-            <div data-testid="user-wallet-logout-button">
-              <Card
-                variant="secondary"
-                className={styles.actionButton}
-                onClick={() => disconnect()}
-              >
-                <LogoutIcon width={16} height={16} />
-                <Body level={2} weight="regular">
-                  Log out
-                </Body>
-              </Card>
-            </div>
+            <Card
+              variant="secondary"
+              className={styles.actionButton}
+              dataTestId="user-wallet-logout-button-card"
+              onClick={() => disconnect()}
+            >
+              <LogoutIcon width={16} height={16} />
+              <Body level={2} weight="regular">
+                Log out
+              </Body>
+            </Card>
           )}
         </div>
       </div>
