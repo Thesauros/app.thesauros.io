@@ -8,17 +8,20 @@ export const Card = ({
   className = '',
   onClick,
   block = false,
+  dataTestId = '',
 }: {
   children: ReactNode;
   variant?: 'primary' | 'secondary';
   className?: string;
   onClick?: () => void;
   block?: boolean;
+  dataTestId?: string;
 }) => {
   return (
     <div
       className={classNames(styles.card, styles[variant], styles[block ? 'block' : ''], className)}
       onClick={onClick}
+      data-testid={dataTestId}
     >
       {children}
     </div>
