@@ -7,13 +7,13 @@ import { Tooltip } from '@/shared/ui/tooltip/tooltip';
 import { UsdcIcon } from '@/shared/ui/icons/usdc-icon';
 import { LightningIcon } from '@/shared/ui/icons/lightning-icon';
 import { StarsIcon } from '@/shared/ui/icons/stars-icon';
-import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
+// import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 import styles from '../main.module.scss';
 
 type VaultInfoCardProps = {
   isMobile: boolean;
   netApy: number;
-  vaultsTVL: number | undefined;
+  // vaultsTVL: number | undefined;
 };
 
 const VAULT_DESCRIPTION =
@@ -22,10 +22,10 @@ const VAULT_DESCRIPTION =
 const WITHDRAW_TOOLTIP =
   'There are no fixed terms or lockups. You can withdraw your funds whenever you choose.';
 
-const TVL_TOOLTIP =
-  'TVL (Total Value Locked) means the total amount of money currently deposited by all users in this strategy. It works like Assets Under Management (AUM) in traditional finance, showing how much capital is being managed right now.';
+// const TVL_TOOLTIP =
+//   'TVL (Total Value Locked) means the total amount of money currently deposited by all users in this strategy. It works like Assets Under Management (AUM) in traditional finance, showing how much capital is being managed right now.';
 
-export const VaultInfoCard = ({ isMobile, netApy, vaultsTVL }: VaultInfoCardProps) => {
+export const VaultInfoCard = ({ isMobile, netApy }: VaultInfoCardProps) => {
   return (
     <FlexBlock direction="column" gap={16} className={styles.vaultInfoCard}>
       <FlexBlock justifyContent="space-between" alignItems="center" block>
@@ -78,7 +78,7 @@ export const VaultInfoCard = ({ isMobile, netApy, vaultsTVL }: VaultInfoCardProp
             </Body>
           </FlexBlock>
         </FlexBlock>
-        <FlexBlock direction="column" gap={4}>
+        {/* <FlexBlock direction="column" gap={4}>
           <Tooltip withIcon tooltipText={TVL_TOOLTIP}>
             <Caption weight="regular" className={styles.secondaryHighlight}>
               TVL
@@ -87,7 +87,7 @@ export const VaultInfoCard = ({ isMobile, netApy, vaultsTVL }: VaultInfoCardProp
           <Body level={2} weight="bold">
             ${formatNumberWithCommas(vaultsTVL ?? 0)}
           </Body>
-        </FlexBlock>
+        </FlexBlock> */}
       </FlexBlock>
     </FlexBlock>
   );

@@ -64,7 +64,7 @@ export const Calculator = ({ apy }: CalculatorProps) => {
   }, [depositValue, timePeriod.value, timePeriod.title, apy]);
 
   return (
-    <Card block>
+    <Card block dataTestId="dashboard-block-potential-earnings">
       <FlexBlock direction="column" gap={16} block>
         {/* Header with period toggle */}
         <FlexBlock

@@ -22,8 +22,12 @@ export const SelectChainButton = () => {
   };
 
   return (
-    <div className={styles.wrapper} ref={dropdownRef}>
-      <div onClick={() => setIsOpen(!isOpen)} className={styles.buttonContainer}>
+    <div className={styles.wrapper} ref={dropdownRef} data-testid="network-selector">
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className={styles.buttonContainer}
+        data-testid="network-button"
+      >
         {currentChain ? (
           <img
             alt={currentChain.name}
@@ -47,6 +51,7 @@ export const SelectChainButton = () => {
               key={chain.id}
               className={`${styles.chainOption} ${chain.id === chainId ? styles.active : ''}`}
               onClick={() => handleChainSelect(chain)}
+              data-testid={`network-option-dd-${chain.id}`}
             >
               <img
                 alt={chain.name}

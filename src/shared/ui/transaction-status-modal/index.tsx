@@ -51,52 +51,64 @@ export const TransactionStatusModal = ({
   };
 
   return (
-    <FlexBlock direction="column" gap={24} block>
-      {/* Header */}
-      <FlexBlock justifyContent="end" alignItems="center" block>
-        <CloseIcon onClick={close} />
-      </FlexBlock>
-
-      <FlexBlock direction="column" gap={12} justifyContent="center" alignItems="center" block>
-        {TYPE_MAP_TO_ICON[type]}
-        <Subtitle className={status === 'success' ? styles.success : styles.error}>
-          {capitalize(type)} {TYPE_STATUS_TO_TEXT[status]}
-        </Subtitle>
-        {amount && coinName && (
-          <Heading level={6} weight="bold">
-            {type === 'deposit' ? '+' : ''}
-            {amount} {coinName}
-          </Heading>
-        )}
-      </FlexBlock>
-
-      <FlexBlock direction="column" gap={16} block>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Body level={2} weight="regular" className={styles.secondary}>
-            Date & time
-          </Body>
-          <Body level={2} weight="regular">
-            {formatDateTime(new Date().toISOString())}
-          </Body>
+    <div data-testid="successful-operation-modal">
+      <FlexBlock direction="column" gap={24} block>
+        {/* Header */}
+        <FlexBlock justifyContent="end" alignItems="center" block>
+          <CloseIcon onClick={close} data-testid="successful-operation-modal-close" />
         </FlexBlock>
-        {data && (
+
+        <FlexBlock direction="column" gap={12} justifyContent="center" alignItems="center" block>
+          {TYPE_MAP_TO_ICON[type]}
+          <Subtitle className={status === 'success' ? styles.success : styles.error}>
+            {capitalize(type)} {TYPE_STATUS_TO_TEXT[status]}
+          </Subtitle>
+          {amount && coinName && (
+            <Heading level={6} weight="bold">
+              {type === 'deposit' ? '+' : ''}
+              {amount} {coinName}
+            </Heading>
+          )}
+        </FlexBlock>
+
+        <FlexBlock direction="column" gap={16} block>
           <FlexBlock alignItems="center" justifyContent="space-between" block>
             <Body level={2} weight="regular" className={styles.secondary}>
-              Txid
+              Date & time
             </Body>
-            <FlexBlock alignItems="center" gap={8}>
-              <Body level={2} weight="regular">
-                {shortString(data)}
-              </Body>
-              <CopyButton value={String(data)} />
-              <LinkIcon onClick={handleOpenExplorer} />
-            </FlexBlock>
+            <Body level={2} weight="regular">
+              {formatDateTime(new Date().toISOString())}
+            </Body>
           </FlexBlock>
-        )}
+          {data && (
+            <FlexBlock alignItems="center" justifyContent="space-between" block>
+              <Body level={2} weight="regular" className={styles.secondary}>
+                Txid
+              </Body>
+              <FlexBlock alignItems="center" gap={8}>
+                <Body level={2} weight="regular">
+                  {shortString(data)}
+                </Body>
+                <span data-testid="successful-operation-copy-tx-button">
+                  <CopyButton value={String(data)} />
+                </span>
+                <LinkIcon
+                  onClick={handleOpenExplorer}
+                  data-testid="successful-operation-view-tx-link"
+                />
+              </FlexBlock>
+            </FlexBlock>
+          )}
+        </FlexBlock>
+        <Button
+          size="lg"
+          onClick={() => close()}
+          fullWidth
+          data-testid="successful-operation-done-button"
+        >
+          Done
+        </Button>
       </FlexBlock>
-      <Button size="lg" onClick={() => close()} fullWidth>
-        Done
-      </Button>
-    </FlexBlock>
+    </div>
   );
 };
