@@ -256,173 +256,186 @@ export const DepositModal = () => {
   }, [open, selectedVault.coinAddress, selectedVault.chainID]);
 
   return (
-    <FlexBlock direction="column" gap={16} block>
-      {/* Header */}
-      <FlexBlock justifyContent="space-between" alignItems="center" block>
-        <FlexBlock gap={8} alignItems="center">
-          <UsdcIcon size={33} />
-          <Heading level={6} weight="regular">
-            Deposit {selectedVault.coinName}
-          </Heading>
+    <div data-testid="deposit-modal">
+      <FlexBlock direction="column" gap={16} block>
+        {/* Header */}
+        <FlexBlock justifyContent="space-between" alignItems="center" block>
+          <FlexBlock gap={8} alignItems="center">
+            <UsdcIcon size={33} />
+            <Heading level={6} weight="regular">
+              Deposit {selectedVault.coinName}
+            </Heading>
+          </FlexBlock>
+          <CloseIcon onClick={close} data-testid="deposit-modal-close" />
         </FlexBlock>
-        <CloseIcon onClick={close} />
-      </FlexBlock>
 
-      {/* APY area */}
-      <FlexBlock gap={4} direction="column" block>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Net APY
-          </Caption>
-          <Body level={2} weight="regular">
-            {complexApy.netApy}%
-          </Body>
-        </FlexBlock>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Reward APY
-          </Caption>
-          <Body level={2} weight="regular">
-            {complexApy.rewardApy}%
-          </Body>
-        </FlexBlock>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Base APY
-          </Caption>
-          <Body level={2} weight="regular">
-            {complexApy.baseApy}%
-          </Body>
-        </FlexBlock>
-      </FlexBlock>
-
-      {/* Deposit Input */}
-      <FlexBlock direction="column" gap={4} block>
-        <Caption>Amount to Deposit</Caption>
-        <InputComponent
-          id="id"
-          value={value.formatted}
-          type="number"
-          size="md"
-          maxValue={1000000000}
-          formatWithCommas
-          postfix={
-            <Body level={2} weight="regular" className={styles.secondary}>
-              {selectedVault.coinName}
-            </Body>
-          }
-          fullWidth
-          onChange={handleValueChange}
-          disabled={isDepositLoading}
-          autoFocus
-        />
-      </FlexBlock>
-
-      {/* Balance block */}
-      <FlexBlock direction="column" gap={8} block>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Balance:
-          </Caption>
-          <div style={{ cursor: 'pointer' }} onClick={setMaxValue}>
-            <Body level={2} weight="regular">
-              {userCoinBalance} {selectedVault.coinName}
-            </Body>
-          </div>
-        </FlexBlock>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Tooltip
-            tooltipText="You receive 1 point for every $1 you hold each day.
-For example, holding 1,000 USDC for one year gives you about 365,000 points."
-            withIcon
-          >
+        {/* APY area */}
+        <FlexBlock gap={4} direction="column" block>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
             <Caption weight="regular" className={styles.secondary}>
-              Total points per year
+              Net APY
             </Caption>
-          </Tooltip>
-          <FlexBlock gap={2} alignItems="center">
+            <Body level={2} weight="regular">
+              {complexApy.netApy}%
+            </Body>
+          </FlexBlock>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Caption weight="regular" className={styles.secondary}>
+              Reward APY
+            </Caption>
+            <Body level={2} weight="regular">
+              {complexApy.rewardApy}%
+            </Body>
+          </FlexBlock>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Caption weight="regular" className={styles.secondary}>
+              Base APY
+            </Caption>
+            <Body level={2} weight="regular">
+              {complexApy.baseApy}%
+            </Body>
+          </FlexBlock>
+        </FlexBlock>
+
+        {/* Deposit Input */}
+        <FlexBlock direction="column" gap={4} block>
+          <Caption>Amount to Deposit</Caption>
+          <InputComponent
+            id="deposit-amount-input"
+            name="deposit-amount-input"
+            value={value.formatted}
+            type="number"
+            size="md"
+            maxValue={1000000000}
+            formatWithCommas
+            postfix={
+              <Body level={2} weight="regular" className={styles.secondary}>
+                {selectedVault.coinName}
+              </Body>
+            }
+            fullWidth
+            onChange={handleValueChange}
+            disabled={isDepositLoading}
+            autoFocus
+          />
+        </FlexBlock>
+
+        {/* Balance block */}
+        <FlexBlock direction="column" gap={8} block>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Caption weight="regular" className={styles.secondary}>
+              Balance:
+            </Caption>
+            <div
+              style={{ cursor: 'pointer' }}
+              onClick={setMaxValue}
+              data-testid="deposit-modal-balance"
+            >
+              <Body level={2} weight="regular">
+                {userCoinBalance} {selectedVault.coinName}
+              </Body>
+            </div>
+          </FlexBlock>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Tooltip
+              tooltipText="You receive 1 point for every $1 you hold each day.
+For example, holding 1,000 USDC for one year gives you about 365,000 points."
+              withIcon
+            >
+              <Caption weight="regular" className={styles.secondary}>
+                Total points per year
+              </Caption>
+            </Tooltip>
+            <FlexBlock gap={2} alignItems="center">
+              <PointCoinIcon size={16} />
+              <Body level={2} weight="regular">
+                {formatNumberWithCommas(Number(value.formatted) * 2 * 365)}
+              </Body>
+            </FlexBlock>
+          </FlexBlock>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Tooltip
+              tooltipText="Applied only to your net profit, never to your initial deposit."
+              withIcon
+            >
+              <Caption weight="regular" className={styles.secondary}>
+                Performance fee
+              </Caption>
+            </Tooltip>
+            <div>
+              <Body level={2} weight="regular">
+                ≈0.054%/Day
+              </Body>
+            </div>
+          </FlexBlock>
+        </FlexBlock>
+
+        <div className={styles.earningsBlock}>
+          <Caption weight="regular">Projected Earnings</Caption>
+          {/* Projected Earnings */}
+          <FlexBlock direction="column" gap={6} block>
+            <FlexBlock alignItems="center" justifyContent="space-between" block>
+              <Caption weight="regular" className={styles.secondary}>
+                Monthly profit
+              </Caption>
+              <Body level={2} weight="regular">
+                ${round((apy * (Number(value.formatted) / 100)) / 12, 2)}
+              </Body>
+            </FlexBlock>
+            <FlexBlock alignItems="center" justifyContent="space-between" block>
+              <Caption weight="regular" className={styles.secondary}>
+                Yearly profit
+              </Caption>
+              <Body level={2} weight="regular">
+                ${round(apy * (Number(value.formatted) / 100), 2)}
+              </Body>
+            </FlexBlock>
+          </FlexBlock>
+        </div>
+
+        {/* Swap Block */}
+        {userCoinBalance < 10 && (
+          <div className={styles.swapBlock}>
+            <FlexBlock alignItems="center">
+              <InfoCircleIcon />
+              <Caption weight="regular">Low on USDC? Swap from any token</Caption>
+            </FlexBlock>
+            <Button
+              variant="text"
+              prefix={<SwapIcon />}
+              onClick={handleSwapClick}
+              data-testid="deposit-modal-swap-button"
+            >
+              Swap
+            </Button>
+          </div>
+        )}
+
+        {/* Deposit button block */}
+        <Button
+          size="lg"
+          onClick={handleButtonClick}
+          fullWidth
+          disabled={isDepositLoading || !depositValue || isMoreThanBalance || isLessThanMinAmount}
+          data-testid="deposit-modal-submit-button"
+        >
+          {buttonText}
+        </Button>
+        <StepsProgress steps={steps} />
+
+        {/* First deposit block */}
+        {Number(tokenBalance) === 0 && !isFirstDepositTaskCompleted && (
+          <FlexBlock alignItems="center" gap={8} justifyContent="center">
+            <Body level={2} weight="regular">
+              +500
+            </Body>
             <PointCoinIcon size={16} />
             <Body level={2} weight="regular">
-              {formatNumberWithCommas(Number(value.formatted) * 2 * 365)}
+              Points bonus for your first deposit
             </Body>
           </FlexBlock>
-        </FlexBlock>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Tooltip
-            tooltipText="Applied only to your net profit, never to your initial deposit."
-            withIcon
-          >
-            <Caption weight="regular" className={styles.secondary}>
-              Performance fee
-            </Caption>
-          </Tooltip>
-          <div>
-            <Body level={2} weight="regular">
-              ≈0.054%/Day
-            </Body>
-          </div>
-        </FlexBlock>
+        )}
       </FlexBlock>
-
-      <div className={styles.earningsBlock}>
-        <Caption weight="regular">Projected Earnings</Caption>
-        {/* Projected Earnings */}
-        <FlexBlock direction="column" gap={6} block>
-          <FlexBlock alignItems="center" justifyContent="space-between" block>
-            <Caption weight="regular" className={styles.secondary}>
-              Monthly profit
-            </Caption>
-            <Body level={2} weight="regular">
-              ${round((apy * (Number(value.formatted) / 100)) / 12, 2)}
-            </Body>
-          </FlexBlock>
-          <FlexBlock alignItems="center" justifyContent="space-between" block>
-            <Caption weight="regular" className={styles.secondary}>
-              Yearly profit
-            </Caption>
-            <Body level={2} weight="regular">
-              ${round(apy * (Number(value.formatted) / 100), 2)}
-            </Body>
-          </FlexBlock>
-        </FlexBlock>
-      </div>
-
-      {/* Swap Block */}
-      {userCoinBalance < 10 && (
-        <div className={styles.swapBlock}>
-          <FlexBlock alignItems="center">
-            <InfoCircleIcon />
-            <Caption weight="regular">Low on USDC? Swap from any token</Caption>
-          </FlexBlock>
-          <Button variant="text" prefix={<SwapIcon />} onClick={handleSwapClick}>
-            Swap
-          </Button>
-        </div>
-      )}
-
-      {/* Deposit button block */}
-      <Button
-        size="lg"
-        onClick={handleButtonClick}
-        fullWidth
-        disabled={isDepositLoading || !depositValue || isMoreThanBalance || isLessThanMinAmount}
-      >
-        {buttonText}
-      </Button>
-      <StepsProgress steps={steps} />
-
-      {/* First deposit block */}
-      {Number(tokenBalance) === 0 && !isFirstDepositTaskCompleted && (
-        <FlexBlock alignItems="center" gap={8} justifyContent="center">
-          <Body level={2} weight="regular">
-            +500
-          </Body>
-          <PointCoinIcon size={16} />
-          <Body level={2} weight="regular">
-            Points bonus for your first deposit
-          </Body>
-        </FlexBlock>
-      )}
-    </FlexBlock>
+    </div>
   );
 };

@@ -24,7 +24,7 @@ export const ProfileMenu = () => {
   };
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} data-testid="user-wallet-menu">
       <div className={styles.top}>
         <FlexBlock gap={12} block>
           <div className={styles.iconContainer}>
@@ -40,7 +40,11 @@ export const ProfileMenu = () => {
           </div>
         </FlexBlock>
         <div className={styles.buttonsContainer}>
-          <Card variant="secondary" className={styles.actionButton}>
+          <Card
+            variant="secondary"
+            className={styles.actionButton}
+            dataTestId="user-wallet-copy-button-card"
+          >
             <CopyButton
               value={address}
               text={
@@ -52,7 +56,12 @@ export const ProfileMenu = () => {
           </Card>
 
           {isConnected && (
-            <Card variant="secondary" className={styles.actionButton} onClick={handleLogout}>
+            <Card
+              variant="secondary"
+              className={styles.actionButton}
+              dataTestId="user-wallet-logout-button-card"
+              onClick={handleLogout}
+            >
               <LogoutIcon width={16} height={16} />
               <Body level={2} weight="regular">
                 Log out

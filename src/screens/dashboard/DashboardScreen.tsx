@@ -25,9 +25,8 @@ import {
 } from './components';
 
 export const DashboardScreen = () => {
-  const { totalPosition, vaultsTVL, complexApy } = useDashboardConstants();
+  const { totalPosition, vaultsTVL: _vaultsTVL, complexApy } = useDashboardConstants();
   const { login, address, isConnected } = useAccount();
-
   const { open } = useModal();
   const { checkSignatureAndExecute } = useSignTermsWithCallback();
   const { isInWhiteList } = useWhiteList(address);
@@ -83,7 +82,7 @@ export const DashboardScreen = () => {
         {isCalculatorOpened && <Calculator apy={complexApy.netApy} />}
       </FlexBlock>
       {/* Main Vault Card */}
-      <Card block>
+      <Card block dataTestId="dashboard-block-usdc-card">
         <FlexBlock direction="column" gap={28}>
           <FlexBlock
             justifyContent="space-between"
@@ -91,7 +90,7 @@ export const DashboardScreen = () => {
             gap={24}
             direction={isLaptop ? 'column' : 'row'}
           >
-            <VaultInfoCard isMobile={isMobile} netApy={complexApy.netApy} vaultsTVL={vaultsTVL} />
+            <VaultInfoCard isMobile={isMobile} netApy={complexApy.netApy} />
 
             {isMobile && isConnected && <MobileUserCards totalPosition={totalPosition} />}
 
@@ -112,7 +111,9 @@ export const DashboardScreen = () => {
           />
         </FlexBlock>
       </Card>
+
       <PerformanceChart />
+
       <AboutSection isMobile={isMobile} />
     </FlexBlock>
   );

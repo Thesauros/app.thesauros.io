@@ -23,7 +23,7 @@ export const PerformanceChart = () => {
   const chosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[1];
 
   return (
-    <Card block>
+    <Card block dataTestId="dashboard-block-performance">
       <FlexBlock direction="column" gap={20}>
         <FlexBlock
           justifyContent="space-between"
