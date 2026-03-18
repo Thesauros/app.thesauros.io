@@ -37,7 +37,7 @@ const socialLinks = [
   },
   {
     id: 'twitter',
-    link: 'https://x.com/thesauros_io',
+    link: 'https://x.com/thesauros_one',
     icon: <TwitterIcon />,
   },
   // {

@@ -13,7 +13,7 @@ export const Footer = () => {
           <LogoIcon size="s" />
           <FlexBlock gap={16}>
             <a
-              href="https://x.com/thesauros_io"
+              href="https://x.com/thesauros_one"
               target="_blank"
               rel="noopener noreferrer"
               className={styles.link}
