@@ -31,7 +31,7 @@ const socialLinks = [
   {
     id: 'twitter',
     name: 'X',
-    link: 'https://x.com/thesauros_io',
+    link: 'https://x.com/thesauros_one',
     icon: <TwitterIcon color="#fff" size={24} />,
   },
 ];
