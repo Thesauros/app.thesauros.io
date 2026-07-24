@@ -6,6 +6,7 @@ import '@shared/ui/ui-constants/globals.scss';
 import '@shared/ui/ui-constants/design-system.scss';
 
 import { Layout } from '@/shared/ui/layout';
+import { LanguageProvider } from '@/shared/i18n/LanguageProvider';
 import { ModalProvider } from '@/shared/ui/modal';
 import ThemeProvider from '@/shared/ui/theme/theme.provider';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
@@ -41,23 +42,25 @@ export default function App({ Component, pageProps }: AppProps) {
           <script src={`https://t.contentsquare.net/uxa/${HOTJAR_ID}.js`} />
         </Head>
       )}
-      <ThemeProvider>
-        <WagmiProvider config={wagmiConfig}>
-          <QueryClientProvider client={queryClient}>
-            <RainbowKitProvider locale="en-US">
-              <ModalProvider>
-                <ReferralProvider>
-                  <AppInitializer>
-                    <Layout>
-                      <Component {...pageProps} />
-                    </Layout>
-                  </AppInitializer>
-                </ReferralProvider>
-              </ModalProvider>
-            </RainbowKitProvider>
-          </QueryClientProvider>
-        </WagmiProvider>
-      </ThemeProvider>
+      <LanguageProvider>
+        <ThemeProvider>
+          <WagmiProvider config={wagmiConfig}>
+            <QueryClientProvider client={queryClient}>
+              <RainbowKitProvider locale="en-US">
+                <ModalProvider>
+                  <ReferralProvider>
+                    <AppInitializer>
+                      <Layout>
+                        <Component {...pageProps} />
+                      </Layout>
+                    </AppInitializer>
+                  </ReferralProvider>
+                </ModalProvider>
+              </RainbowKitProvider>
+            </QueryClientProvider>
+          </WagmiProvider>
+        </ThemeProvider>
+      </LanguageProvider>
     </div>
   );
 }
