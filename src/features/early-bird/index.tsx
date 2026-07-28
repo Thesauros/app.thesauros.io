@@ -14,6 +14,7 @@ import { useAccount } from '@/shared/blockchain';
 import { TelegramIcon } from '@/shared/ui/icons/telegram-icon';
 import { TwitterIcon } from '@/shared/ui/icons/twitter-icon';
 import { DiscordIcon } from '@/shared/ui/icons/discord-icon';
+import { LinkedInIcon } from '@/shared/ui/icons/linkedin-icon';
 
 const socialLinks = [
   {
@@ -33,6 +34,12 @@ const socialLinks = [
     name: 'X',
     link: 'https://x.com/thesauros_one',
     icon: <TwitterIcon color="#fff" size={24} />,
+  },
+  {
+    id: 'linkedin',
+    name: 'LinkedIn',
+    link: 'https://www.linkedin.com/company/thesauros-protocol/',
+    icon: <LinkedInIcon color="#fff" size={24} />,
   },
 ];
 
