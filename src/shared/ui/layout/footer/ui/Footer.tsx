@@ -1,7 +1,7 @@
 import { FlexBlock } from '@/shared/ui/flex-block';
 import styles from './Footer.module.scss';
 import Link from 'next/link';
-import { TwitterIcon, TelegramIcon, DiscordIcon } from '@shared/ui/icons/media';
+import { TwitterIcon, TelegramIcon, DiscordIcon, LinkedInIcon } from '@shared/ui/icons/media';
 import { Body } from '@/shared/ui/new-typography/body';
 import { LogoIcon } from '@/shared/ui/icons/logo';
 
@@ -35,6 +35,14 @@ export const Footer = () => {
               className={styles.link}
             >
               <TelegramIcon />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/thesauros-protocol/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.link}
+            >
+              <LinkedInIcon />
             </a>
           </FlexBlock>
         </FlexBlock>
