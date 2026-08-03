@@ -83,6 +83,24 @@ const EXACT_TRANSLATIONS: Record<string, string> = {
   'Earn Points': 'Gana puntos',
   'Copy Link': 'Copiar enlace',
   Copied: 'Copiado',
+  Season: 'Temporada',
+  '% Complete': '% completado',
+  'days remaining': 'días restantes',
+  // Values below come from the API (users/:address, global/current-season)
+  // and must be kept in sync with the backend copy.
+  'Early Adopter': 'Adoptante temprano',
+  'Bootstrap the protocol with early liquidity. First 500 users get exclusive Early Adopter status and 2x point multiplier for the entire season.':
+    'Impulsa el protocolo con liquidez temprana. Los primeros 500 usuarios obtienen el estatus exclusivo de Adoptante temprano y un multiplicador de puntos 2x durante toda la temporada.',
+  'Invite Friends': 'Invita amigos',
+  'Earn 500 points per active invite and 10% of their daily points, or 20% when 100+ invited users keep an active deposit.':
+    'Gana 500 puntos por cada invitado activo y el 10% de sus puntos diarios, o el 20% cuando más de 100 usuarios invitados mantienen un depósito activo.',
+  'Connect Wallet': 'Conecta wallet',
+  'Connect your Web3 wallet to get started': 'Conecta tu wallet Web3 para empezar',
+  'First Deposit $100+': 'Primer depósito de $100+',
+  'Make your first deposit of at least $100': 'Haz tu primer depósito de al menos $100',
+  'Daily Deposit Points': 'Puntos diarios por depósito',
+  'Earn 2 points for every dollar you hold daily (automatically tracked)':
+    'Gana 2 puntos por cada dólar que mantienes cada día (seguimiento automático)',
   'About Thesauros Points': 'Acerca de los puntos Thesauros',
   'Points reflect your activity inside Thesauros. You earn them by holding funds, completing actions, and inviting friends.The more you hold, the more you earn.':
     'Los puntos reflejan tu actividad dentro de Thesauros. Los ganas manteniendo fondos, completando acciones e invitando amigos. Cuanto más mantienes, más ganas.',
@@ -236,9 +254,13 @@ function translateSource(value: string) {
 
   if (!trimmed) return value;
 
-  let translated = EXACT_TRANSLATIONS[trimmed] || trimmed;
-  for (const [source, target] of PHRASE_TRANSLATIONS) {
-    translated = translated.split(source).join(target);
+  const exact = EXACT_TRANSLATIONS[trimmed];
+  let translated = exact ?? trimmed;
+
+  if (exact === undefined) {
+    for (const [source, target] of PHRASE_TRANSLATIONS) {
+      translated = translated.split(source).join(target);
+    }
   }
 
   return translated === trimmed ? value : `${leading}${translated}${trailing}`;
