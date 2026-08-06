@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -403,30 +404,149 @@ function useLanguage() {
   return useContext(LanguageContext);
 }
 
+function luminanceOf(cssColor: string) {
+  const m = cssColor.match(/\d+(\.\d+)?/g);
+  if (!m) return 1;
+  if (m.length >= 4 && parseFloat(m[3]) === 0) return -1;
+  return (0.2126 * Number(m[0]) + 0.7152 * Number(m[1]) + 0.0722 * Number(m[2])) / 255;
+}
+
+function darkAtPoint(el: HTMLElement, x: number, y: number) {
+  const els = document.elementsFromPoint(x, y);
+  for (let i = 0; i < els.length; i += 1) {
+    if (el.contains(els[i])) continue;
+    const L = luminanceOf(getComputedStyle(els[i]).backgroundColor);
+    if (L < 0) continue;
+    return L < 0.45;
+  }
+  return false;
+}
+
+function isBehindDark(el: HTMLElement | null) {
+  if (!el) return false;
+  const r = el.getBoundingClientRect();
+  if (!r.width || !r.height) return false;
+  const x = Math.min(window.innerWidth - 4, Math.max(4, r.left + r.width / 2));
+  const y = Math.min(window.innerHeight - 4, Math.max(4, r.top + r.height / 2));
+  return darkAtPoint(el, x, y);
+}
+
 function LanguageSwitcher() {
   const { locale, setLocale } = useLanguage();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [onDark, setOnDark] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const THEME_INTERVAL = 32;
+    let lastRun = 0;
+    let lastY = NaN;
+    let trailingT = 0;
+
+    const updateTheme = () => {
+      lastRun = performance.now();
+      setOnDark(isBehindDark(rootRef.current));
+    };
+
+    const onScroll = () => {
+      const y = (window as Window & { __smoothY?: number }).__smoothY ?? window.scrollY;
+      if (y === lastY) return;
+      lastY = y;
+
+      window.clearTimeout(trailingT);
+      if (performance.now() - lastRun >= THEME_INTERVAL) updateTheme();
+      else trailingT = window.setTimeout(updateTheme, THEME_INTERVAL);
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    let resizeT = 0;
+    const onResize = () => {
+      window.clearTimeout(resizeT);
+      resizeT = window.setTimeout(updateTheme, 120);
+    };
+    window.addEventListener('resize', onResize);
+    updateTheme();
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onResize);
+      window.clearTimeout(trailingT);
+      window.clearTimeout(resizeT);
+    };
+  }, []);
+
+  // Hover expands the pill on pointer devices; touch needs an explicit tap on
+  // the active language, so it also has to close on an outside tap.
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+
+    window.addEventListener('pointerdown', onPointerDown);
+    window.addEventListener('keydown', onKeyDown);
+    return () => {
+      window.removeEventListener('pointerdown', onPointerDown);
+      window.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open]);
+
+  const pick = (next: string) => {
+    if (next === locale) {
+      setOpen(value => !value);
+      return;
+    }
+    setLocale(next);
+    setOpen(false);
+  };
 
   return (
     <div
-      className="thesauros-language-switcher"
+      ref={rootRef}
+      className={`thesauros-language-switcher${onDark ? ' switcher-on-dark' : ''}${open ? ' is-open' : ''}`}
       role="group"
       aria-label="Language selection"
       data-no-translate
+      onMouseLeave={() => setOpen(false)}
     >
       <button
         type="button"
         className={`lang-option lang-en ${locale === 'en' ? 'active' : ''}`}
-        onClick={() => setLocale('en')}
+        onClick={() => pick('en')}
+        aria-label="English"
+        aria-pressed={locale === 'en'}
       >
-        En
+        <span className="lang-flag" aria-hidden="true">
+          <svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+            <rect width="60" height="40" fill="#012169" />
+            <path d="M0 0 L60 40 M60 0 L0 40" stroke="#fff" strokeWidth="8" />
+            <path d="M0 0 L60 40 M60 0 L0 40" stroke="#C8102E" strokeWidth="5" />
+            <path d="M30 0 V40 M0 20 H60" stroke="#fff" strokeWidth="13" />
+            <path d="M30 0 V40 M0 20 H60" stroke="#C8102E" strokeWidth="8" />
+          </svg>
+        </span>
+        <span>En</span>
       </button>
       <span aria-hidden="true">/</span>
       <button
         type="button"
         className={`lang-option lang-es ${locale === 'es' ? 'active' : ''}`}
-        onClick={() => setLocale('es')}
+        onClick={() => pick('es')}
+        aria-label="Español"
+        aria-pressed={locale === 'es'}
       >
-        Sp
+        <span className="lang-flag" aria-hidden="true">
+          <svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+            <rect width="60" height="40" fill="#AA151B" />
+            <rect y="10" width="60" height="20" fill="#F1BF00" />
+          </svg>
+        </span>
+        <span>Sp</span>
       </button>
       <style>{`
         .thesauros-language-switcher {
@@ -436,58 +556,175 @@ function LanguageSwitcher() {
           z-index: 2147483647;
           display: inline-flex;
           align-items: center;
-          gap: 5px;
+          gap: 0;
           padding: 5px;
-          border: 1px solid rgba(16, 24, 40, 0.14);
+          border: 1px solid rgba(255, 255, 255, 0.28);
           border-radius: 999px;
-          background: rgba(255, 255, 255, 0.9);
-          box-shadow: 0 14px 34px rgba(16, 24, 40, 0.16);
-          backdrop-filter: blur(14px);
-          color: #101828;
+          background: rgba(255, 255, 255, 0.35);
+          box-shadow: 0 14px 34px rgba(10, 20, 32, 0.16);
+          backdrop-filter: blur(14px) saturate(1.4);
+          -webkit-backdrop-filter: blur(14px) saturate(1.4);
+          color: #08111f;
           font-family: inherit;
+          transition:
+            background 0.25s ease,
+            border-color 0.25s ease,
+            color 0.25s ease;
+        }
+
+        /* Rim light + diagonal sheen, same treatment as the nav glass pill */
+        .thesauros-language-switcher::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          pointer-events: none;
+          border-radius: 999px;
+          background: linear-gradient(
+            -45deg,
+            rgba(255, 255, 255, 0.42) 0%,
+            rgba(255, 255, 255, 0.1) 20%,
+            rgba(255, 255, 255, 0) 42%,
+            rgba(255, 255, 255, 0) 62%,
+            rgba(56, 107, 184, 0.08) 100%
+          );
+          box-shadow:
+            inset 0 0 0 1px rgba(255, 255, 255, 0.45),
+            inset 0 1px 0 rgba(255, 255, 255, 0.6);
+          opacity: 0.8;
+        }
+
+        .thesauros-language-switcher > * {
+          position: relative;
+          z-index: 1;
         }
 
         .thesauros-language-switcher button {
-          position: relative;
-          overflow: hidden;
-          min-width: 38px;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          min-width: 44px;
           border: 0;
           border-radius: 999px;
-          padding: 7px 9px;
-          background: transparent;
-          color: #fff;
+          padding: 5px 9px 5px 5px;
+          background: rgba(8, 17, 31, 0.06);
+          color: #08111f;
           cursor: pointer;
-          font: 700 11px/1 inherit;
+          font-family: inherit;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 1.15;
           letter-spacing: 0;
-          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.72);
-          box-shadow: inset 0 0 0 1px rgba(16, 24, 40, 0.16);
+          box-shadow: inset 0 0 0 1px rgba(8, 17, 31, 0.1);
         }
 
-        .thesauros-language-switcher button.lang-en {
-          background:
-            linear-gradient(33deg, transparent 42%, #fff 42% 48%, #c8102e 48% 53%, #fff 53% 59%, transparent 59%),
-            linear-gradient(147deg, transparent 42%, #fff 42% 48%, #c8102e 48% 53%, #fff 53% 59%, transparent 59%),
-            linear-gradient(90deg, transparent 43%, #fff 43% 57%, transparent 57%),
-            linear-gradient(0deg, transparent 38%, #fff 38% 62%, transparent 62%),
-            linear-gradient(90deg, transparent 46%, #c8102e 46% 54%, transparent 54%),
-            linear-gradient(0deg, transparent 43%, #c8102e 43% 57%, transparent 57%),
-            #012169;
-          background-size: cover;
+        .thesauros-language-switcher .lang-flag {
+          display: block;
+          width: 22px;
+          height: 15px;
+          border-radius: 3px;
+          overflow: hidden;
+          box-shadow: inset 0 0 0 1px rgba(8, 17, 31, 0.18);
+          flex-shrink: 0;
         }
 
-        .thesauros-language-switcher button.lang-es {
-          background: linear-gradient(180deg, #aa151b 0 25%, #f1bf00 25% 75%, #aa151b 75% 100%);
+        .thesauros-language-switcher .lang-flag svg {
+          display: block;
+          width: 100%;
+          height: 100%;
         }
 
         .thesauros-language-switcher button.active {
           box-shadow:
-            inset 0 0 0 2px rgba(255, 255, 255, 0.9),
-            0 0 0 2px rgba(16, 24, 40, 0.78);
+            inset 0 0 0 2px rgba(255, 255, 255, 0.95),
+            0 0 0 2px rgba(8, 17, 31, 0.78);
         }
 
-        .thesauros-language-switcher span {
-          color: rgba(16, 24, 40, 0.36);
+        .thesauros-language-switcher > span {
+          color: rgba(8, 17, 31, 0.36);
           font-size: 12px;
+        }
+
+        /* Adaptive contrast over dark sections, mirrors the nav */
+        .thesauros-language-switcher.switcher-on-dark {
+          background: rgba(8, 17, 31, 0.55);
+          border-color: rgba(255, 255, 255, 0.28);
+          color: #fff;
+        }
+
+        .thesauros-language-switcher.switcher-on-dark button {
+          background: rgba(255, 255, 255, 0.1);
+          color: #fff;
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+        }
+
+        .thesauros-language-switcher.switcher-on-dark button.active {
+          box-shadow:
+            inset 0 0 0 2px rgba(8, 17, 31, 0.6),
+            0 0 0 2px rgba(255, 255, 255, 0.85);
+        }
+
+        .thesauros-language-switcher.switcher-on-dark > span {
+          color: rgba(255, 255, 255, 0.45);
+        }
+
+        /* Collapsed to the active language only; expands on hover / focus / tap */
+        .thesauros-language-switcher button:not(.active),
+        .thesauros-language-switcher > span {
+          max-width: 0;
+          min-width: 0;
+          opacity: 0;
+          padding-left: 0;
+          padding-right: 0;
+          margin: 0;
+          border-width: 0;
+          box-shadow: none;
+          overflow: hidden;
+          white-space: nowrap;
+          pointer-events: none;
+          transition:
+            max-width 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+            opacity 0.25s ease 0.05s,
+            padding 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+            margin 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .thesauros-language-switcher button.active {
+          transition: margin 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .thesauros-language-switcher:hover button:not(.active),
+        .thesauros-language-switcher:focus-within button:not(.active),
+        .thesauros-language-switcher.is-open button:not(.active) {
+          max-width: 80px;
+          min-width: 44px;
+          opacity: 1;
+          padding: 5px 9px 5px 5px;
+          pointer-events: auto;
+          box-shadow: inset 0 0 0 1px rgba(8, 17, 31, 0.1);
+        }
+
+        .thesauros-language-switcher.switcher-on-dark:hover button:not(.active),
+        .thesauros-language-switcher.switcher-on-dark:focus-within button:not(.active),
+        .thesauros-language-switcher.switcher-on-dark.is-open button:not(.active) {
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+        }
+
+        .thesauros-language-switcher:hover > span,
+        .thesauros-language-switcher:focus-within > span,
+        .thesauros-language-switcher.is-open > span {
+          max-width: 12px;
+          opacity: 1;
+          margin: 0 5px;
+          pointer-events: auto;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .thesauros-language-switcher,
+          .thesauros-language-switcher button,
+          .thesauros-language-switcher > span {
+            transition: none;
+          }
         }
       `}</style>
     </div>
