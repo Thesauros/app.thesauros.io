@@ -69,7 +69,7 @@ export const contractRead = async <T>(props: TContractReadProps): Promise<T> => 
   const { request } = await simulateContract(wagmiConfig, {
     abi: abi,
     address: props.address,
-    chainId: props.chainID as 1 | 42161 | 8453 | undefined,
+    chainId: props.chainID as 1 | 42161 | 8453 | 9745 | 143 | undefined,
     functionName: props.functionName,
     args: props.args,
   });
