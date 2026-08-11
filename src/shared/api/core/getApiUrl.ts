@@ -6,6 +6,8 @@ const NETWORK_MAP: Record<number, string> = {
   8453: 'Base',
   56: 'BSC',
   1: 'Ethereum',
+  9745: 'Plasma',
+  143: 'Monad',
 };
 
 export const getApiUrl = (endpoint: string): string => {
