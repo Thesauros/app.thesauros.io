@@ -37,6 +37,8 @@ export const TransactionStatusModal = ({
     42161: 'https://arbiscan.io/tx/',
     8453: 'https://basescan.org/tx/',
     1: 'https://etherscan.io/tx/',
+    9745: 'https://plasmascan.to/tx/',
+    143: 'https://monadvision.com/tx/',
   };
 
   const getExplorerUrl = (chainId: number, data: TAddress) => {
