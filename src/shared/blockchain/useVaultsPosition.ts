@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useContractsRead } from './core/useContractsRead';
 import { vaults } from './config';
 import { TVault } from './core/types';
@@ -11,10 +11,17 @@ type TVaultPositionResult = {
   refetchData: () => void;
 };
 
+const queryOptions = {
+  staleTime: Infinity,
+  refetchOnWindowFocus: false,
+  refetchOnMount: false,
+  refetchOnReconnect: false,
+} as const;
+
 export const useVaultsPosition = (): TVaultPositionResult => {
   const { address } = useAccount();
 
-  const contracts = useMemo(
+  const shareContracts = useMemo(
     () =>
       (address ? vaults : []).map((vault: TVault) => ({
         address: vault.vaultAddress,
@@ -25,18 +32,41 @@ export const useVaultsPosition = (): TVaultPositionResult => {
     [address]
   );
 
-  const { data, isLoading, refetch } = useContractsRead<bigint>({
-    contracts,
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
+  const {
+    results: shareResults,
+    isLoading: isLoadingShares,
+    refetch: refetchShares,
+  } = useContractsRead<bigint>({
+    contracts: shareContracts,
+    ...queryOptions,
   });
 
-  const totalPosition = useMemo(() => {
-    if (!address || isLoading || !data) return undefined;
+  const assetContracts = useMemo(() => {
+    if (!address || isLoadingShares) return [];
 
-    const positionsInDollars = data.reduce((sum, position, index) => {
+    return vaults.map((vault: TVault, index) => ({
+      address: vault.vaultAddress,
+      functionName: 'convertToAssets',
+      args: [shareResults[index]?.data ?? BigInt(0)],
+      chainID: vault.chainID,
+    }));
+  }, [address, isLoadingShares, shareResults]);
+
+  const {
+    data: assets,
+    isLoading: isLoadingAssets,
+    refetch: refetchAssets,
+  } = useContractsRead<bigint>({
+    contracts: assetContracts,
+    ...queryOptions,
+  });
+
+  const isLoading = isLoadingShares || isLoadingAssets;
+
+  const totalPosition = useMemo(() => {
+    if (!address || isLoading || !assets) return undefined;
+
+    const positionsInDollars = assets.reduce((sum, position, index) => {
       if (position === undefined) return sum;
 
       const vault = vaults[index];
@@ -46,11 +76,16 @@ export const useVaultsPosition = (): TVaultPositionResult => {
     }, 0);
 
     return positionsInDollars > 0 ? round(positionsInDollars) : undefined;
-  }, [address, data, isLoading]);
+  }, [address, assets, isLoading]);
+
+  const refetchData = useCallback(() => {
+    refetchShares();
+    refetchAssets();
+  }, [refetchShares, refetchAssets]);
 
   return {
     data: totalPosition,
     isLoading,
-    refetchData: refetch,
+    refetchData,
   };
 };
