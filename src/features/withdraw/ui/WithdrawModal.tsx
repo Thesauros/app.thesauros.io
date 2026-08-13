@@ -8,6 +8,7 @@ import { Button } from '@/shared/ui/button';
 import { useSwitchNetwork } from '@/shared/blockchain/core/useSwitchNetwork';
 import { round } from '@/shared/number/round';
 import { useContractRead } from '@/shared/blockchain/core/useContractRead';
+import { useBalanceOfAsset } from '@/shared/blockchain/useBalanceOfAsset';
 import { useWithdraw } from '../model/useWithdraw';
 import { Heading } from '@/shared/ui/new-typography/heading';
 import { Caption } from '@/shared/ui/new-typography/caption';
@@ -44,10 +45,9 @@ export const WithdrawModal = () => {
     [selectedVault.decimals]
   );
 
-  const { data: coinBalance, refetch: refetchCoinBalance } = useContractRead({
-    address: selectedVault.vaultAddress,
-    functionName: 'getBalanceOfAsset',
-    args: [address],
+  const { data: coinBalance, refetch: refetchCoinBalance } = useBalanceOfAsset({
+    vaultAddress: selectedVault.vaultAddress,
+    account: address,
     chainID: selectedVault.chainID,
     staleTime: 30000,
     selectData: selectBalance,

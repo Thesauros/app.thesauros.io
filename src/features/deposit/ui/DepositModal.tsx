@@ -10,6 +10,7 @@ import { useApprove } from '@/shared/blockchain/useApprove';
 import { useSwitchNetwork } from '@/shared/blockchain/core/useSwitchNetwork';
 import { round } from '@/shared/number/round';
 import { useContractRead } from '@/shared/blockchain/core/useContractRead';
+import { useBalanceOfAsset } from '@/shared/blockchain/useBalanceOfAsset';
 import { SwapWidget } from '@/widgets/swap';
 import { Heading } from '@/shared/ui/new-typography/heading';
 import { UsdcIcon } from '@/shared/ui/icons/usdc-icon';
@@ -131,10 +132,9 @@ export const DepositModal = () => {
     selectData: selectCoinBalance,
   });
 
-  const { data: tokenBalance, refetch: refetchTokenBalance } = useContractRead({
-    address: selectedVault.vaultAddress,
-    functionName: 'getBalanceOfAsset',
-    args: [address],
+  const { data: tokenBalance, refetch: refetchTokenBalance } = useBalanceOfAsset({
+    vaultAddress: selectedVault.vaultAddress,
+    account: address,
     chainID: selectedVault.chainID,
     staleTime: 30000,
     selectData: selectTokenBalance,
