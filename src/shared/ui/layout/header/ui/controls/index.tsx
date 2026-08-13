@@ -8,7 +8,6 @@ import { connectBonus } from '@/shared/api/pointProgram';
 import { ProfileWindow } from '@/shared/ui/profile-window';
 import { MobileMenu } from '../../../mobile-menu';
 import { SelectChainButton } from '@/shared/ui/select-chain-button';
-import { ConnectWalletBadge } from '@/shared/ui/connect-wallet-badge';
 import { ThesaurosMiniLogo } from '@/shared/ui/icons/thesauros-mini-logo';
 import { WalletIcon } from '@/shared/ui/icons/wallet-icon';
 
@@ -53,7 +52,6 @@ export const Controls = () => {
         gap={24}
         block={!!isMobile}
       >
-        {!isMobile && <ConnectWalletBadge />}
         <Button variant="primary" size="lg" onClick={openConnectModal}>
           Connect wallet
         </Button>
