@@ -18,7 +18,7 @@ export const useVaultsPosition = (): TVaultPositionResult => {
     () =>
       (address ? vaults : []).map((vault: TVault) => ({
         address: vault.vaultAddress,
-        functionName: 'getBalanceOfAsset',
+        functionName: 'balanceOf',
         args: [address],
         chainID: vault.chainID,
       })),
