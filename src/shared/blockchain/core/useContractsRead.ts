@@ -62,6 +62,13 @@ export const useContractsRead = <T = unknown>({
       refetchOnMount,
       refetchOnReconnect,
       enabled: Boolean(contract.address && contract.functionName && (contract.isEnabled ?? true)),
+      // Contract args can include BigInt (e.g. share amounts), which JSON.stringify can't
+      // serialize by default — react-query's default queryKeyHashFn would throw building
+      // the cache key, so give it a BigInt-safe replacer.
+      queryKeyHashFn: (queryKey: readonly unknown[]) =>
+        JSON.stringify(queryKey, (_key, value) =>
+          typeof value === 'bigint' ? value.toString() : value
+        ),
     })),
   });
 
@@ -90,9 +97,7 @@ export const useContractsRead = <T = unknown>({
 
   const isLoading = queries.some(query => query.isLoading);
   const error =
-    queries.length > 0 && queries.every(query => query.error)
-      ? (queries[0]?.error as Error)
-      : null;
+    queries.length > 0 && queries.every(query => query.error) ? (queries[0]?.error as Error) : null;
 
   return {
     data: results.map(r => r.data) as T[],
