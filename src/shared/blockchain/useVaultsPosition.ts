@@ -42,15 +42,16 @@ export const useVaultsPosition = (): TVaultPositionResult => {
   });
 
   const assetContracts = useMemo(() => {
-    if (!address || isLoadingShares) return [];
+    if (!address) return [];
 
     return vaults.map((vault: TVault, index) => ({
       address: vault.vaultAddress,
       functionName: 'convertToAssets',
       args: [shareResults[index]?.data ?? BigInt(0)],
       chainID: vault.chainID,
+      isEnabled: shareResults[index]?.data !== undefined,
     }));
-  }, [address, isLoadingShares, shareResults]);
+  }, [address, shareResults]);
 
   const {
     data: assets,
@@ -64,9 +65,9 @@ export const useVaultsPosition = (): TVaultPositionResult => {
   const isLoading = isLoadingShares || isLoadingAssets;
 
   const totalPosition = useMemo(() => {
-    if (!address || isLoading || !assets) return undefined;
+    if (!address) return undefined;
 
-    const positionsInDollars = assets.reduce((sum, position, index) => {
+    const positionsInDollars = (assets ?? []).reduce((sum, position, index) => {
       if (position === undefined) return sum;
 
       const vault = vaults[index];
@@ -74,6 +75,8 @@ export const useVaultsPosition = (): TVaultPositionResult => {
       const value = Number(position) / Number(divisor);
       return sum + value;
     }, 0);
+
+    if (isLoading && positionsInDollars === 0) return undefined;
 
     return positionsInDollars > 0 ? round(positionsInDollars) : undefined;
   }, [address, assets, isLoading]);
