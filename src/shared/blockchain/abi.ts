@@ -1723,4 +1723,28 @@ export const abi: Abi = [
     stateMutability: 'view',
     type: 'function',
   },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+      {
+        internalType: 'contract IRebalancer',
+        name: 'vault',
+        type: 'address',
+      },
+    ],
+    name: 'getDepositBalance',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
 ];
