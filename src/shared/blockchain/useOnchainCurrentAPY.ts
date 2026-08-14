@@ -10,7 +10,7 @@ export const useOnchainCurrentAPY = ({
 }) => {
   const { data: activeProvider } = useContractRead({
     address: vaultAddress,
-    functionName: 'activeProvider',
+    functionName: 'getEntryProvider',
     chainID: chainID,
     staleTime: 300000,
   });
@@ -21,6 +21,7 @@ export const useOnchainCurrentAPY = ({
     chainID: chainID,
     args: [vaultAddress as TAddress],
     staleTime: 300000,
+    isEnabled: activeProvider !== undefined,
   });
 
   return depositRate ? Number(depositRate) / 10 ** 25 : 0;
