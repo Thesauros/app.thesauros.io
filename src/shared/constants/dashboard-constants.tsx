@@ -28,7 +28,7 @@ export const useDashboardConstants = () => {
   const complexApy = {
     netApy: 10 + round(apy % 1),
     baseApy: round(apy),
-    rewardApy: round(10 + round(apy % 1) - round(apy)),
+    rewardApy: Math.max(0, round(10 + round(apy % 1) - round(apy))),
   };
 
   return {
