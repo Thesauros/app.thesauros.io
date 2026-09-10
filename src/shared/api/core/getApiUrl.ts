@@ -1,4 +1,4 @@
-const API_URL = 'https://api.thesauros.tech/api/';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 const VAULT_DATA_URL = process.env.NEXT_PUBLIC_VAULT_DATA_URL || '';
 
 const NETWORK_MAP: Record<number, string> = {
