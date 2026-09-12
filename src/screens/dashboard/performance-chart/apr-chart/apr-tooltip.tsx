@@ -22,7 +22,7 @@ export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
           </Body>
         </FlexBlock>
         <FlexBlock alignItems="center" justifyContent="space-between" gap={8}>
-          <Caption weight="regular">Market av. APY</Caption>
+          <Caption weight="regular">Market avg. APY</Caption>
           <Body level={1} weight="medium">
             {round(aprMarketValue)}%
           </Body>
