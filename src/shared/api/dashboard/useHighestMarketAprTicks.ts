@@ -18,7 +18,7 @@ type TParams = {
 const fetcMarketAPRTicks = async (params: TParams): Promise<TAPRInfoRaw> => {
   return customFetch<TAPRInfoRaw>(
     getVaultDataUrl(
-      `lending/${params.token}/highest-market-apr-ticks/${params.interval}/${params.intervals}`,
+      `lending/${params.token}/market-avg-apr-ticks/${params.interval}/${params.intervals}`,
       params.chainID
     )
   );
