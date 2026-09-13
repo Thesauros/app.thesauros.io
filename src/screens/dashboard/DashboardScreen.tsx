@@ -11,11 +11,9 @@ import { ChevronTopIcon } from '@/shared/ui/icons/chevron-top-icon';
 import { useAccount } from '@/shared/blockchain';
 import { useModal } from '@/shared/ui/modal';
 import { useCheckResolution } from '@/shared/browser/useCheckResolution';
-import { useWhiteList } from '@/shared/api/dashboard/useWhiteList';
 import { useSignTermsWithCallback } from '@/features/sign-terms';
 import { DepositModal } from '@/features/deposit/ui/DepositModal';
 import { WithdrawModal } from '@/features/withdraw/ui/WithdrawModal';
-import { EarlyBirdModal } from '@/features/early-bird';
 import { PerformanceChart } from './performance-chart';
 import {
   VaultInfoCard,
@@ -28,10 +26,9 @@ import {
 export const DashboardScreen = () => {
   const { totalPosition, complexApy } = useDashboardConstants();
   const { openConnectModal } = useConnectModal();
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
   const { open } = useModal();
   const { checkSignatureAndExecute } = useSignTermsWithCallback();
-  const { isInWhiteList } = useWhiteList(address);
 
   const isMobile = useCheckResolution(768);
   const isLaptop = useCheckResolution(1024);
@@ -46,10 +43,7 @@ export const DashboardScreen = () => {
   }, [isDeposited]);
 
   const openDepositModal = () => {
-    open(isInWhiteList ? <DepositModal /> : <EarlyBirdModal />, {
-      smallPaddings: !isInWhiteList,
-      maxWidth: !isInWhiteList ? 596 : undefined,
-    });
+    open(<DepositModal />);
   };
 
   const handleDepositClick = () => {
@@ -84,7 +78,7 @@ export const DashboardScreen = () => {
         {isCalculatorOpened && <Calculator apy={complexApy.netApy} />}
       </FlexBlock>
       {/* Main Vault Card */}
-      <Card block>
+      <Card block dataTestId="dashboard-block-usdc-card">
         <FlexBlock direction="column" gap={28}>
           <FlexBlock
             justifyContent="space-between"
@@ -113,7 +107,9 @@ export const DashboardScreen = () => {
           />
         </FlexBlock>
       </Card>
+
       <PerformanceChart />
+
       <AboutSection isMobile={isMobile} />
     </FlexBlock>
   );

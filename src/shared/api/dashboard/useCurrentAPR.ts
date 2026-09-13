@@ -11,7 +11,7 @@ type TTokenInfoRaw = {
   funds: number;
   earned: number;
   avgApr30D: number;
-  highestMarket30DAprDiff: number;
+  marketAvg30DAprDiffPercentage: number;
 };
 
 const fetchCommonData = async (): Promise<TCommonData> => {

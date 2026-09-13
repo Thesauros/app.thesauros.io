@@ -1,10 +1,10 @@
 import styles from './select-chain-button.module.scss';
 import { useState, useRef } from 'react';
 import { useChainId, useSwitchChain } from 'wagmi';
-import { base, arbitrum, mainnet } from 'wagmi/chains';
+import { base, arbitrum, mainnet, plasma, monad } from 'wagmi/chains';
 import { useClickOutside } from '@/shared/browser/useClickOutside';
 
-const ALLOWED_CHAINS = [base, arbitrum, mainnet];
+const ALLOWED_CHAINS = [base, arbitrum, /* mainnet, */ plasma, monad];
 
 export const SelectChainButton = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -22,8 +22,12 @@ export const SelectChainButton = () => {
   };
 
   return (
-    <div className={styles.wrapper} ref={dropdownRef}>
-      <div onClick={() => setIsOpen(!isOpen)} className={styles.buttonContainer}>
+    <div className={styles.wrapper} ref={dropdownRef} data-testid="network-selector">
+      <div
+        onClick={() => setIsOpen(!isOpen)}
+        className={styles.buttonContainer}
+        data-testid="network-button"
+      >
         {currentChain ? (
           <img
             alt={currentChain.name}
@@ -47,6 +51,7 @@ export const SelectChainButton = () => {
               key={chain.id}
               className={`${styles.chainOption} ${chain.id === chainId ? styles.active : ''}`}
               onClick={() => handleChainSelect(chain)}
+              data-testid={`network-option-dd-${chain.id}`}
             >
               <img
                 alt={chain.name}
@@ -67,6 +72,8 @@ function getChainIcon(chainId: number): string {
     [base.id]: 'https://icons.llamao.fi/icons/chains/rsz_base.jpg',
     [arbitrum.id]: 'https://icons.llamao.fi/icons/chains/rsz_arbitrum.jpg',
     [mainnet.id]: 'https://icons.llamao.fi/icons/chains/rsz_ethereum.jpg',
+    [plasma.id]: 'https://icons.llamao.fi/icons/chains/rsz_plasma.jpg',
+    [monad.id]: 'https://icons.llamao.fi/icons/chains/rsz_monad.jpg',
   };
   return icons[chainId] ?? '';
 }

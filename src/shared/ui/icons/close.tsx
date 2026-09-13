@@ -1,4 +1,9 @@
-export const CloseIcon = ({ onClick }: { onClick?: () => void }) => {
+import { SVGAttributes } from 'react';
+
+export const CloseIcon = ({
+  onClick,
+  ...rest
+}: { onClick?: () => void } & SVGAttributes<SVGSVGElement>) => {
   return (
     <svg
       width="24"
@@ -8,6 +13,7 @@ export const CloseIcon = ({ onClick }: { onClick?: () => void }) => {
       xmlns="http://www.w3.org/2000/svg"
       cursor="pointer"
       onClick={onClick}
+      {...rest}
     >
       <path
         d="M18 18L12 12M12 12L6 6M12 12L18 6M12 12L6 18"

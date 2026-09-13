@@ -70,7 +70,9 @@ export const ApyCards = ({ isDeposited, totalPosition, complexApy }: ApyCardsPro
                 </FlexBlock>
                 <FlexBlock justifyContent="space-between" block>
                   <Overline>Reward Rate</Overline>
-                  <Caption weight="regular">+{complexApy.rewardApy}%</Caption>
+                  <Caption weight="regular">
+                    {complexApy.rewardApy > 0 ? `+${complexApy.rewardApy}%` : '0%'}
+                  </Caption>
                 </FlexBlock>
                 <FlexBlock justifyContent="space-between" block>
                   <Overline>Net APY</Overline>

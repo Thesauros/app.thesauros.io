@@ -97,7 +97,7 @@ export const APRChart = memo(
             <div className={styles.marketValueLegendCircle} />
             <FlexBlock direction="column" gap={0}>
               <Caption weight="regular" className={styles.secondary}>
-                Market value
+                Market avg. APY
               </Caption>
             </FlexBlock>
           </FlexBlock>

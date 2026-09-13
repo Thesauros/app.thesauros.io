@@ -1,4 +1,4 @@
-const API_URL = 'https://api.thesauros.tech/api/';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 const VAULT_DATA_URL = process.env.NEXT_PUBLIC_VAULT_DATA_URL || '';
 
 const NETWORK_MAP: Record<number, string> = {
@@ -6,6 +6,8 @@ const NETWORK_MAP: Record<number, string> = {
   8453: 'Base',
   56: 'BSC',
   1: 'Ethereum',
+  9745: 'Plasma',
+  143: 'Monad',
 };
 
 export const getApiUrl = (endpoint: string): string => {

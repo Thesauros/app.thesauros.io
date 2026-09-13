@@ -1,5 +1,7 @@
-import { useMemo } from 'react';
-import { useReadContracts } from 'wagmi';
+import { useCallback, useMemo } from 'react';
+import { useQueries } from '@tanstack/react-query';
+import { useConfig } from 'wagmi';
+import { readContractQueryOptions } from 'wagmi/query';
 import { abi } from '../abi';
 import { TAddress, TArg, TChainID } from './types';
 
@@ -10,6 +12,7 @@ type TContractReadConfig = {
   chainID: TChainID;
   watch?: boolean;
   staleTime?: number;
+  isEnabled?: boolean;
   selectData?: ((data: unknown) => unknown) | undefined;
 };
 
@@ -42,50 +45,64 @@ export const useContractsRead = <T = unknown>({
   refetchOnMount = true,
   refetchOnReconnect = true,
 }: TContractsReadProps): TContractsReadResult<T> => {
+  const config = useConfig();
   const staleTimeResult = staleTime ?? Infinity;
 
-  const result = useReadContracts({
-    contracts: contracts.map(contract => ({
-      address: contract.address,
-      abi: abi,
-      chainId: contract.chainID,
-      functionName: contract.functionName,
-      watch: contract.watch,
-      args: contract.args,
-    })),
-    query: {
+  const queries = useQueries({
+    queries: contracts.map(contract => ({
+      ...readContractQueryOptions(config, {
+        address: contract.address,
+        abi,
+        chainId: contract.chainID,
+        functionName: contract.functionName,
+        args: contract.args,
+      }),
       staleTime: staleTimeResult,
       refetchOnWindowFocus,
       refetchOnMount,
       refetchOnReconnect,
-    },
+      enabled: Boolean(contract.address && contract.functionName && (contract.isEnabled ?? true)),
+      // Contract args can include BigInt (e.g. share amounts), which JSON.stringify can't
+      // serialize by default — react-query's default queryKeyHashFn would throw building
+      // the cache key, so give it a BigInt-safe replacer.
+      queryKeyHashFn: (queryKey: readonly unknown[]) =>
+        JSON.stringify(queryKey, (_key, value) =>
+          typeof value === 'bigint' ? value.toString() : value
+        ),
+    })),
   });
 
   const results = useMemo(() => {
     return contracts.map((contract, index) => {
-      const contractData = result.data?.[index];
-      const contractResult = contractData?.result;
-      const contractError = contractData?.error || result.error;
+      const query = queries[index];
+      const contractResult = query?.data;
+      const contractError = (query?.error as Error | null) ?? null;
 
       return {
         data: contract.selectData
           ? (contract.selectData(contractResult) as T)
           : (contractResult as T),
-        isLoading: result.isLoading,
-        error: contractError as Error | null,
-        refetch: result.refetch,
+        isLoading: query?.isLoading ?? false,
+        error: contractError,
+        refetch: query?.refetch ?? (() => undefined),
       };
     });
-  }, [contracts, result.data, result.isLoading, result.error, result.refetch]);
+  }, [contracts, queries]);
 
-  const refetch = () => {
-    result.refetch();
-  };
+  const refetch = useCallback(() => {
+    queries.forEach(query => {
+      query.refetch();
+    });
+  }, [queries]);
+
+  const isLoading = queries.some(query => query.isLoading);
+  const error =
+    queries.length > 0 && queries.every(query => query.error) ? (queries[0]?.error as Error) : null;
 
   return {
     data: results.map(r => r.data) as T[],
-    isLoading: result.isLoading,
-    error: result.error as Error | null,
+    isLoading,
+    error,
     refetch,
     results,
   };

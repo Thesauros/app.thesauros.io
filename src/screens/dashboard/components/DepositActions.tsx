@@ -2,7 +2,6 @@ import { FlexBlock } from '@/shared/ui/flex-block';
 import { Button } from '@/shared/ui/button';
 import { Caption } from '@/shared/ui/new-typography/caption';
 import { ConvertBadge } from '@/shared/ui/convert-badge';
-import { DepositBadge } from '@/shared/ui/deposit-badge';
 import styles from '../main.module.scss';
 
 type DepositActionsProps = {
@@ -35,7 +34,6 @@ export const DepositActions = ({
           <Button size="xl" onClick={onDepositClick} fullWidth={isMobile}>
             Deposit
           </Button>
-          <DepositBadge />
         </FlexBlock>
         {!isMobile && <ConvertBadge />}
       </FlexBlock>

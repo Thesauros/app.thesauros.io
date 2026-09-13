@@ -2,64 +2,18 @@ import { Abi } from 'viem';
 
 export const abi: Abi = [
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'asset_',
-        type: 'address',
-      },
-      {
-        internalType: 'string',
-        name: 'name_',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'symbol_',
-        type: 'string',
-      },
-      {
-        internalType: 'contract IProvider[]',
-        name: 'providers_',
-        type: 'address[]',
-      },
-      {
-        internalType: 'uint256',
-        name: 'withdrawFeePercent_',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: 'timelock_',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: 'treasury_',
-        type: 'address',
-      },
-    ],
+    inputs: [],
     stateMutability: 'nonpayable',
     type: 'constructor',
   },
   {
     inputs: [],
-    name: 'AccessManager__CallerIsNotAdmin',
+    name: 'ActionNotPaused',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'AccessManager__CallerIsNotExecutor',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'AccessManager__CallerIsNotOperator',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'AccessManager__CallerIsNotRootUpdater',
+    name: 'ActionPaused',
     type: 'error',
   },
   {
@@ -71,6 +25,21 @@ export const abi: Abi = [
       },
     ],
     name: 'AddressEmptyCode',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'AddressZero',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'ArrayMismatch',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'AssetsBelowMin',
     type: 'error',
   },
   {
@@ -99,25 +68,6 @@ export const abi: Abi = [
     ],
     name: 'ECDSAInvalidSignatureS',
     type: 'error',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'isWhitelisted',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
   },
   {
     inputs: [
@@ -238,6 +188,11 @@ export const abi: Abi = [
     type: 'error',
   },
   {
+    inputs: [],
+    name: 'InsufficientLiquidity',
+    type: 'error',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -255,27 +210,43 @@ export const abi: Abi = [
   },
   {
     inputs: [],
-    name: 'InvalidShortString',
+    name: 'InvalidCount',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'PausableActions__ActionNotPaused',
+    name: 'InvalidInitialization',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'PausableActions__ActionPaused',
+    name: 'InvalidInput',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'Rebalancer__ExcessRebalanceFee',
+    name: 'InvalidProvider',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'Rebalancer__InvalidProvider',
+    name: 'NotInitializing',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint8',
+        name: 'bits',
+        type: 'uint8',
+      },
+      {
+        internalType: 'uint256',
+        name: 'value',
+        type: 'uint256',
+      },
+    ],
+    name: 'SafeCastOverflowedUintDowncast',
     type: 'error',
   },
   {
@@ -290,53 +261,9 @@ export const abi: Abi = [
     type: 'error',
   },
   {
-    inputs: [
-      {
-        internalType: 'string',
-        name: 'str',
-        type: 'string',
-      },
-    ],
-    name: 'StringTooLong',
-    type: 'error',
-  },
-  {
     inputs: [],
-    name: 'Vault__AddressZero',
+    name: 'Unauthorized',
     type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'Vault__DepositLessThanMin',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'Vault__InvalidInput',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'Vault__SetupAlreadyCompleted',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'Vault__Unauthorized',
-    type: 'error',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'contract IProvider',
-        name: 'activeProvider',
-        type: 'address',
-      },
-    ],
-    name: 'ActiveProviderUpdated',
-    type: 'event',
   },
   {
     anonymous: false,
@@ -396,19 +323,6 @@ export const abi: Abi = [
   },
   {
     anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'rewardsDistributor',
-        type: 'address',
-      },
-    ],
-    name: 'DistributorUpdated',
-    type: 'event',
-  },
-  {
-    anonymous: false,
     inputs: [],
     name: 'EIP712DomainChanged',
     type: 'event',
@@ -417,25 +331,13 @@ export const abi: Abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: 'address',
-        name: 'treasury',
+        indexed: false,
+        internalType: 'contract IProvider',
+        name: 'entryProvider',
         type: 'address',
       },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'assets',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'fee',
-        type: 'uint256',
-      },
     ],
-    name: 'FeeCharged',
+    name: 'EntryProviderUpdated',
     type: 'event',
   },
   {
@@ -444,11 +346,68 @@ export const abi: Abi = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'minAmount',
+        name: 'lastTotalBalance',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'currentTotalBalance',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'performanceFeeShares',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'managementFeeShares',
         type: 'uint256',
       },
     ],
-    name: 'MinAmountUpdated',
+    name: 'FeesApplied',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint64',
+        name: 'version',
+        type: 'uint64',
+      },
+    ],
+    name: 'Initialized',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'managementFee',
+        type: 'uint256',
+      },
+    ],
+    name: 'ManagementFeeUpdated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'minAssets',
+        type: 'uint256',
+      },
+    ],
+    name: 'MinAssetsUpdated',
     type: 'event',
   },
   {
@@ -462,12 +421,25 @@ export const abi: Abi = [
       },
       {
         indexed: false,
-        internalType: 'enum PausableActions.Actions',
+        internalType: 'enum IPausableActions.Actions',
         name: 'action',
         type: 'uint8',
       },
     ],
     name: 'Paused',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'performanceFee',
+        type: 'uint256',
+      },
+    ],
+    name: 'PerformanceFeeUpdated',
     type: 'event',
   },
   {
@@ -489,13 +461,7 @@ export const abi: Abi = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'assetsFrom',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'assetsTo',
+        name: 'assets',
         type: 'uint256',
       },
       {
@@ -512,25 +478,6 @@ export const abi: Abi = [
       },
     ],
     name: 'RebalanceExecuted',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-    ],
-    name: 'RewardsTransferred',
     type: 'event',
   },
   {
@@ -581,19 +528,6 @@ export const abi: Abi = [
       },
     ],
     name: 'RoleRevoked',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'setupAddress',
-        type: 'address',
-      },
-    ],
-    name: 'SetupCompleted',
     type: 'event',
   },
   {
@@ -658,7 +592,7 @@ export const abi: Abi = [
       },
       {
         indexed: false,
-        internalType: 'enum PausableActions.Actions',
+        internalType: 'enum IPausableActions.Actions',
         name: 'action',
         type: 'uint8',
       },
@@ -704,19 +638,6 @@ export const abi: Abi = [
     type: 'event',
   },
   {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'withdrawFeePercent',
-        type: 'uint256',
-      },
-    ],
-    name: 'WithdrawFeePercentUpdated',
-    type: 'event',
-  },
-  {
     inputs: [],
     name: 'ADMIN_ROLE',
     outputs: [
@@ -756,64 +677,6 @@ export const abi: Abi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'OPERATOR_ROLE',
-    outputs: [
-      {
-        internalType: 'bytes32',
-        name: '',
-        type: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'ROOT_UPDATER_ROLE',
-    outputs: [
-      {
-        internalType: 'bytes32',
-        name: '',
-        type: 'bytes32',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'activeProvider',
-    outputs: [
-      {
-        internalType: 'contract IProvider',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'contract IVault',
-        name: 'vault',
-        type: 'address',
-      },
-    ],
-    name: 'getDepositRate',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: 'rate',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -835,6 +698,13 @@ export const abi: Abi = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'applyFees',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -961,7 +831,7 @@ export const abi: Abi = [
     outputs: [
       {
         internalType: 'uint256',
-        name: '',
+        name: 'shares',
         type: 'uint256',
       },
     ],
@@ -1012,19 +882,96 @@ export const abi: Abi = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'owner',
-        type: 'address',
-      },
-    ],
-    name: 'getBalanceOfAsset',
+    inputs: [],
+    name: 'getAccruedFees',
     outputs: [
       {
         internalType: 'uint256',
-        name: 'assets',
+        name: '',
         type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getEntryProvider',
+    outputs: [
+      {
+        internalType: 'contract IProvider',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getLastTimestamp',
+    outputs: [
+      {
+        internalType: 'uint64',
+        name: '',
+        type: 'uint64',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getLastTotalAssets',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getManagementFee',
+    outputs: [
+      {
+        internalType: 'uint96',
+        name: '',
+        type: 'uint96',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getMinAssets',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getPerformanceFee',
+    outputs: [
+      {
+        internalType: 'uint96',
+        name: '',
+        type: 'uint96',
       },
     ],
     stateMutability: 'view',
@@ -1038,6 +985,32 @@ export const abi: Abi = [
         internalType: 'contract IProvider[]',
         name: '',
         type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getTimelock',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getTreasury',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -1089,6 +1062,64 @@ export const abi: Abi = [
     inputs: [
       {
         internalType: 'address',
+        name: 'admin_',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'timelock_',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'asset_',
+        type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: 'name_',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'symbol_',
+        type: 'string',
+      },
+      {
+        internalType: 'contract IProvider[]',
+        name: 'providers_',
+        type: 'address[]',
+      },
+      {
+        internalType: 'address',
+        name: 'treasury_',
+        type: 'address',
+      },
+      {
+        internalType: 'uint96',
+        name: 'managementFee_',
+        type: 'uint96',
+      },
+      {
+        internalType: 'uint96',
+        name: 'performanceFee_',
+        type: 'uint96',
+      },
+      {
+        internalType: 'uint256',
+        name: 'minAssets_',
+        type: 'uint256',
+      },
+    ],
+    name: 'initialize',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: '',
         type: 'address',
       },
@@ -1101,7 +1132,7 @@ export const abi: Abi = [
         type: 'uint256',
       },
     ],
-    stateMutability: 'view',
+    stateMutability: 'pure',
     type: 'function',
   },
   {
@@ -1120,14 +1151,14 @@ export const abi: Abi = [
         type: 'uint256',
       },
     ],
-    stateMutability: 'view',
+    stateMutability: 'pure',
     type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'address',
-        name: 'owner',
+        name: '',
         type: 'address',
       },
     ],
@@ -1139,14 +1170,14 @@ export const abi: Abi = [
         type: 'uint256',
       },
     ],
-    stateMutability: 'view',
+    stateMutability: 'pure',
     type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'address',
-        name: 'owner',
+        name: '',
         type: 'address',
       },
     ],
@@ -1158,20 +1189,7 @@ export const abi: Abi = [
         type: 'uint256',
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'minAmount',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
+    stateMutability: 'pure',
     type: 'function',
   },
   {
@@ -1191,7 +1209,7 @@ export const abi: Abi = [
     outputs: [
       {
         internalType: 'uint256',
-        name: '',
+        name: 'assets',
         type: 'uint256',
       },
     ],
@@ -1233,7 +1251,7 @@ export const abi: Abi = [
   {
     inputs: [
       {
-        internalType: 'enum PausableActions.Actions',
+        internalType: 'enum IPausableActions.Actions',
         name: 'action',
         type: 'uint8',
       },
@@ -1246,7 +1264,7 @@ export const abi: Abi = [
   {
     inputs: [
       {
-        internalType: 'enum PausableActions.Actions',
+        internalType: 'enum IPausableActions.Actions',
         name: 'action',
         type: 'uint8',
       },
@@ -1384,29 +1402,19 @@ export const abi: Abi = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: 'assets',
-        type: 'uint256',
+        internalType: 'uint256[]',
+        name: 'amounts',
+        type: 'uint256[]',
       },
       {
-        internalType: 'contract IProvider',
-        name: 'from',
-        type: 'address',
+        internalType: 'contract IProvider[]',
+        name: 'sources',
+        type: 'address[]',
       },
       {
-        internalType: 'contract IProvider',
-        name: 'to',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'fee',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bool',
-        name: 'activateToProvider',
-        type: 'bool',
+        internalType: 'contract IProvider[]',
+        name: 'destinations',
+        type: 'address[]',
       },
     ],
     name: 'rebalance',
@@ -1442,7 +1450,7 @@ export const abi: Abi = [
     outputs: [
       {
         internalType: 'uint256',
-        name: '',
+        name: 'assets',
         type: 'uint256',
       },
     ],
@@ -1471,11 +1479,24 @@ export const abi: Abi = [
     inputs: [
       {
         internalType: 'contract IProvider',
-        name: '_activeProvider',
+        name: 'entryProvider',
         type: 'address',
       },
     ],
-    name: 'setActiveProvider',
+    name: 'setEntryProvider',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint96',
+        name: 'managementFee',
+        type: 'uint96',
+      },
+    ],
+    name: 'setManagementFee',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1484,11 +1505,24 @@ export const abi: Abi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_minAmount',
+        name: 'minAssets',
         type: 'uint256',
       },
     ],
-    name: 'setMinAmount',
+    name: 'setMinAssets',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint96',
+        name: 'performanceFee',
+        type: 'uint96',
+      },
+    ],
+    name: 'setPerformanceFee',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1510,7 +1544,7 @@ export const abi: Abi = [
     inputs: [
       {
         internalType: 'address',
-        name: '_timelock',
+        name: 'timelock',
         type: 'address',
       },
     ],
@@ -1523,50 +1557,11 @@ export const abi: Abi = [
     inputs: [
       {
         internalType: 'address',
-        name: '_treasury',
+        name: 'treasury',
         type: 'address',
       },
     ],
     name: 'setTreasury',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_withdrawFeePercent',
-        type: 'uint256',
-      },
-    ],
-    name: 'setWithdrawFeePercent',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'setupCompleted',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'assets',
-        type: 'uint256',
-      },
-    ],
-    name: 'setupVault',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -1586,24 +1581,11 @@ export const abi: Abi = [
   },
   {
     inputs: [],
-    name: 'timelock',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'totalAssets',
     outputs: [
       {
         internalType: 'uint256',
-        name: 'assets',
+        name: '',
         type: 'uint256',
       },
     ],
@@ -1677,22 +1659,9 @@ export const abi: Abi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'treasury',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
-        internalType: 'enum PausableActions.Actions',
+        internalType: 'enum IPausableActions.Actions',
         name: 'action',
         type: 'uint8',
       },
@@ -1724,7 +1693,7 @@ export const abi: Abi = [
     outputs: [
       {
         internalType: 'uint256',
-        name: '',
+        name: 'shares',
         type: 'uint256',
       },
     ],
@@ -1732,8 +1701,42 @@ export const abi: Abi = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'withdrawFeePercent',
+    stateMutability: 'payable',
+    type: 'receive',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'contract IRebalancer',
+        name: 'vault',
+        type: 'address',
+      },
+    ],
+    name: 'getDepositRate',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'rate',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+      {
+        internalType: 'contract IRebalancer',
+        name: 'vault',
+        type: 'address',
+      },
+    ],
+    name: 'getDepositBalance',
     outputs: [
       {
         internalType: 'uint256',
@@ -1743,9 +1746,5 @@ export const abi: Abi = [
     ],
     stateMutability: 'view',
     type: 'function',
-  },
-  {
-    stateMutability: 'payable',
-    type: 'receive',
   },
 ];

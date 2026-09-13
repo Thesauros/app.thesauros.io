@@ -8,6 +8,7 @@ import { Button } from '@/shared/ui/button';
 import { useSwitchNetwork } from '@/shared/blockchain/core/useSwitchNetwork';
 import { round } from '@/shared/number/round';
 import { useContractRead } from '@/shared/blockchain/core/useContractRead';
+import { useBalanceOfAsset } from '@/shared/blockchain/useBalanceOfAsset';
 import { useWithdraw } from '../model/useWithdraw';
 import { Heading } from '@/shared/ui/new-typography/heading';
 import { Caption } from '@/shared/ui/new-typography/caption';
@@ -44,10 +45,9 @@ export const WithdrawModal = () => {
     [selectedVault.decimals]
   );
 
-  const { data: coinBalance, refetch: refetchCoinBalance } = useContractRead({
-    address: selectedVault.vaultAddress,
-    functionName: 'getBalanceOfAsset',
-    args: [address],
+  const { data: coinBalance, refetch: refetchCoinBalance } = useBalanceOfAsset({
+    vaultAddress: selectedVault.vaultAddress,
+    account: address,
     chainID: selectedVault.chainID,
     staleTime: 30000,
     selectData: selectBalance,
@@ -113,111 +113,128 @@ export const WithdrawModal = () => {
   }, [userCoinBalance]);
 
   return (
-    <FlexBlock direction="column" gap={24} block>
-      {/* Header */}
-      <FlexBlock justifyContent="space-between" alignItems="center" block>
-        <Heading level={6} weight="regular">
-          Withdraw Funds
-        </Heading>
-        <CloseIcon onClick={close} />
-      </FlexBlock>
+    <div data-testid="withdraw-modal">
+      <FlexBlock direction="column" gap={24} block>
+        {/* Header */}
+        <FlexBlock justifyContent="space-between" alignItems="center" block>
+          <Heading level={6} weight="regular">
+            Withdraw Funds
+          </Heading>
+          <CloseIcon onClick={close} data-testid="withdraw-modal-close" />
+        </FlexBlock>
 
-      {/* Withdraw block */}
-      <FlexBlock direction="column" gap={4} block>
-        <Caption>Amount to Withdraw</Caption>
-        <InputComponent
-          id="id"
-          value={value}
-          type="number"
-          size="md"
-          numberPrefix="$"
-          textAlign="left"
-          postfix={
-            <Body level={2} weight="regular" className={styles.secondary}>
-              {selectedVault.coinName}
-            </Body>
-          }
-          fullWidth
-          onChange={setValue}
-          disabled={isWithdrawingLoading}
-        />
-      </FlexBlock>
+        {/* Withdraw block */}
+        <FlexBlock direction="column" gap={4} block>
+          <Caption>Amount to Withdraw</Caption>
+          <InputComponent
+            id="withdraw-amount-input"
+            name="withdraw-amount-input"
+            value={value}
+            type="number"
+            size="md"
+            numberPrefix="$"
+            textAlign="left"
+            postfix={
+              <Body level={2} weight="regular" className={styles.secondary}>
+                {selectedVault.coinName}
+              </Body>
+            }
+            fullWidth
+            onChange={setValue}
+            disabled={isWithdrawingLoading}
+          />
+        </FlexBlock>
 
-      {/* Funds */}
-      <FlexBlock direction="column" gap={8} block>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Available:
-          </Caption>
-          <div style={{ cursor: 'pointer' }} onClick={setMaxValue}>
+        {/* Funds */}
+        <FlexBlock direction="column" gap={8} block>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Caption weight="regular" className={styles.secondary}>
+              Available:
+            </Caption>
+            <div
+              style={{ cursor: 'pointer' }}
+              onClick={setMaxValue}
+              data-testid="withdraw-modal-available"
+            >
+              <Body level={2} weight="regular">
+                {round(userCoinBalance)} {selectedVault.coinName}
+              </Body>
+            </div>
+          </FlexBlock>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Caption weight="regular" className={styles.secondary}>
+              Withdrawal Fee:
+            </Caption>
             <Body level={2} weight="regular">
-              {round(userCoinBalance)} {selectedVault.coinName}
+              {round(Number(feePercent))}%
             </Body>
-          </div>
+          </FlexBlock>
         </FlexBlock>
-        <FlexBlock alignItems="center" justifyContent="space-between" block>
-          <Caption weight="regular" className={styles.secondary}>
-            Withdrawal Fee:
-          </Caption>
-          <Body level={2} weight="regular">
-            {round(Number(feePercent))}%
-          </Body>
-        </FlexBlock>
-      </FlexBlock>
 
-      <div className={styles.potentialProfitLoseBlock}>
-        <FlexBlock direction="column" justifyContent="space-between" alignItems="center" block>
-          <Caption weight="bold">Withdrawing will reduce your potential earnings per year:</Caption>
-          <FlexBlock justifyContent="center" alignItems="center">
-            <FlexBlock
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-              gap={4}
-              className={styles.innerPotentialProfitBlock}
-            >
-              <Subtitle level={2} weight="medium">
-                {round((Number(value) / 100) * apy)}
-              </Subtitle>
-              <FlexBlock gap={8} alignItems="center">
-                <UsdcIcon size={16} />
-                <Caption weight="regular">{selectedVault.coinName}</Caption>
+        <div className={styles.potentialProfitLoseBlock}>
+          <FlexBlock direction="column" justifyContent="space-between" alignItems="center" block>
+            <Caption weight="bold">
+              Withdrawing will reduce your potential earnings per year:
+            </Caption>
+            <FlexBlock justifyContent="center" alignItems="center">
+              <FlexBlock
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+                gap={4}
+                className={styles.innerPotentialProfitBlock}
+              >
+                <Subtitle level={2} weight="medium">
+                  {round((Number(value) / 100) * apy)}
+                </Subtitle>
+                <FlexBlock gap={8} alignItems="center">
+                  <UsdcIcon size={16} />
+                  <Caption weight="regular">{selectedVault.coinName}</Caption>
+                </FlexBlock>
               </FlexBlock>
-            </FlexBlock>
 
-            <FlexBlock
-              direction="column"
-              justifyContent="center"
-              alignItems="center"
-              gap={4}
-              className={styles.innerPotentialProfitBlock}
-            >
-              <Subtitle level={2} weight="medium">
-                {round(2 * 365 * Number(value))}
-              </Subtitle>
-              <FlexBlock gap={8} alignItems="center">
-                <PointCoinIcon size={16} />
-                <Caption weight="regular">Points</Caption>
+              <FlexBlock
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+                gap={4}
+                className={styles.innerPotentialProfitBlock}
+              >
+                <Subtitle level={2} weight="medium">
+                  {round(2 * 365 * Number(value))}
+                </Subtitle>
+                <FlexBlock gap={8} alignItems="center">
+                  <PointCoinIcon size={16} />
+                  <Caption weight="regular">Points</Caption>
+                </FlexBlock>
               </FlexBlock>
             </FlexBlock>
           </FlexBlock>
-        </FlexBlock>
-      </div>
+        </div>
 
-      <FlexBlock gap={16} alignItems="center" block>
-        <Button variant="text" fullWidth size="lg" onClick={close} disabled={isWithdrawingLoading}>
-          Cancel
-        </Button>
-        <Button
-          variant="outline"
-          size="lg"
-          fullWidth
-          onClick={handleButtonClick}
-          disabled={isWithdrawingLoading || !withdrawValue || isMoreThanBalance}
-        >
-          {isNeedSwitch ? 'Switch network' : 'Confirm'}
-        </Button>
+        <FlexBlock gap={16} alignItems="center" block>
+          <Button
+            variant="text"
+            fullWidth
+            size="lg"
+            onClick={close}
+            disabled={isWithdrawingLoading}
+            data-testid="withdraw-modal-cancel-button"
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            fullWidth
+            onClick={handleButtonClick}
+            disabled={isWithdrawingLoading || !withdrawValue || isMoreThanBalance}
+            data-testid="withdraw-modal-confirm-button"
+          >
+            {isNeedSwitch ? 'Switch network' : 'Confirm'}
+          </Button>
+        </FlexBlock>
       </FlexBlock>
-    </FlexBlock>
+    </div>
   );
 };
