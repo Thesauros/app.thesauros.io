@@ -12,6 +12,7 @@ import { Subtitle } from '../../new-typography/subtitle';
 import { PointProgramBanner } from '../../point-program-banner';
 import { TwitterIcon } from '../../icons/twitter-icon';
 import { TelegramIcon } from '../../icons/telegram-icon';
+import { LinkedInIcon } from '../../icons/linkedin-icon';
 import { Overline } from '../../new-typography/overline';
 
 const docsLinks = [
@@ -39,6 +40,11 @@ const socialLinks = [
     id: 'twitter',
     link: 'https://x.com/thesauros_one',
     icon: <TwitterIcon />,
+  },
+  {
+    id: 'linkedin',
+    link: 'https://www.linkedin.com/company/thesauros-protocol/',
+    icon: <LinkedInIcon />,
   },
   // {
   //   id: 'discord',
