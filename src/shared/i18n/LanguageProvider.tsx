@@ -31,15 +31,15 @@ const EXACT_TRANSLATIONS: Record<string, string> = {
   'Convert any crypto to USDC during Deposit':
     'Convierte cualquier crypto a USDC durante el depósito',
   'Net APY': 'APY neto',
-  'Reward APY': 'APY de recompensas',
   'Base APY': 'APY base',
   'Amount to Deposit': 'Importe a depositar',
   'Amount to Withdraw': 'Importe a retirar',
   'Balance:': 'Saldo:',
   'Available:': 'Disponible:',
-  'Withdrawal Fee:': 'Comisión de retiro:',
   'Total points per year': 'Puntos totales por año',
   'Performance fee': 'Comisión de rendimiento',
+  'Performance fee:': 'Comisión de rendimiento:',
+  'No fee on your principal': 'Sin comisión sobre tu capital',
   'Projected Earnings': 'Ganancias proyectadas',
   'Monthly profit': 'Beneficio mensual',
   'Yearly profit': 'Beneficio anual',
@@ -57,7 +57,6 @@ const EXACT_TRANSLATIONS: Record<string, string> = {
   'Your funds': 'Tus fondos',
   APY: 'APY',
   'Base Rate': 'Tasa base',
-  'Reward Rate': 'Tasa de recompensa',
   INSTANT: 'INSTANTÁNEO',
   About: 'Acerca de',
   Protocols: 'Protocolos',
@@ -159,21 +158,30 @@ const PHRASE_TRANSLATIONS: Array<[string, string]> = [
   ['Av. ', 'APY prom. '],
   [' APY', ' APY'],
   ['/day', '/día'],
+  ['% of yield', '% del rendimiento'],
   [
     'Shows the current average yield the strategy generates from connected DeFi protocols. The percentage can move up or down depending on market conditions.',
     'Muestra el rendimiento promedio actual que genera la estrategia desde protocolos DeFi conectados. El porcentaje puede subir o bajar según las condiciones de mercado.',
   ],
   [
-    'The displayed APY includes the base yield from DeFi strategies and an additional part earned as points. These points are accrued over time and will be converted into tokens once the points program ends and the token launches.',
-    'El APY mostrado incluye el rendimiento base de las estrategias DeFi y una parte adicional obtenida como puntos. Estos puntos se acumulan con el tiempo y se convertirán en tokens cuando termine el programa de puntos y se lance el token.',
+    'Net APY is the yield the DeFi strategies generate after the performance fee. The fee is taken from generated yield only, never from your principal. Points are tracked separately and will be converted into tokens once the points program ends and the token launches.',
+    'El APY neto es el rendimiento que generan las estrategias DeFi después de la comisión de rendimiento. La comisión se aplica solo sobre el rendimiento generado, nunca sobre tu capital. Los puntos se registran por separado y se convertirán en tokens cuando termine el programa de puntos y se lance el token.',
   ],
   [
-    'Your stablecoins are automatically allocated across top and safest DeFi providers holding over $60 billion in assets. When yields shift, the system reallocates funds to maintain the best available return.',
-    'Tus stablecoins se asignan automáticamente entre los proveedores DeFi principales y más seguros, que gestionan más de $60 mil millones en activos. Cuando cambian los rendimientos, el sistema reasigna fondos para mantener el mejor retorno disponible.',
+    'Your stablecoins are automatically allocated across top and safest DeFi providers. When yields shift, the system reallocates funds to maintain the best available return.',
+    'Tus stablecoins se asignan automáticamente entre los proveedores DeFi principales y más seguros. Cuando cambian los rendimientos, el sistema reasigna fondos para mantener el mejor retorno disponible.',
   ],
   [
     'There are no fixed terms or lockups. You can withdraw your funds whenever you choose.',
     'No hay plazos fijos ni bloqueos. Puedes retirar tus fondos cuando quieras.',
+  ],
+  [
+    'TVL (Total Value Locked) means the total amount of money currently deposited by all users in this strategy. It works like Assets Under Management (AUM) in traditional finance, showing how much capital is being managed right now.',
+    'TVL (Total Value Locked) es la cantidad total de dinero depositada actualmente por todos los usuarios en esta estrategia. Funciona como los Activos Bajo Gestión (AUM) en las finanzas tradicionales y muestra cuánto capital se está gestionando ahora mismo.',
+  ],
+  [
+    'Charged on generated yield only. No fee on your principal, and no management fee.',
+    'Se cobra solo sobre el rendimiento generado. Sin comisión sobre tu capital y sin comisión de gestión.',
   ],
   [
     'The system constantly monitors yield across DeFi protocols and rebalances positions when conditions change — keeping your returns optimized in real time.',
@@ -212,12 +220,12 @@ const PHRASE_TRANSLATIONS: Array<[string, string]> = [
     'Muestra tu beneficio total proyectado si mantienes los fondos durante todo el periodo seleccionado. Las ganancias se suman a tu depósito, por lo que tu saldo puede crecer más rápido con el tiempo.',
   ],
   [
-    'You receive 1 point for every $1 you hold each day.',
-    'Recibes 1 punto por cada $1 que mantienes cada día.',
+    'You receive 2 points for every $1 you hold each day.',
+    'Recibes 2 puntos por cada $1 que mantienes cada día.',
   ],
   [
-    'For example, holding 1,000 USDC for one year gives you about 365,000 points.',
-    'Por ejemplo, mantener 1.000 USDC durante un año te da aproximadamente 365.000 puntos.',
+    'For example, holding 1,000 USDC for one year gives you about 730,000 points.',
+    'Por ejemplo, mantener 1.000 USDC durante un año te da aproximadamente 730.000 puntos.',
   ],
   [
     'Here you can see how your deposit grows over time and what average return the strategy is generating for you. The chart shows both your earned amount for the selected period and the average APY the strategy maintained during that time.',

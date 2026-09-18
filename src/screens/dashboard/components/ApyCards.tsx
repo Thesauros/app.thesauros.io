@@ -14,7 +14,7 @@ import styles from '../main.module.scss';
 type ComplexApy = {
   netApy: number;
   baseApy: number;
-  rewardApy: number;
+  performanceFeePercent: number;
 };
 
 type ApyCardsProps = {
@@ -23,11 +23,11 @@ type ApyCardsProps = {
   complexApy: ComplexApy;
 };
 
-const POINTS_TOOLTIP =
-  'Shows the current average yield the strategy generates from connected DeFi protocols. The percentage can move up or down depending on market conditions.';
+const POINTS_TOOLTIP = `You receive 2 points for every $1 you hold each day.
+For example, holding 1,000 USDC for one year gives you about 730,000 points.`;
 
 const APY_DESCRIPTION =
-  'The displayed APY includes the base yield from DeFi strategies and an additional part earned as points. These points are accrued over time and will be converted into tokens once the points program ends and the token launches.';
+  'Net APY is the yield the DeFi strategies generate after the performance fee. The fee is taken from generated yield only, never from your principal. Points are tracked separately and will be converted into tokens once the points program ends and the token launches.';
 
 export const ApyCards = ({ isDeposited, totalPosition, complexApy }: ApyCardsProps) => {
   return (
@@ -69,10 +69,8 @@ export const ApyCards = ({ isDeposited, totalPosition, complexApy }: ApyCardsPro
                   <Caption weight="regular">+{complexApy.baseApy}%</Caption>
                 </FlexBlock>
                 <FlexBlock justifyContent="space-between" block>
-                  <Overline>Reward Rate</Overline>
-                  <Caption weight="regular">
-                    {complexApy.rewardApy > 0 ? `+${complexApy.rewardApy}%` : '0%'}
-                  </Caption>
+                  <Overline>Performance fee</Overline>
+                  <Caption weight="regular">{complexApy.performanceFeePercent}%</Caption>
                 </FlexBlock>
                 <FlexBlock justifyContent="space-between" block>
                   <Overline>Net APY</Overline>
