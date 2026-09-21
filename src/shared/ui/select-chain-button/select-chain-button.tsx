@@ -4,7 +4,7 @@ import { useChainId, useSwitchChain } from 'wagmi';
 import { base, arbitrum, mainnet, plasma, monad } from 'wagmi/chains';
 import { useClickOutside } from '@/shared/browser/useClickOutside';
 
-const ALLOWED_CHAINS = [base, arbitrum, /* mainnet, */ plasma, monad];
+const ALLOWED_CHAINS = [base, arbitrum, mainnet, plasma, monad];
 
 export const SelectChainButton = () => {
   const [isOpen, setIsOpen] = useState(false);
