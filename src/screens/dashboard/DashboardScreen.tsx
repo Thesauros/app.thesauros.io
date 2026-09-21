@@ -24,7 +24,7 @@ import {
 } from './components';
 
 export const DashboardScreen = () => {
-  const { totalPosition, complexApy } = useDashboardConstants();
+  const { totalPosition, complexApy, vaultsTVL } = useDashboardConstants();
   const { openConnectModal } = useConnectModal();
   const { isConnected } = useAccount();
   const { open } = useModal();
@@ -86,7 +86,7 @@ export const DashboardScreen = () => {
             gap={24}
             direction={isLaptop ? 'column' : 'row'}
           >
-            <VaultInfoCard isMobile={isMobile} netApy={complexApy.netApy} />
+            <VaultInfoCard isMobile={isMobile} netApy={complexApy.netApy} vaultsTVL={vaultsTVL} />
 
             {isMobile && isConnected && <MobileUserCards totalPosition={totalPosition} />}
 

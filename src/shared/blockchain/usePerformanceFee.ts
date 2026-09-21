@@ -2,33 +2,36 @@ import { round } from '../number/round';
 import { TAddress, TChainID } from './core/types';
 import { useContractRead } from './core/useContractRead';
 
-type TMinAmountProps = {
+export const PUBLISHED_PERFORMANCE_FEE_PERCENT = 25;
+
+const WAD_TO_PERCENT = 10 ** 16;
+
+type TPerformanceFeeProps = {
   vaultAddress: TAddress;
   chainID: TChainID;
-  decimals: number;
+  staleTime?: number;
 };
 
-type TMinAmountResult = {
+type TPerformanceFeeResult = {
   data: number | undefined;
   isLoading: boolean;
   error: Error | null;
   refetch: () => void;
 };
 
-export const useMinAmount = ({
+export const usePerformanceFee = ({
   vaultAddress,
   chainID,
-  decimals,
-}: TMinAmountProps): TMinAmountResult => {
+  staleTime = 300000,
+}: TPerformanceFeeProps): TPerformanceFeeResult => {
   const { data, isLoading, error, refetch } = useContractRead({
     address: vaultAddress,
     chainID,
-    functionName: 'getMinAssets',
+    functionName: 'getPerformanceFee',
     args: [],
     watch: false,
-    selectData: (data: unknown): number => {
-      return round(Number(data) / 10 ** decimals, 2);
-    },
+    staleTime,
+    selectData: (value: unknown): number => round(Number(value) / WAD_TO_PERCENT, 2),
   });
 
   return {

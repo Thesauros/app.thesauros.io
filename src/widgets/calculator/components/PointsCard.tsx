@@ -13,8 +13,8 @@ type PointsCardProps = {
   pointsValue: number;
 };
 
-const POINTS_TOOLTIP_TEXT = `You receive 1 point for every $1 you hold each day.
-For example, holding 1,000 USDC for one year gives you about 365,000 points.`;
+const POINTS_TOOLTIP_TEXT = `You receive 2 points for every $1 you hold each day.
+For example, holding 1,000 USDC for one year gives you about 730,000 points.`;
 
 export const PointsCard = memo(function PointsCard({ pointsValue }: PointsCardProps) {
   return (

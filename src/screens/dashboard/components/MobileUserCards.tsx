@@ -12,8 +12,8 @@ type MobileUserCardsProps = {
   totalPosition: number;
 };
 
-const POINTS_TOOLTIP =
-  'Shows the current average yield the strategy generates from connected DeFi protocols. The percentage can move up or down depending on market conditions.';
+const POINTS_TOOLTIP = `You receive 2 points for every $1 you hold each day.
+For example, holding 1,000 USDC for one year gives you about 730,000 points.`;
 
 export const MobileUserCards = ({ totalPosition }: MobileUserCardsProps) => {
   return (

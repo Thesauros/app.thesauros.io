@@ -23,8 +23,8 @@ const SLIDER_MAX = 1000000;
 const APY_TOOLTIP_TEXT =
   'Annual Percentage Yield shows how much your money could earn in one year if profits are reinvested. In DeFi the rate changes over time depending on market activity.';
 
-const POINTS_TOOLTIP_TEXT = `You receive 1 point for every $1 you hold each day.
-For example, holding 1,000 USDC for one year gives you about 365,000 points.`;
+const POINTS_TOOLTIP_TEXT = `You receive 2 points for every $1 you hold each day.
+For example, holding 1,000 USDC for one year gives you about 730,000 points.`;
 
 export const MobileCalculator = memo(function MobileCalculator({
   apy,

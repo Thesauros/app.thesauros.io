@@ -5,7 +5,7 @@ export { useAccount } from './useAccount';
 export { useAllowance } from './useAllowance';
 export { useApprove } from './useApprove';
 export { useNetwork } from './useNetwork';
-export { useWithdraw } from './useWithdraw';
+export { usePerformanceFee, PUBLISHED_PERFORMANCE_FEE_PERCENT } from './usePerformanceFee';
 export { useMinAmount } from './useMinAmount';
 export { useSelectedVault } from './useSelectedVault';
 export { useRefetchAfterTransaction } from './useRefetchAfterTransaction';

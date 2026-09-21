@@ -1,5 +1,12 @@
 import { useMemo } from 'react';
-import { useVaultsPosition, useVaultsTVL, useAccount, vaults } from '../blockchain';
+import {
+  useVaultsPosition,
+  useVaultsTVL,
+  useAccount,
+  vaults,
+  usePerformanceFee,
+  PUBLISHED_PERFORMANCE_FEE_PERCENT,
+} from '../blockchain';
 import { round } from '../number/round';
 import { useHighestApr, useUserEarnedOverallTicks } from '../api/dashboard';
 import { useOnchainCurrentAPY } from '../blockchain/useOnchainCurrentAPY';
@@ -25,10 +32,17 @@ export const useDashboardConstants = () => {
     chainID: chosenVault.chainID,
   });
 
+  const { data: performanceFee } = usePerformanceFee({
+    vaultAddress: chosenVault.vaultAddress,
+    chainID: chosenVault.chainID,
+  });
+
+  const performanceFeePercent = performanceFee ?? PUBLISHED_PERFORMANCE_FEE_PERCENT;
+
   const complexApy = {
-    netApy: 10 + round(apy % 1),
+    netApy: round(apy * (1 - performanceFeePercent / 100)),
     baseApy: round(apy),
-    rewardApy: Math.max(0, round(10 + round(apy % 1) - round(apy))),
+    performanceFeePercent: performanceFeePercent,
   };
 
   return {

@@ -7,18 +7,24 @@ import { InputComponent } from '@/shared/ui/input';
 import { Button } from '@/shared/ui/button';
 import { useSwitchNetwork } from '@/shared/blockchain/core/useSwitchNetwork';
 import { round } from '@/shared/number/round';
-import { useContractRead } from '@/shared/blockchain/core/useContractRead';
 import { useBalanceOfAsset } from '@/shared/blockchain/useBalanceOfAsset';
 import { useWithdraw } from '../model/useWithdraw';
 import { Heading } from '@/shared/ui/new-typography/heading';
 import { Caption } from '@/shared/ui/new-typography/caption';
 import { Body } from '@/shared/ui/new-typography/body';
 import { Subtitle } from '@/shared/ui/new-typography/subtitle';
+import { Tooltip } from '@/shared/ui/tooltip/tooltip';
 import { UsdcIcon } from '@/shared/ui/icons/usdc-icon';
 import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
-import { useSelectedVault, useRefetchAfterTransaction, useAccount } from '@/shared/blockchain';
+import {
+  useSelectedVault,
+  useRefetchAfterTransaction,
+  useAccount,
+  usePerformanceFee,
+  PUBLISHED_PERFORMANCE_FEE_PERCENT,
+} from '@/shared/blockchain';
 
 export const WithdrawModal = () => {
   const { close, open } = useModal();
@@ -35,12 +41,15 @@ export const WithdrawModal = () => {
     chainID: selectedVault.chainID,
   });
 
-  const selectBalance = useCallback(
-    (data: unknown): number => round(Number(data) / 10 ** selectedVault.decimals, 2),
-    [selectedVault.decimals]
-  );
+  const { data: performanceFee } = usePerformanceFee({
+    vaultAddress: selectedVault.vaultAddress,
+    chainID: selectedVault.chainID,
+  });
 
-  const selectFeePercent = useCallback(
+  const performanceFeePercent = performanceFee ?? PUBLISHED_PERFORMANCE_FEE_PERCENT;
+  const netApy = round(apy * (1 - performanceFeePercent / 100));
+
+  const selectBalance = useCallback(
     (data: unknown): number => round(Number(data) / 10 ** selectedVault.decimals, 2),
     [selectedVault.decimals]
   );
@@ -82,13 +91,6 @@ export const WithdrawModal = () => {
 
   const { isNeedSwitch, switchNetwork } = useSwitchNetwork({
     targetChainID: selectedVault.chainID,
-  });
-
-  const { data: feePercent } = useContractRead({
-    address: selectedVault.vaultAddress,
-    functionName: 'withdrawFeePercent',
-    chainID: selectedVault.chainID,
-    selectData: selectFeePercent,
   });
 
   const userCoinBalance: number = useMemo(() => {
@@ -162,13 +164,21 @@ export const WithdrawModal = () => {
             </div>
           </FlexBlock>
           <FlexBlock alignItems="center" justifyContent="space-between" block>
-            <Caption weight="regular" className={styles.secondary}>
-              Withdrawal Fee:
-            </Caption>
+            <Tooltip
+              tooltipText="Charged on generated yield only. No fee on your principal, and no management fee."
+              withIcon
+            >
+              <Caption weight="regular" className={styles.secondary}>
+                Performance fee:
+              </Caption>
+            </Tooltip>
             <Body level={2} weight="regular">
-              {round(Number(feePercent))}%
+              {performanceFeePercent}% of yield
             </Body>
           </FlexBlock>
+          <Caption weight="regular" className={styles.secondary}>
+            No fee on your principal
+          </Caption>
         </FlexBlock>
 
         <div className={styles.potentialProfitLoseBlock}>
@@ -185,7 +195,7 @@ export const WithdrawModal = () => {
                 className={styles.innerPotentialProfitBlock}
               >
                 <Subtitle level={2} weight="medium">
-                  {round((Number(value) / 100) * apy)}
+                  {round((Number(value) / 100) * netApy)}
                 </Subtitle>
                 <FlexBlock gap={8} alignItems="center">
                   <UsdcIcon size={16} />
