@@ -13,8 +13,7 @@ type MobileUserCardsProps = {
   totalPosition: number;
 };
 
-const POINTS_TOOLTIP =
-  'You receive 1 point for every $1 you hold each day. Points are accrued over time and will be converted into tokens once the points program ends and the token launches.';
+const POINTS_TOOLTIP = 'You receive 1 point for every $1 you hold each day.';
 
 export const MobileUserCards = ({ totalPosition }: MobileUserCardsProps) => {
   return (

@@ -19,7 +19,7 @@ export const ApyTooltipContent = ({ apy }: { apy: number }) => (
     <Overline className={styles.tooltipApyDescription}>
       The current average yield the strategy earns across the DeFi protocols it is allocated to. It
       moves up and down with market conditions, and it is the same figure plotted on the performance
-      chart below. Points are earned on top of this yield and are not included in it.
+      chart below.
     </Overline>
   </FlexBlock>
 );
