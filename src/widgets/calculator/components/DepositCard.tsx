@@ -6,7 +6,7 @@ import { Caption } from '@/shared/ui/new-typography/caption';
 import { Tooltip } from '@/shared/ui/tooltip/tooltip';
 import { InputComponent } from '@/shared/ui/input';
 import { Slider } from '@/shared/ui/slider';
-import { round } from '@/shared/number/round';
+import { formatPercent } from '@/shared/number/formatPercent';
 import styles from '../calculator.module.scss';
 
 type DepositCardProps = {
@@ -39,7 +39,7 @@ export const DepositCard = memo(function DepositCard({
             withIcon
           >
             <Caption weight="regular" className={styles.secondary}>
-              24h average APY <span className={styles.highlight}>{round(apy)}%</span>
+              24h average APY <span className={styles.highlight}>{formatPercent(apy)}%</span>
             </Caption>
           </Tooltip>
         </FlexBlock>

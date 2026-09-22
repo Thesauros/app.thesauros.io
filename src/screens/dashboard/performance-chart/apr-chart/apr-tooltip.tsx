@@ -1,7 +1,7 @@
 import styles from './apr-chart.module.scss';
 import { CustomTooltipProps } from '../types';
 import { FlexBlock } from '@/shared/ui/flex-block';
-import { round } from '@/shared/number/round';
+import { formatPercent } from '@/shared/number/formatPercent';
 import { Caption } from '@/shared/ui/new-typography/caption';
 import { Body } from '@/shared/ui/new-typography/body';
 import formatNumberSmart from '@/shared/number/formatNumberSmart';
@@ -18,13 +18,13 @@ export const APRChartTooltip = ({ active, payload }: CustomTooltipProps) => {
         <FlexBlock alignItems="center" justifyContent="space-between" gap={8}>
           <Caption weight="regular">Av. daily APY</Caption>
           <Body level={1} weight="medium">
-            {round(aprValue)}%
+            {formatPercent(aprValue)}%
           </Body>
         </FlexBlock>
         <FlexBlock alignItems="center" justifyContent="space-between" gap={8}>
           <Caption weight="regular">Market avg. APY</Caption>
           <Body level={1} weight="medium">
-            {round(aprMarketValue)}%
+            {formatPercent(aprMarketValue)}%
           </Body>
         </FlexBlock>
         <FlexBlock alignItems="center" justifyContent="space-between" gap={8}>

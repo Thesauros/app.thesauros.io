@@ -1,23 +1,25 @@
 import styles from './select-chain-button.module.scss';
 import { useState, useRef } from 'react';
-import { useChainId, useSwitchChain } from 'wagmi';
 import { base, arbitrum, mainnet, plasma, monad } from 'wagmi/chains';
 import { useClickOutside } from '@/shared/browser/useClickOutside';
+import { useViewChain } from '@/shared/blockchain';
 
 const ALLOWED_CHAINS = [base, arbitrum, mainnet, plasma, monad];
 
 export const SelectChainButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const chainId = useChainId();
-  const { switchChain } = useSwitchChain();
+  const { viewChainId, setViewChainId } = useViewChain();
 
   useClickOutside(dropdownRef, () => setIsOpen(false));
 
-  const currentChain = ALLOWED_CHAINS.find(c => c.id === chainId);
+  const currentChain = ALLOWED_CHAINS.find(c => c.id === viewChainId);
 
+  // Only the chain being viewed changes here. The wallet is asked to switch
+  // right before signing instead, so picking a network never bounces mobile
+  // users out into their wallet app.
   const handleChainSelect = (chain: (typeof ALLOWED_CHAINS)[number]) => {
-    switchChain({ chainId: chain.id });
+    setViewChainId(chain.id);
     setIsOpen(false);
   };
 
@@ -49,7 +51,7 @@ export const SelectChainButton = () => {
           {ALLOWED_CHAINS.map(chain => (
             <div
               key={chain.id}
-              className={`${styles.chainOption} ${chain.id === chainId ? styles.active : ''}`}
+              className={`${styles.chainOption} ${chain.id === viewChainId ? styles.active : ''}`}
               onClick={() => handleChainSelect(chain)}
               data-testid={`network-option-dd-${chain.id}`}
             >

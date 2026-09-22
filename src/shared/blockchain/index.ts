@@ -8,6 +8,7 @@ export { useNetwork } from './useNetwork';
 export { useWithdraw } from './useWithdraw';
 export { useMinAmount } from './useMinAmount';
 export { useSelectedVault } from './useSelectedVault';
+export { ViewChainProvider, useViewChain } from './useViewChain';
 export { useRefetchAfterTransaction } from './useRefetchAfterTransaction';
 export {
   vaults,

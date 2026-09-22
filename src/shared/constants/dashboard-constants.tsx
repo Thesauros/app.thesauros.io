@@ -1,16 +1,17 @@
 import { useMemo } from 'react';
-import { useVaultsPosition, useVaultsTVL, useAccount, vaults } from '../blockchain';
+import { useVaultsPosition, useVaultsTVL, useAccount, useViewChain, vaults } from '../blockchain';
 import { round } from '../number/round';
 import { useHighestApr, useUserEarnedOverallTicks } from '../api/dashboard';
 import { useOnchainCurrentAPY } from '../blockchain/useOnchainCurrentAPY';
 
 export const useDashboardConstants = () => {
-  const { address, chainId } = useAccount();
+  const { address } = useAccount();
+  const { viewChainId } = useViewChain();
   const { data } = useUserEarnedOverallTicks({
     interval: 1,
     intervals: 7,
     address: address,
-    chainID: chainId ?? 42161,
+    chainID: viewChainId,
   });
   const { data: vaultsTVL } = useVaultsTVL();
   const { data: totalPosition } = useVaultsPosition();
@@ -18,22 +19,18 @@ export const useDashboardConstants = () => {
 
   const totalEarned = useMemo(() => (data ? round(data[0].value, 6) : 0), [data]);
 
-  const chosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[1];
+  const chosenVault = vaults.find(vault => vault.chainID === viewChainId) ?? vaults[1];
 
   const apy = useOnchainCurrentAPY({
     vaultAddress: chosenVault.vaultAddress,
     chainID: chosenVault.chainID,
   });
 
-  const complexApy = {
-    netApy: 10 + round(apy % 1),
-    baseApy: round(apy),
-    rewardApy: Math.max(0, round(10 + round(apy % 1) - round(apy))),
-  };
-
   return {
+    // The deposit-weighted on-chain yield of the vault. This is the only APY
+    // the app shows: it is measured on the same basis as the APR ticks behind
+    // the performance chart, so the card and the chart cannot disagree.
     apy: apy,
-    complexApy: complexApy,
     totalPosition: totalPosition ? round(totalPosition) : 0,
     performerOfTheWeek,
     totalEarned,

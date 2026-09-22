@@ -30,9 +30,6 @@ const EXACT_TRANSLATIONS: Record<string, string> = {
   '500 points': '500 puntos',
   'Convert any crypto to USDC during Deposit':
     'Convierte cualquier crypto a USDC durante el depósito',
-  'Net APY': 'APY neto',
-  'Reward APY': 'APY de recompensas',
-  'Base APY': 'APY base',
   'Amount to Deposit': 'Importe a depositar',
   'Amount to Withdraw': 'Importe a retirar',
   'Balance:': 'Saldo:',
@@ -56,8 +53,6 @@ const EXACT_TRANSLATIONS: Record<string, string> = {
   Points: 'Puntos',
   'Your funds': 'Tus fondos',
   APY: 'APY',
-  'Base Rate': 'Tasa base',
-  'Reward Rate': 'Tasa de recompensa',
   INSTANT: 'INSTANTÁNEO',
   About: 'Acerca de',
   Protocols: 'Protocolos',
@@ -164,8 +159,8 @@ const PHRASE_TRANSLATIONS: Array<[string, string]> = [
     'Muestra el rendimiento promedio actual que genera la estrategia desde protocolos DeFi conectados. El porcentaje puede subir o bajar según las condiciones de mercado.',
   ],
   [
-    'The displayed APY includes the base yield from DeFi strategies and an additional part earned as points. These points are accrued over time and will be converted into tokens once the points program ends and the token launches.',
-    'El APY mostrado incluye el rendimiento base de las estrategias DeFi y una parte adicional obtenida como puntos. Estos puntos se acumulan con el tiempo y se convertirán en tokens cuando termine el programa de puntos y se lance el token.',
+    'The current average yield the strategy earns across the DeFi protocols it is allocated to. It moves up and down with market conditions, and it is the same figure plotted on the performance chart below.',
+    'El rendimiento promedio actual que la estrategia obtiene en los protocolos DeFi en los que está asignada. Sube y baja según las condiciones de mercado, y es la misma cifra que se muestra en el gráfico de rendimiento de abajo.',
   ],
   [
     'Your stablecoins are automatically allocated across top and safest DeFi providers holding over $60 billion in assets. When yields shift, the system reallocates funds to maintain the best available return.',

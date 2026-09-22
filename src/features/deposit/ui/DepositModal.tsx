@@ -23,7 +23,7 @@ import { SwapIcon } from '@/shared/ui/icons/swap';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
-import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
+import { formatPercent } from '@/shared/number/formatPercent';
 import {
   useMinAmount,
   useSelectedVault,
@@ -201,7 +201,6 @@ export const DepositModal = () => {
 
   const isLessThanMinAmount =
     minAmount !== undefined && Number(value.formatted) > 0 && Number(value.formatted) < minAmount;
-  const { complexApy } = useDashboardConstants();
 
   const steps: Step[] = useMemo(() => {
     const approveStatus =
@@ -273,26 +272,10 @@ export const DepositModal = () => {
         <FlexBlock gap={4} direction="column" block>
           <FlexBlock alignItems="center" justifyContent="space-between" block>
             <Caption weight="regular" className={styles.secondary}>
-              Net APY
+              Current APY
             </Caption>
             <Body level={2} weight="regular">
-              {complexApy.netApy}%
-            </Body>
-          </FlexBlock>
-          <FlexBlock alignItems="center" justifyContent="space-between" block>
-            <Caption weight="regular" className={styles.secondary}>
-              Reward APY
-            </Caption>
-            <Body level={2} weight="regular">
-              {complexApy.rewardApy}%
-            </Body>
-          </FlexBlock>
-          <FlexBlock alignItems="center" justifyContent="space-between" block>
-            <Caption weight="regular" className={styles.secondary}>
-              Base APY
-            </Caption>
-            <Body level={2} weight="regular">
-              {complexApy.baseApy}%
+              {formatPercent(apy)}%
             </Body>
           </FlexBlock>
         </FlexBlock>

@@ -3,16 +3,19 @@ import { Heading } from '@/shared/ui/new-typography/heading';
 import { Body } from '@/shared/ui/new-typography/body';
 import { Caption } from '@/shared/ui/new-typography/caption';
 import { Subtitle } from '@/shared/ui/new-typography/subtitle';
-import { Tooltip } from '@/shared/ui/tooltip/tooltip';
+import { Tooltip, TooltipWithContent } from '@/shared/ui/tooltip/tooltip';
+import { InfoIcon } from '@/shared/ui/icons';
 import { UsdcIcon } from '@/shared/ui/icons/usdc-icon';
 import { LightningIcon } from '@/shared/ui/icons/lightning-icon';
 import { StarsIcon } from '@/shared/ui/icons/stars-icon';
 // import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
+import { formatPercent } from '@/shared/number/formatPercent';
+import { ApyTooltipContent } from './ApyTooltip';
 import styles from '../main.module.scss';
 
 type VaultInfoCardProps = {
   isMobile: boolean;
-  netApy: number;
+  apy: number;
   // vaultsTVL: number | undefined;
 };
 
@@ -25,7 +28,7 @@ const WITHDRAW_TOOLTIP =
 // const TVL_TOOLTIP =
 //   'TVL (Total Value Locked) means the total amount of money currently deposited by all users in this strategy. It works like Assets Under Management (AUM) in traditional finance, showing how much capital is being managed right now.';
 
-export const VaultInfoCard = ({ isMobile, netApy }: VaultInfoCardProps) => {
+export const VaultInfoCard = ({ isMobile, apy }: VaultInfoCardProps) => {
   return (
     <FlexBlock direction="column" gap={16} className={styles.vaultInfoCard}>
       <FlexBlock justifyContent="space-between" alignItems="center" block>
@@ -42,15 +45,18 @@ export const VaultInfoCard = ({ isMobile, netApy }: VaultInfoCardProps) => {
           )}
         </FlexBlock>
         {isMobile && (
-          <FlexBlock alignItems="center" gap={8}>
-            <Subtitle level={2} weight="regular" className={styles.secondaryHighlight}>
-              APY
-            </Subtitle>
-            <Body level={2} weight="bold">
-              {netApy}%
-            </Body>
-            <StarsIcon />
-          </FlexBlock>
+          <TooltipWithContent content={<ApyTooltipContent apy={apy} />}>
+            <FlexBlock alignItems="center" gap={4}>
+              <Subtitle level={2} weight="regular" className={styles.secondaryHighlight}>
+                APY
+              </Subtitle>
+              <InfoIcon />
+              <Body level={2} weight="bold">
+                {formatPercent(apy)}%
+              </Body>
+              <StarsIcon />
+            </FlexBlock>
+          </TooltipWithContent>
         )}
       </FlexBlock>
 

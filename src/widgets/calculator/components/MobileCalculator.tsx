@@ -7,6 +7,7 @@ import { NewInfoIcon } from '@/shared/ui/icons/new-info';
 import { PointCoinIcon } from '@/shared/ui/icons/point-icon';
 import { Slider } from '@/shared/ui/slider';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
+import { formatPercent } from '@/shared/number/formatPercent';
 import styles from '../calculator.module.scss';
 
 type MobileCalculatorProps = {
@@ -45,7 +46,7 @@ export const MobileCalculator = memo(function MobileCalculator({
           </Tooltip>
         </FlexBlock>
         <Body level={2} weight="bold">
-          {apy}%
+          {formatPercent(apy)}%
         </Body>
       </FlexBlock>
 

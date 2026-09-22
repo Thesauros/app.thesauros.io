@@ -6,6 +6,7 @@ import { Caption } from '@/shared/ui/new-typography/caption';
 import { Heading } from '@/shared/ui/new-typography/heading';
 import { Tooltip } from '@/shared/ui/tooltip/tooltip';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
+import { formatPercent } from '@/shared/number/formatPercent';
 import styles from '../calculator.module.scss';
 
 type ReturnsCardProps = {
@@ -35,7 +36,8 @@ export const ReturnsCard = memo(function ReturnsCard({
           withIcon
         >
           <Caption weight="regular" className={styles.secondary}>
-            Projected growth <span className={styles.highlight}>{cumulativeProfit}%</span>
+            Projected growth{' '}
+            <span className={styles.highlight}>{formatPercent(cumulativeProfit)}%</span>
           </Caption>
         </Tooltip>
       </FlexBlock>

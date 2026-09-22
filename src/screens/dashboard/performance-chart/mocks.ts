@@ -48,7 +48,9 @@ export const useAPRData = ({
     return {
       data: reversedData,
       isLoading: isAPRLoading && isMarketAPRLoading,
-      average: round(average, 2),
+      // Precision is applied at render time so every APY on the page is
+      // formatted the same way.
+      average: average,
     };
   }, [aprDatas, isAPRLoading, isMarketAPRLoading]);
 };
