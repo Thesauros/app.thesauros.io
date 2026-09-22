@@ -19,3 +19,21 @@ export const formatDateTime = (dateString: string): string => {
 
   return `${year}-${month}-${day} ${hours}:${minutes}`;
 };
+
+/**
+ * Axis-sized label ("Sep 22"). The long `formatDate` form is ~112px wide, which
+ * does not fit a phone-width chart — the first and last labels got clipped by
+ * the SVG edge. The tooltip still shows the full date.
+ */
+export const formatShortDate = (value: string): string => {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat('en-US', {
+    day: '2-digit',
+    month: 'short',
+  }).format(date);
+};

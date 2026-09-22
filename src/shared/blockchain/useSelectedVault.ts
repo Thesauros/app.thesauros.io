@@ -1,9 +1,9 @@
-import { useAccount } from 'wagmi';
 import { vaults, getVaultByChainId, DEFAULT_VAULT_INDEX } from './config';
 import { TVault } from './core/types';
+import { useViewChain } from './useViewChain';
 
 export const useSelectedVault = (): TVault => {
-  const { chainId } = useAccount();
+  const { viewChainId } = useViewChain();
 
-  return getVaultByChainId(chainId ?? 0) ?? vaults[DEFAULT_VAULT_INDEX];
+  return getVaultByChainId(viewChainId) ?? vaults[DEFAULT_VAULT_INDEX];
 };
