@@ -1,3 +1,4 @@
+import { isCrossChainEnabled } from '@/shared/blockchain/crosschain/config';
 import {
   CoinStackedIcon,
   GearIcon,
@@ -27,6 +28,13 @@ export const MENU_ITEMS = [
     path: '/deposits',
     icon: <LineChartUpIcon />,
     disabled: true,
+  },
+  {
+    id: 'crosschain',
+    name: 'Cross-chain Vault',
+    path: '/crosschain',
+    icon: <LineChartUpIcon />,
+    disabled: !isCrossChainEnabled(),
   },
   {
     id: 'points-program',
