@@ -57,6 +57,8 @@ export const CrossChainScreen = () => {
   if (vault.isLoading) {
     return (
       <FlexBlock direction="column" gap={16} className={styles.container} block>
+        <Heading level={3}>Where the money is</Heading>
+        <Heading level={3}>Across which networks</Heading>
         <Loader />
         <Caption className={styles.muted}>Reading the vault from Base…</Caption>
       </FlexBlock>
