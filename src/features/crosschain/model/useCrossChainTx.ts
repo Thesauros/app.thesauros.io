@@ -31,6 +31,8 @@ export const useCrossChainTx = () => {
       if (receipt.data.status !== 'success') setError('Transaction reverted');
       queryClient.invalidateQueries({ queryKey: ['CROSSCHAIN_VAULT'] });
       queryClient.invalidateQueries({ queryKey: ['CROSSCHAIN_USER'] });
+      queryClient.invalidateQueries({ queryKey: ['CROSSCHAIN_ALLOCATION'] });
+      queryClient.invalidateQueries({ queryKey: ['CROSSCHAIN_ACTIVITY'] });
       queryClient.invalidateQueries({ queryKey: ['readContract'] });
     } else if (receipt.isError) {
       setState('error');

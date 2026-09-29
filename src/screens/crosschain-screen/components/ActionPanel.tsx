@@ -19,8 +19,8 @@ import styles from '../crosschain.module.scss';
 
 const TABS = [
   { title: 'Deposit', value: 0 },
-  { title: 'Redeem', value: 1 },
-  { title: 'Instant exit', value: 2 },
+  { title: 'Withdraw', value: 1 },
+  { title: 'Withdraw now', value: 2 },
 ];
 
 const safeParse = (v: string) => {
@@ -31,7 +31,13 @@ const safeParse = (v: string) => {
   }
 };
 
-export const ActionPanel = ({ vault }: { vault: TCrossChainVault }) => {
+export const ActionPanel = ({
+  vault,
+  shareSymbol,
+}: {
+  vault: TCrossChainVault;
+  shareSymbol: string;
+}) => {
   const [tab, setTab] = useState(TABS[0]);
   const [value, setValue] = useState('');
   const { address, isConnected } = useAccount();
@@ -82,8 +88,8 @@ export const ActionPanel = ({ vault }: { vault: TCrossChainVault }) => {
       return {
         unit: CROSSCHAIN.assetSymbol,
         balance,
-        estimate: `≈ ${fmtUnits(assetsToShares(amount, rateOffer), 4)} ${CROSSCHAIN.shareSymbol} at the current offer price`,
-        note: 'Your deposit joins the current epoch and is priced at the first NAV tick after the epoch closes. Cancel any time before then.',
+        estimate: `≈ ${fmtUnits(assetsToShares(amount, rateOffer), 4)} ${shareSymbol} at the current entry price`,
+        note: 'Your deposit joins the current batch and receives the price published after that batch closes. You can pull it out for a full refund any time before then.',
         problem,
         needsApprove,
       };
@@ -91,10 +97,10 @@ export const ActionPanel = ({ vault }: { vault: TCrossChainVault }) => {
     const balance = shareBalance.data ?? BigInt(0);
     if (tab.value === 1) {
       return {
-        unit: CROSSCHAIN.shareSymbol,
+        unit: shareSymbol,
         balance,
         estimate: `≈ ${fmtUnits(sharesToAssets(amount, rateBid))} USDC at the current price`,
-        note: 'Paid at the lower of the share price at epoch open and at clearing. Shares stop earning while queued; claim once the epoch is funded.',
+        note: 'Paid at the lower of the price when the batch opened and when it was priced, so waiting can never cost you more than the market moved. Your shares stop earning while they wait.',
         problem: amount > balance ? 'Insufficient share balance' : '',
         needsApprove: false,
       };
@@ -105,15 +111,15 @@ export const ActionPanel = ({ vault }: { vault: TCrossChainVault }) => {
     let problem = '';
     if (amount > balance) problem = 'Insufficient share balance';
     else if (out > maxCall)
-      problem = `Instant exits are limited to ${fmtUnits(maxCall)} USDC per transaction`;
+      problem = `Immediate withdrawals are limited to ${fmtUnits(maxCall)} USDC per transaction`;
     else if (out > remaining)
-      problem = `Only ~${fmtUnits(remaining)} USDC of instant exits left today`;
-    else if (vault.tick.frozen) problem = 'Instant exits are paused';
+      problem = `About ${fmtUnits(remaining)} USDC of immediate withdrawals is left today`;
+    else if (vault.tick.frozen) problem = 'Immediate withdrawals are paused';
     return {
-      unit: CROSSCHAIN.shareSymbol,
+      unit: shareSymbol,
       balance,
       estimate: `You receive ≈ ${fmtUnits(out)} USDC now (fee ${(Number(fee) / 1e16).toFixed(2)}%)`,
-      note: `Paid immediately from the vault buffer. Up to ${fmtUnits(maxCall)} USDC per transaction, ~${fmtUnits(remaining)} USDC left today.`,
+      note: `Paid straight from the cash reserve, in one transaction. Up to ${fmtUnits(maxCall)} USDC at a time, about ${fmtUnits(remaining)} USDC left today. The fee is what makes it safe to let people leave ahead of a price update.`,
       problem,
       needsApprove: false,
     };
@@ -128,6 +134,7 @@ export const ActionPanel = ({ vault }: { vault: TCrossChainVault }) => {
     fee,
     vault,
     WAD,
+    shareSymbol,
   ]);
 
   const submit = async () => {
@@ -179,11 +186,11 @@ export const ActionPanel = ({ vault }: { vault: TCrossChainVault }) => {
           ? 'Waiting for confirmation…'
           : view.needsApprove && tab.value === 0
             ? `Approve ${value || 0} USDC`
-            : TABS[tab.value].title === 'Deposit'
-              ? 'Request deposit'
-              : TABS[tab.value].title === 'Redeem'
-                ? 'Request redemption'
-                : 'Redeem instantly';
+            : tab.value === 0
+              ? 'Deposit'
+              : tab.value === 1
+                ? 'Withdraw'
+                : 'Withdraw now';
 
   return (
     <Card block>
