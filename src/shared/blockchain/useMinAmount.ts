@@ -9,7 +9,7 @@ type TMinAmountProps = {
 };
 
 type TMinAmountResult = {
-  data: bigint | undefined;
+  data: number | undefined;
   isLoading: boolean;
   error: Error | null;
   refetch: () => void;
@@ -23,7 +23,7 @@ export const useMinAmount = ({
   const { data, isLoading, error, refetch } = useContractRead({
     address: vaultAddress,
     chainID,
-    functionName: 'minAmount',
+    functionName: 'getMinAssets',
     args: [],
     watch: false,
     selectData: (data: unknown): number => {
@@ -32,7 +32,7 @@ export const useMinAmount = ({
   });
 
   return {
-    data: data as bigint | undefined,
+    data: data as number | undefined,
     isLoading,
     error: error as Error | null,
     refetch,

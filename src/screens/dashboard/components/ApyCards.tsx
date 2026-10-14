@@ -10,18 +10,20 @@ import { StarsIcon } from '@/shared/ui/icons/stars-icon';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
 import { formatPercent } from '@/shared/number/formatPercent';
 import { formatUsd } from '@/shared/number/formatUsd';
+import type { ComplexApy } from '@/shared/constants/dashboard-constants';
 import { ApyTooltipContent } from './ApyTooltip';
 import styles from '../main.module.scss';
 
 type ApyCardsProps = {
   isDeposited: boolean;
   totalPosition: number;
-  apy: number;
+  complexApy: ComplexApy;
 };
 
-const POINTS_TOOLTIP = 'You receive 1 point for every $1 you hold each day.';
+const POINTS_TOOLTIP = `You receive 2 points for every $1 you hold each day.
+For example, holding 1,000 USDC for one year gives you about 730,000 points.`;
 
-export const ApyCards = ({ isDeposited, totalPosition, apy }: ApyCardsProps) => {
+export const ApyCards = ({ isDeposited, totalPosition, complexApy }: ApyCardsProps) => {
   return (
     <FlexBlock direction="column" justifyContent="space-between" alignItems="flex-end" fullHeight>
       <FlexBlock gap={8} alignItems="flex-start">
@@ -52,14 +54,14 @@ export const ApyCards = ({ isDeposited, totalPosition, apy }: ApyCardsProps) => 
           </Card>
         )}
 
-        <TooltipWithContent content={<ApyTooltipContent apy={apy} />}>
+        <TooltipWithContent content={<ApyTooltipContent complexApy={complexApy} />}>
           <Card variant="secondary" className={styles.apyCard}>
             <Subtitle level={2} weight="regular" className={styles.secondaryHighlight}>
               APY
             </Subtitle>
             <FlexBlock alignItems="center" gap={12}>
               <Heading level={5} weight="bold">
-                {formatPercent(apy)}%
+                {formatPercent(complexApy.netApy)}%
               </Heading>
               <StarsIcon />
             </FlexBlock>

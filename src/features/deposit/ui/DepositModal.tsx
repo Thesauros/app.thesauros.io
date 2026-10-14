@@ -29,6 +29,8 @@ import {
   useSelectedVault,
   useRefetchAfterTransaction,
   useAccount,
+  usePerformanceFee,
+  PUBLISHED_PERFORMANCE_FEE_PERCENT,
 } from '@/shared/blockchain';
 import { useTaskStatuses } from '@/shared/api/pointProgram/useTaskStatuses';
 import { useCurrentSeason } from '@/shared/api/pointProgram/useCurrentSeasonId';
@@ -178,6 +180,14 @@ export const DepositModal = () => {
       chainID: selectedVault.chainID,
     }) ?? 0;
 
+  const { data: performanceFee } = usePerformanceFee({
+    vaultAddress: selectedVault.vaultAddress,
+    chainID: selectedVault.chainID,
+  });
+
+  const performanceFeePercent = performanceFee ?? PUBLISHED_PERFORMANCE_FEE_PERCENT;
+  const netApy = round(apy * (1 - performanceFeePercent / 100));
+
   const userCoinBalance = useMemo(() => {
     return (coinBalance as CoinBalance | undefined)?.value ?? 0;
   }, [coinBalance]);
@@ -272,10 +282,18 @@ export const DepositModal = () => {
         <FlexBlock gap={4} direction="column" block>
           <FlexBlock alignItems="center" justifyContent="space-between" block>
             <Caption weight="regular" className={styles.secondary}>
-              Current APY
+              Base APY
             </Caption>
             <Body level={2} weight="regular">
               {formatPercent(apy)}%
+            </Body>
+          </FlexBlock>
+          <FlexBlock alignItems="center" justifyContent="space-between" block>
+            <Caption weight="regular" className={styles.secondary}>
+              Net APY
+            </Caption>
+            <Body level={2} weight="regular">
+              {formatPercent(netApy)}%
             </Body>
           </FlexBlock>
         </FlexBlock>
@@ -321,8 +339,8 @@ export const DepositModal = () => {
           </FlexBlock>
           <FlexBlock alignItems="center" justifyContent="space-between" block>
             <Tooltip
-              tooltipText="You receive 1 point for every $1 you hold each day.
-For example, holding 1,000 USDC for one year gives you about 365,000 points."
+              tooltipText="You receive 2 points for every $1 you hold each day.
+For example, holding 1,000 USDC for one year gives you about 730,000 points."
               withIcon
             >
               <Caption weight="regular" className={styles.secondary}>
@@ -338,7 +356,7 @@ For example, holding 1,000 USDC for one year gives you about 365,000 points."
           </FlexBlock>
           <FlexBlock alignItems="center" justifyContent="space-between" block>
             <Tooltip
-              tooltipText="Applied only to your net profit, never to your initial deposit."
+              tooltipText="Charged on generated yield only. No fee on your principal, and no management fee."
               withIcon
             >
               <Caption weight="regular" className={styles.secondary}>
@@ -347,7 +365,7 @@ For example, holding 1,000 USDC for one year gives you about 365,000 points."
             </Tooltip>
             <div>
               <Body level={2} weight="regular">
-                ≈0.054%/Day
+                {performanceFeePercent}% of yield
               </Body>
             </div>
           </FlexBlock>
@@ -362,7 +380,7 @@ For example, holding 1,000 USDC for one year gives you about 365,000 points."
                 Monthly profit
               </Caption>
               <Body level={2} weight="regular">
-                ${round((apy * (Number(value.formatted) / 100)) / 12, 2)}
+                ${round((netApy * (Number(value.formatted) / 100)) / 12, 2)}
               </Body>
             </FlexBlock>
             <FlexBlock alignItems="center" justifyContent="space-between" block>
@@ -370,7 +388,7 @@ For example, holding 1,000 USDC for one year gives you about 365,000 points."
                 Yearly profit
               </Caption>
               <Body level={2} weight="regular">
-                ${round(apy * (Number(value.formatted) / 100), 2)}
+                ${round(netApy * (Number(value.formatted) / 100), 2)}
               </Body>
             </FlexBlock>
           </FlexBlock>

@@ -24,7 +24,7 @@ import {
 } from './components';
 
 export const DashboardScreen = () => {
-  const { totalPosition, apy } = useDashboardConstants();
+  const { totalPosition, apy, complexApy, vaultsTVL } = useDashboardConstants();
   const { openConnectModal } = useConnectModal();
   const { isConnected } = useAccount();
   const { open } = useModal();
@@ -86,12 +86,16 @@ export const DashboardScreen = () => {
             gap={24}
             direction={isLaptop ? 'column' : 'row'}
           >
-            <VaultInfoCard isMobile={isMobile} apy={apy} />
+            <VaultInfoCard isMobile={isMobile} complexApy={complexApy} vaultsTVL={vaultsTVL} />
 
             {isMobile && isConnected && <MobileUserCards totalPosition={totalPosition} />}
 
             {!isMobile && (
-              <ApyCards isDeposited={isDeposited} totalPosition={totalPosition} apy={apy} />
+              <ApyCards
+                isDeposited={isDeposited}
+                totalPosition={totalPosition}
+                complexApy={complexApy}
+              />
             )}
           </FlexBlock>
 

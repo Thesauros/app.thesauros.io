@@ -13,7 +13,8 @@ type MobileUserCardsProps = {
   totalPosition: number;
 };
 
-const POINTS_TOOLTIP = 'You receive 1 point for every $1 you hold each day.';
+const POINTS_TOOLTIP = `You receive 2 points for every $1 you hold each day.
+For example, holding 1,000 USDC for one year gives you about 730,000 points.`;
 
 export const MobileUserCards = ({ totalPosition }: MobileUserCardsProps) => {
   return (
