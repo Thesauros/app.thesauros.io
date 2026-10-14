@@ -18,9 +18,11 @@ import { FlexBlock } from '@/shared/ui/flex-block';
 import { Caption } from '@/shared/ui/new-typography/caption';
 import { Body } from '@/shared/ui/new-typography/body';
 import formatNumberSmart from '@/shared/number/formatNumberSmart';
+import { formatPercent } from '@/shared/number/formatPercent';
 import { memo, useMemo } from 'react';
 import { useDashboardConstants } from '@/shared/constants/dashboard-constants';
 import { useCheckResolution } from '@/shared/browser/useCheckResolution';
+import { formatShortDate } from '@/shared/date';
 
 export const APRChart = memo(
   ({
@@ -68,7 +70,7 @@ export const APRChart = memo(
 
     return (
       <div className={styles.container}>
-        <FlexBlock alignItems="flex-start" gap={16} className={styles.legendBlock}>
+        <FlexBlock alignItems="flex-start" gap={16} flexWrap className={styles.legendBlock}>
           {isDeposited && (
             <FlexBlock gap={8} alignItems="flex-start">
               <div className={styles.profitLegendCircle} />
@@ -89,7 +91,7 @@ export const APRChart = memo(
                 Av. {period.title} APY
               </Caption>
               <Body level={2} weight="bold">
-                {average}%
+                {formatPercent(average)}%
               </Body>
             </FlexBlock>
           </FlexBlock>
@@ -106,7 +108,12 @@ export const APRChart = memo(
           <Loader />
         ) : (
           <ResponsiveContainer width="100%" height={394}>
-            <AreaChart data={combinedData} margin={{ left: 10, right: isMobile ? -40 : 10 }}>
+            <AreaChart
+              data={combinedData}
+              // Without the profit axis on the right there is nothing to absorb
+              // the last date label, so the margin has to leave room for it.
+              margin={{ top: 8, right: isDeposited ? 8 : 28, left: 0, bottom: 0 }}
+            >
               <defs>
                 <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#FFDDAD" stopOpacity={0.6} />
@@ -132,7 +139,8 @@ export const APRChart = memo(
                 tickLine={false}
                 tick={{ fontSize: 12, fill: '#9D9D9D' }}
                 tickMargin={10}
-                interval={!isMobile ? (isWeekPeriod ? 1 : 5) : isWeekPeriod ? 5 : 14}
+                tickFormatter={value => formatShortDate(String(value))}
+                interval={!isMobile ? (isWeekPeriod ? 1 : 5) : isWeekPeriod ? 1 : 6}
               />
               <YAxis
                 yAxisId="left"
@@ -140,8 +148,9 @@ export const APRChart = memo(
                 tickLine={false}
                 tickCount={7}
                 tick={{ fontSize: 12, fill: '#9D9D9D' }}
-                tickMargin={20}
-                tickFormatter={value => `${value.toFixed(2)}%`}
+                width={isMobile ? 52 : 72}
+                tickMargin={isMobile ? 4 : 12}
+                tickFormatter={value => `${formatPercent(value as number)}%`}
                 domain={[0, (dataMax: number) => dataMax * 1.1]}
                 allowDataOverflow={false}
               />
@@ -152,9 +161,12 @@ export const APRChart = memo(
                 tickLine={false}
                 tickCount={4}
                 tick={{ fontSize: 12, fill: '#9D9D9D' }}
+                width={isMobile ? 44 : 60}
+                tickMargin={4}
                 tickFormatter={value => formatNumberSmart(value as number)}
                 domain={[0, (dataMax: number) => dataMax * 1.1]}
                 allowDataOverflow={false}
+                hide={!isDeposited}
               />
               <Tooltip content={<APRChartTooltip />} />
               {isDeposited && (

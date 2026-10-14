@@ -58,7 +58,7 @@ export const Calculator = ({ apy }: CalculatorProps) => {
     return {
       pointsValue: depositNum * 2 * periodYears * DAYS_IN_YEAR,
       potentialReturns: round(periodYears * apy * (depositNum / 100) + depositNum),
-      cumulativeProfit: round(periodYears * apy),
+      cumulativeProfit: periodYears * apy,
       periodText: PERIOD_TITLE_MAP_TO_TEXT[timePeriod.title],
     };
   }, [depositValue, timePeriod.value, timePeriod.title, apy]);

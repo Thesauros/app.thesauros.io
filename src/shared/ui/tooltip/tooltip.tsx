@@ -1,9 +1,10 @@
 import 'react-tooltip/dist/react-tooltip.css';
 import styles from './tooltip.module.scss';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import React, { ReactNode, useMemo } from 'react';
+import React, { ReactNode, useId, useMemo } from 'react';
 import { FlexBlock } from '../flex-block';
 import { NewInfoIcon } from '../icons/new-info';
+import { useIsTouchDevice } from '@/shared/browser/useIsTouchDevice';
 
 type TProps = {
   tooltipText: string;
@@ -23,6 +24,7 @@ export const Tooltip = ({
   withIcon = false,
 }: TProps) => {
   const uniqueId = useMemo(() => createUniqueId(tooltipText), [tooltipText]);
+  const isTouch = useIsTouchDevice();
 
   return (
     <div style={{ display: display, width: fullWidth ? '100%' : 'auto' }}>
@@ -43,6 +45,7 @@ export const Tooltip = ({
         noArrow
         content={tooltipText}
         opacity={1}
+        openOnClick={isTouch}
         style={{
           backgroundColor: '#262F38',
           borderRadius: '8px',
@@ -64,13 +67,20 @@ export const TooltipWithContent = ({
   children: ReactNode;
   content: ReactNode;
 }) => {
+  // Every instance needs its own anchor id, otherwise several tooltips on the
+  // same page all attach to the first anchor in the document.
+  // useId() output is not selector-safe (React wraps it in punctuation).
+  const anchorId = `tooltip-anchor-${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
+  const isTouch = useIsTouchDevice();
+
   return (
     <FlexBlock direction="column" gap={0}>
-      <a id="clickable">{children}</a>
+      <a id={anchorId}>{children}</a>
       <ReactTooltip
-        anchorSelect="#clickable"
+        anchorSelect={`#${anchorId}`}
         place={'bottom-end'}
         opacity={1}
+        openOnClick={isTouch}
         style={{
           width: '186px',
           backgroundColor: '#262F38',

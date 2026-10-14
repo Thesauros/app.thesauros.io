@@ -23,6 +23,7 @@ import { SwapIcon } from '@/shared/ui/icons/swap';
 import { useOnchainCurrentAPY } from '@/shared/blockchain/useOnchainCurrentAPY';
 import { TransactionStatusModal } from '@/shared/ui/transaction-status-modal';
 import { formatNumberWithCommas } from '@/shared/number/formatNumberWithCommas';
+import { formatPercent } from '@/shared/number/formatPercent';
 import {
   useMinAmount,
   useSelectedVault,
@@ -284,7 +285,7 @@ export const DepositModal = () => {
               Base APY
             </Caption>
             <Body level={2} weight="regular">
-              {round(apy)}%
+              {formatPercent(apy)}%
             </Body>
           </FlexBlock>
           <FlexBlock alignItems="center" justifyContent="space-between" block>
@@ -292,7 +293,7 @@ export const DepositModal = () => {
               Net APY
             </Caption>
             <Body level={2} weight="regular">
-              {netApy}%
+              {formatPercent(netApy)}%
             </Body>
           </FlexBlock>
         </FlexBlock>

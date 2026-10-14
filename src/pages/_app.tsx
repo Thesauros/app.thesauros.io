@@ -16,6 +16,7 @@ import '@rainbow-me/rainbowkit/styles.css';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import { wagmiConfig } from '@/shared/blockchain/config';
+import { ViewChainProvider } from '@/shared/blockchain';
 import { ReferralProvider } from '@/widgets/referral';
 import { AppInitializer } from '@/shared/providers';
 
@@ -47,15 +48,17 @@ export default function App({ Component, pageProps }: AppProps) {
           <WagmiProvider config={wagmiConfig}>
             <QueryClientProvider client={queryClient}>
               <RainbowKitProvider locale="en-US">
-                <ModalProvider>
-                  <ReferralProvider>
-                    <AppInitializer>
-                      <Layout>
-                        <Component {...pageProps} />
-                      </Layout>
-                    </AppInitializer>
-                  </ReferralProvider>
-                </ModalProvider>
+                <ViewChainProvider>
+                  <ModalProvider>
+                    <ReferralProvider>
+                      <AppInitializer>
+                        <Layout>
+                          <Component {...pageProps} />
+                        </Layout>
+                      </AppInitializer>
+                    </ReferralProvider>
+                  </ModalProvider>
+                </ViewChainProvider>
               </RainbowKitProvider>
             </QueryClientProvider>
           </WagmiProvider>

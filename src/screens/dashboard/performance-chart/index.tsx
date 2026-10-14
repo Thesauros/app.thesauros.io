@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import styles from './performance-chart.module.scss';
 import { FlexBlock } from '@/shared/ui/flex-block';
 import { APRChart } from './apr-chart';
-import { vaults } from '@/shared/blockchain/config';
+import { vaults, DEFAULT_VAULT_INDEX } from '@/shared/blockchain/config';
 import { Card } from '@/shared/ui/new-card';
 import { SwitchToggle } from '@/shared/ui/switch-toggle';
 import { Subtitle } from '@/shared/ui/new-typography/subtitle';
 import { Tooltip } from '@/shared/ui/tooltip/tooltip';
-import { useAccount } from '@/shared/blockchain';
+import { useAccount, useViewChain } from '@/shared/blockchain';
 import { useCheckResolution } from '@/shared/browser/useCheckResolution';
 import { InfoIcon } from '@/shared/ui/icons';
 
@@ -18,9 +18,11 @@ const periods = [
 
 export const PerformanceChart = () => {
   const [timePeriod, setTimePeriod] = useState(periods[0]);
-  const { isConnected, chainId } = useAccount();
+  const { isConnected } = useAccount();
+  const { viewChainId } = useViewChain();
   const isMobile = useCheckResolution(576);
-  const chosenVault = vaults.find(vault => vault.chainID === chainId) ?? vaults[1];
+  const chosenVault =
+    vaults.find(vault => vault.chainID === viewChainId) ?? vaults[DEFAULT_VAULT_INDEX];
 
   return (
     <Card block dataTestId="dashboard-block-performance">

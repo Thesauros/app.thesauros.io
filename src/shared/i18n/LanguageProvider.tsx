@@ -164,8 +164,8 @@ const PHRASE_TRANSLATIONS: Array<[string, string]> = [
     'Muestra el rendimiento promedio actual que genera la estrategia desde protocolos DeFi conectados. El porcentaje puede subir o bajar según las condiciones de mercado.',
   ],
   [
-    'Net APY is the yield the DeFi strategies generate after the performance fee. The fee is taken from generated yield only, never from your principal. Points are tracked separately and will be converted into tokens once the points program ends and the token launches.',
-    'El APY neto es el rendimiento que generan las estrategias DeFi después de la comisión de rendimiento. La comisión se aplica solo sobre el rendimiento generado, nunca sobre tu capital. Los puntos se registran por separado y se convertirán en tokens cuando termine el programa de puntos y se lance el token.',
+    'Net APY is the yield the DeFi strategies generate after the performance fee. The fee is taken from generated yield only, never from your principal.',
+    'El APY neto es el rendimiento que generan las estrategias DeFi después de la comisión de rendimiento. La comisión se aplica solo sobre el rendimiento generado, nunca sobre tu capital.',
   ],
   [
     'Your stablecoins are automatically allocated across top and safest DeFi providers. When yields shift, the system reallocates funds to maintain the best available return.',

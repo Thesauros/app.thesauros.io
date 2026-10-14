@@ -45,14 +45,14 @@ export const vaults: TVault[] = [
     coinName: 'USDC',
     coinAddress: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as TAddress,
   },
-  // {
-  //   chainID: 1,
-  //   chainName: 'Ethereum',
-  //   decimals: 6,
-  //   vaultAddress: '0x839E57080C18195D8D343a02c2f623b5916f7383' as TAddress,
-  //   coinName: 'USDC',
-  //   coinAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as TAddress,
-  // },
+  {
+    chainID: 1,
+    chainName: 'Ethereum',
+    decimals: 6,
+    vaultAddress: '0xc3156Da39EeEa9De80F1d74b497C0E4A7030Aae3' as TAddress,
+    coinName: 'USDC',
+    coinAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48' as TAddress,
+  },
   {
     chainID: 9745,
     chainName: 'Plasma',

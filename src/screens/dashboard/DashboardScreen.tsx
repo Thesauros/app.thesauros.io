@@ -24,7 +24,7 @@ import {
 } from './components';
 
 export const DashboardScreen = () => {
-  const { totalPosition, complexApy, vaultsTVL } = useDashboardConstants();
+  const { totalPosition, apy, complexApy, vaultsTVL } = useDashboardConstants();
   const { openConnectModal } = useConnectModal();
   const { isConnected } = useAccount();
   const { open } = useModal();
@@ -75,7 +75,7 @@ export const DashboardScreen = () => {
             {isMobile ? null : 'Potential earnings'}
           </Button>
         </FlexBlock>
-        {isCalculatorOpened && <Calculator apy={complexApy.netApy} />}
+        {isCalculatorOpened && <Calculator apy={apy} />}
       </FlexBlock>
       {/* Main Vault Card */}
       <Card block dataTestId="dashboard-block-usdc-card">
@@ -86,7 +86,7 @@ export const DashboardScreen = () => {
             gap={24}
             direction={isLaptop ? 'column' : 'row'}
           >
-            <VaultInfoCard isMobile={isMobile} netApy={complexApy.netApy} vaultsTVL={vaultsTVL} />
+            <VaultInfoCard isMobile={isMobile} complexApy={complexApy} vaultsTVL={vaultsTVL} />
 
             {isMobile && isConnected && <MobileUserCards totalPosition={totalPosition} />}
 

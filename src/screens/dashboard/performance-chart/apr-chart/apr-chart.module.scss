@@ -81,5 +81,11 @@
 }
 
 .legendBlock {
-  padding-left: 65px;
+  padding-left: 72px;
+}
+
+@media (max-width: 576px) {
+  .legendBlock {
+    padding-left: 0;
+  }
 }

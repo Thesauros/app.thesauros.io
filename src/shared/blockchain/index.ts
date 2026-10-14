@@ -8,6 +8,7 @@ export { useNetwork } from './useNetwork';
 export { usePerformanceFee, PUBLISHED_PERFORMANCE_FEE_PERCENT } from './usePerformanceFee';
 export { useMinAmount } from './useMinAmount';
 export { useSelectedVault } from './useSelectedVault';
+export { ViewChainProvider, useViewChain } from './useViewChain';
 export { useRefetchAfterTransaction } from './useRefetchAfterTransaction';
 export {
   vaults,
