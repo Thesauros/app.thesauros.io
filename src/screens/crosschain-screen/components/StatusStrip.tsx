@@ -93,16 +93,6 @@ export const StatusStrip = ({
         </Tooltip>
       </FlexBlock>
 
-      {vault.profile === 'stand' ? (
-        <div className={styles.notice}>
-          <Body level={2}>
-            <strong>Test deployment.</strong> This is a stand with small limits and a single
-            governance key, used to exercise the system with real contracts before production. The
-            mechanics shown are the real ones; the amounts are not.
-          </Body>
-        </div>
-      ) : null}
-
       <FlexBlock gap={32} flexWrap block className={styles.stats}>
         <Stat
           label="Net value"
