@@ -56,15 +56,6 @@ export const signalsOf = (
     });
   }
 
-  if (vault.profile === 'stand') {
-    out.push({
-      id: 'profile.stand',
-      level: 'warn',
-      label: 'Test deployment',
-      note: 'This is a test stand with small limits and a single governance key. It is not the production vault.',
-    });
-  }
-
   const { tick, risk } = vault;
 
   if (tick.id === 0) {
